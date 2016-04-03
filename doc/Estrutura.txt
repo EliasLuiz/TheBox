@@ -1,0 +1,59 @@
+starter.js - Configurador de eventos - inicializador do jogo - include thebox.js
+
+=====================
+
+thebox.js - Gerencia o funcionamento do jogo - include sprite.js e som.js
+Jogo
+	fases
+	gatilhos para os elementos de fase
+		?som
+		comandos dos botoes
+		atualizar elementos
+		desenhar
+
+Fase
+	sprites
+		background
+		fundo paralax
+		elementos de cenario
+		inimigos
+		protagonista
+	som
+	comandos dos botoes
+	atualizar elementos
+	desenhar
+FaseXXXXX
+	classe especifica de cada fase
+
+=====================
+
+sprite.js - classes dos sprites - include som.js
+Sprite
+	atualiza
+	desenha
+	carrega sprites
+	som
+SpriteXXXXX
+	classe especifica de cada tipo de sprite
+SpriteXXXXXYYYYY
+	variacoes de cada tipo de sprite
+
+SpriteFactory
+	ctor
+		cria um de cada ao carregar
+	createSpriteXXXXXX
+		retorna uma copia do q foi carregado no ctor
+
+=====================
+
+som.js - classe singleton que gerencia musica e efeitos sonoros
+Som
+	efeitos sonoros
+	musicas
+
+=====================
+
+/music - diretorio onde ficam salvas as musicas
+/sfx - diretorio onde ficam salvas os efeitos sonoros
+/sprites - diretorio onde ficam salvos os sprites
+/doc - diretorio para coisas relativas a documentacao
