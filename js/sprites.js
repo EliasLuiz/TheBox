@@ -11,7 +11,7 @@
 function Sprite(){
 };
 //Carrega sprites a partir de arquivo
-Sprite.prototype.load = function(canvas, filename){
+Sprite.prototype.load = function(canvas){
 	this.context = canvas;
 
 	//<Javascript eh um trem muito louco>
@@ -67,23 +67,44 @@ height 	Optional. The height of the image to use (stretch or reduce the image)
 SpritePrincipal.prototype = new Sprite();
 SpritePrincipal.prototype.constructor = SpritePrincipal;
 function SpritePrincipal() {
-
+	this.acao = {
+		"dir": false,
+		"esq": false,
+		"cim": false,
+		"bxo": false,
+		"spa": false
+	};
 };
 //Funcoes para acoes do personagem
-SpritePrincipal.prototype.botaoDireita = function(){
-
+Jogo.prototype.botaoDireitaUp = function(){
+	this.acao["dir"] = false;
 };
-SpritePrincipal.prototype.botaoEsquerda = function(){
-
+Jogo.prototype.botaoDireitaDown = function(){
+	this.acao["dir"] = true;
 };
-SpritePrincipal.prototype.botaoCima = function(){
-
+Jogo.prototype.botaoEsquerdaUp = function(){
+	this.acao["esq"] = false;
 };
-SpritePrincipal.prototype.botaoBaixo = function(){
-
+Jogo.prototype.botaoEsquerdaDown = function(){
+	this.acao["esq"] = true;
 };
-SpritePrincipal.prototype.botaoAcao = function(){
-
+Jogo.prototype.botaoCimaUp = function(){
+	this.acao["cim"] = false;
+};
+Jogo.prototype.botaoCimaDown = function(){
+	this.acao["cim"] = true;
+};
+Jogo.prototype.botaoBaixoUp = function(){
+	this.acao["bxo"] = false;
+};
+Jogo.prototype.botaoBaixoDown = function(){
+	this.acao["bxo"] = true;
+};
+Jogo.prototype.botaoAcaoUp = function(){
+	this.acao["spa"] = false;
+};
+Jogo.prototype.botaoAcaoDown = function(){
+	this.acao["spa"] = true;
 };
 
 ////////////////////////////////////////////////////////////////
@@ -92,6 +113,10 @@ SpritePrincipal01.prototype = new Sprite();
 SpritePrincipal01.prototype.constructor = SpritePrincipal01;
 function SpritePrincipal01() {
 
+};
+SpritePrincipal01.prototype.load = function(canvas){
+	Sprite.prototype.load.call(
+		this, canvas, "../sprites/SpritePrincipal01.json");
 };
 //Funcoes para acoes do personagem
 SpritePrincipal01.prototype.botaoAcao = function(){
@@ -157,8 +182,7 @@ function SpriteFactory(canvas, onload){
 
 	//Carregar todas as classes finais de sprite
 	this.sprites["SpritePrincipal01"] = newSpritePrincipal01();
-	this.sprites["SpritePrincipal01"].carrega(
-		canvas, "../sprites/SpritePrincipal01.json", this.loading);
+	this.sprites["SpritePrincipal01"].carrega(canvas);
 
 	//Funcoes de factory
 	this.newSpritePrincipal = function(tipo){
