@@ -8,11 +8,15 @@
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 
-function Jogo (canvas){
+function Jogo (canvas) {
 	//Construtor de Jogo
 	this.canvas = canvas;
 	this.fase = [
-
+		new Fase1(canvas),
+		new Fase2(canvas),
+		new Fase3(canvas),
+		new Fase4(canvas),
+		new Fase5(canvas),
 	];
 	this.faseAtual = 0;
 };

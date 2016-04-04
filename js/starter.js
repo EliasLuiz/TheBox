@@ -3,7 +3,8 @@ spritef = new SpriteFactory();
 som = new Som();
 
 //Inicializador do jogo
-jogo = new Jogo();
+canvas = document.getElementById('canvas').getContext('2d');
+jogo = new Jogo(canvas);
 
 //Gatilhos de eventos
 
