@@ -1,6 +1,9 @@
-//Include thebox.js
+//Inicializando singletons
+spritef = new SpriteFactory();
+som = new Som();
 
 //Inicializador do jogo
+jogo = new Jogo();
 
 //Gatilhos de eventos
 

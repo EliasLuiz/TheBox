@@ -17,28 +17,49 @@ function Jogo (canvas){
 	this.faseAtual = 0;
 };
 //Gatilhos para os botoes
-Jogo.prototype.botaoDireita = function(){
-
+Jogo.prototype.botaoDireitaUp = function(){
+		this.fases[this.faseAtual].botaoDireitaUp();
 };
-Jogo.prototype.botaoEsquerda = function(){
-
+Jogo.prototype.botaoDireitaDown = function(){
+	this.fases[this.faseAtual].botaoDireitaDown();
 };
-Jogo.prototype.botaoCima = function(){
-
+Jogo.prototype.botaoEsquerdaUp = function(){
+	this.fases[this.faseAtual].botaoEsquerdaUp();
 };
-Jogo.prototype.botaoBaixo = function(){
-
+Jogo.prototype.botaoEsquerdaDown = function(){
+	this.fases[this.faseAtual].botaoEsquerdaDown();
 };
-Jogo.prototype.botaoAcao = function(){
-
+Jogo.prototype.botaoCimaUp = function(){
+	this.fases[this.faseAtual].botaoCimaUp();
+};
+Jogo.prototype.botaoCimaDown = function(){
+	this.fases[this.faseAtual].botaoCimaDown();
+};
+Jogo.prototype.botaoBaixoUp = function(){
+	this.fases[this.faseAtual].botaoBaixoUp();
+};
+Jogo.prototype.botaoBaixoDown = function(){
+	this.fases[this.faseAtual].botaoBaixoDown();
+};
+Jogo.prototype.botaoAcaoUp = function(){
+	this.fases[this.faseAtual].botaoAcaoUp();
+};
+Jogo.prototype.botaoAcaoDown = function(){
+	this.fases[this.faseAtual].botaoAcaoDown();
+};
+Jogo.prototype.botaoPause = function(){
+	this.fases[this.faseAtual].botaoPause();
+};
+Jogo.prototype.botaoVoltar = function(){
+	this.fases[this.faseAtual].botaoVoltar();
 };
 //Atualizar os elementos do Jogo
 Jogo.prototype.atualiza = function(now){
-
+	this.fases[this.faseAtual].atualiza();
 };
 //Desenhar os elementos do Jogo
 Jogo.prototype.desenha = function(now){
-
+	this.fases[this.faseAtual].desenha();
 };
 
 
@@ -68,19 +89,40 @@ function Fase (canvas){
 	];
 };
 //Gatilhos para os botoes
-Fase.prototype.botaoDireita = function(){
+Jogo.prototype.botaoDireitaUp = function(){
 
 };
-Fase.prototype.botaoEsquerda = function(){
+Jogo.prototype.botaoDireitaDown = function(){
 
 };
-Fase.prototype.botaoCima = function(){
+Jogo.prototype.botaoEsquerdaUp = function(){
 
 };
-Fase.prototype.botaoBaixo = function(){
+Jogo.prototype.botaoEsquerdaDown = function(){
 
 };
-Fase.prototype.botaoAcao = function(){
+Jogo.prototype.botaoCimaUp = function(){
+
+};
+Jogo.prototype.botaoCimaDown = function(){
+
+};
+Jogo.prototype.botaoBaixoUp = function(){
+
+};
+Jogo.prototype.botaoBaixoDown = function(){
+
+};
+Jogo.prototype.botaoAcaoUp = function(){
+
+};
+Jogo.prototype.botaoAcaoDown = function(){
+
+};
+Jogo.prototype.botaoPause = function(){
+
+};
+Jogo.prototype.botaoVoltar = function(){
 
 };
 //Atualizar os elementos do Fase
