@@ -1,6 +1,3 @@
-//include som.js
-
-
 
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
@@ -74,37 +71,63 @@ function SpritePrincipal() {
 		"bxo": false,
 		"spa": false
 	};
+	this.colisao = {
+		"dir": false,
+		"esq": false,
+		"cim": false,
+		"bxo": false
+	};
 };
 //Funcoes para acoes do personagem
-Jogo.prototype.botaoDireitaUp = function(){
-	this.acao["dir"] = false;
+SpritePrincipal.prototype.botaoDireita = function(estado){
+	this.acao["dir"] = estado;
 };
-Jogo.prototype.botaoDireitaDown = function(){
-	this.acao["dir"] = true;
+SpritePrincipal.prototype.botaoEsquerda = function(estado){
+	this.acao["esq"] = estado;
 };
-Jogo.prototype.botaoEsquerdaUp = function(){
-	this.acao["esq"] = false;
+SpritePrincipal.prototype.botaoCima = function(estado){
+	this.acao["cim"] = estado;
 };
-Jogo.prototype.botaoEsquerdaDown = function(){
-	this.acao["esq"] = true;
+SpritePrincipal.prototype.botaoBaixo = function(estado){
+	this.acao["bxo"] = estado;
 };
-Jogo.prototype.botaoCimaUp = function(){
-	this.acao["cim"] = false;
+SpritePrincipal.prototype.botaoAcao = function(estado){
+	this.acao["spa"] = estado;
 };
-Jogo.prototype.botaoCimaDown = function(){
-	this.acao["cim"] = true;
+SpritePrincipal.prototype.colisaoDireita = function(){
+	this.colisao["dir"] = true;
 };
-Jogo.prototype.botaoBaixoUp = function(){
-	this.acao["bxo"] = false;
+SpritePrincipal.prototype.colisaoEsquerda = function(){
+	this.colisao["esq"] = true;
 };
-Jogo.prototype.botaoBaixoDown = function(){
-	this.acao["bxo"] = true;
+SpritePrincipal.prototype.colisaoCima = function(){
+	this.colisao["cim"] = true;
 };
-Jogo.prototype.botaoAcaoUp = function(){
-	this.acao["spa"] = false;
+SpritePrincipal.prototype.colisaoBaixo = function(){
+	this.colisao["bxo"] = true;
 };
-Jogo.prototype.botaoAcaoDown = function(){
-	this.acao["spa"] = true;
+//Atualiza o estado do personagem
+SpritePrincipal.prototype.atualiza = function(){
+	//Se estiver livre
+	if(!this.colisao["bxo"]){
+		this.vel.y += gravidade;	
+	}
+	else{
+		//Se estiver pulando
+		if(this.acao["cim"]){
+			this.acao["cim"] = false;
+			this.vel.y = this.acc.y;
+		}
+		//Se estiver escorado no chao
+		else if(this.vel.y < 0){
+			this.vel.y = 0;		
+		}
+	}
+	//Se estiver colidindo com o teto
+	if(this.colisao["cim"] && this.vel.y > 0)
+		this.vel.y = 0;
+
+	if()
 };
 
 ////////////////////////////////////////////////////////////////
@@ -112,19 +135,15 @@ Jogo.prototype.botaoAcaoDown = function(){
 SpritePrincipal01.prototype = new Sprite();
 SpritePrincipal01.prototype.constructor = SpritePrincipal01;
 function SpritePrincipal01() {
-
+	//Velocidade e posicao atual
+	this.pos = { x: 0, y: 0 };
+	this.vel = { x: 0, y: 0 };
+	//Velocidade de corrida e pulo
+	this.acc = { x: 10, y: 1000 };
 };
 SpritePrincipal01.prototype.load = function(canvas){
 	Sprite.prototype.load.call(
 		this, canvas, "../sprites/SpritePrincipal01.json");
-};
-//Funcoes para acoes do personagem
-SpritePrincipal01.prototype.botaoAcao = function(){
-
-};
-//Atualiza o estado do personagem
-SpritePrincipal01.prototype.atualiza = function(){
-
 };
 
 

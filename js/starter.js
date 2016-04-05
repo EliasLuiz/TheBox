@@ -1,3 +1,6 @@
+//Definicao de constantes
+gravidade = -10;
+
 //Inicializando singletons
 spritef = new SpriteFactory();
 som = new Som();
