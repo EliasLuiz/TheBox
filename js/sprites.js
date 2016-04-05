@@ -1,6 +1,3 @@
-//include som.js
-
-
 
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
@@ -11,7 +8,7 @@
 function Sprite(){
 };
 //Carrega sprites a partir de arquivo
-Sprite.prototype.load = function(canvas, filename){
+Sprite.prototype.load = function(canvas){
 	this.context = canvas;
 
 	//<Javascript eh um trem muito louco>
@@ -28,11 +25,22 @@ Sprite.prototype.load = function(canvas, filename){
 	//</Javascript eh um trem muito louco>
 
 };
+//Retorna as dimensoes atuais do objeto
+Sprite.prototype.getPosAtual(){
+	return {
+		x: this.pos.x,
+		y: this.pos.y,
+		h: this.animacoes[this.spriteAtual.animacao].h[
+			this.spriteAtual.sprite] * this.altura,
+		w: this.animacoes[this.spriteAtual.animacao].w[
+			this.spriteAtual.sprite] * this.altura
+	};
+}
 //Desenha o objeto
 Sprite.prototype.desenha = function(){
 
 	// desenha o pedaço do sprite em tela
-	/*
+/*
     this.context.drawImage(
         this.imagem,
         this.centroImgX[this.proximaImg] - (this.width[this.proximaImg] / 2),
@@ -53,7 +61,7 @@ x 		The x coordinate where to place the image on the canvas
 y 		The y coordinate where to place the image on the canvas 	
 width 	Optional. The width of the image to use (stretch or reduce the image) 	
 height 	Optional. The height of the image to use (stretch or reduce the image)
-	*/
+*/
 };
 
 
@@ -67,23 +75,71 @@ height 	Optional. The height of the image to use (stretch or reduce the image)
 SpritePrincipal.prototype = new Sprite();
 SpritePrincipal.prototype.constructor = SpritePrincipal;
 function SpritePrincipal() {
-
+	this.acao = {
+		"dir": false,
+		"esq": false,
+		"cim": false,
+		"bxo": false,
+		"spa": false
+	};
+	this.colisao = {
+		"dir": false,
+		"esq": false,
+		"cim": false,
+		"bxo": false
+	};
+	this.spriteAtual = { "animacao": "dir", "frame": 0 };
 };
 //Funcoes para acoes do personagem
-SpritePrincipal.prototype.botaoDireita = function(){
-
+SpritePrincipal.prototype.botaoDireita = function(estado){
+	this.acao["dir"] = estado;
 };
-SpritePrincipal.prototype.botaoEsquerda = function(){
-
+SpritePrincipal.prototype.botaoEsquerda = function(estado){
+	this.acao["esq"] = estado;
 };
-SpritePrincipal.prototype.botaoCima = function(){
-
+SpritePrincipal.prototype.botaoCima = function(estado){
+	this.acao["cim"] = estado;
 };
-SpritePrincipal.prototype.botaoBaixo = function(){
-
+SpritePrincipal.prototype.botaoBaixo = function(estado){
+	this.acao["bxo"] = estado;
 };
-SpritePrincipal.prototype.botaoAcao = function(){
+SpritePrincipal.prototype.botaoAcao = function(estado){
+	this.acao["spa"] = estado;
+};
+SpritePrincipal.prototype.colisaoDireita = function(){
+	this.colisao["dir"] = true;
+};
+SpritePrincipal.prototype.colisaoEsquerda = function(){
+	this.colisao["esq"] = true;
+};
+SpritePrincipal.prototype.colisaoCima = function(){
+	this.colisao["cim"] = true;
+};
+SpritePrincipal.prototype.colisaoBaixo = function(){
+	this.colisao["bxo"] = true;
+};
+//Atualiza o estado do personagem
+SpritePrincipal.prototype.atualiza = function(){
+	//Se estiver livre
+	if(!this.colisao["bxo"]){
+		this.vel.y += gravidade;	
+	}
+	else{
+		//Se estiver pulando
+		if(this.acao["cim"]){
+			this.acao["cim"] = false;
+			this.vel.y = this.acc.y;
+		}
+		//Se estiver escorado no chao
+		else if(this.vel.y < 0){
+			this.vel.y = 0;		
+		}
+	}
+	//Se estiver colidindo com o teto
+	if(this.colisao["cim"] && this.vel.y > 0)
+		this.vel.y = 0;
 
+	if()
 };
 
 ////////////////////////////////////////////////////////////////
@@ -91,15 +147,17 @@ SpritePrincipal.prototype.botaoAcao = function(){
 SpritePrincipal01.prototype = new Sprite();
 SpritePrincipal01.prototype.constructor = SpritePrincipal01;
 function SpritePrincipal01() {
-
+	//Velocidade e posicao atual
+	this.pos = { x: 0, y: 0 };
+	this.vel = { x: 0, y: 0 };
+	//Velocidade de corrida e pulo
+	this.acc = { x: 10, y: 1000 };
+	//Multiplicador de tamanho do sprite
+	this.altura = 1;
 };
-//Funcoes para acoes do personagem
-SpritePrincipal01.prototype.botaoAcao = function(){
-
-};
-//Atualiza o estado do personagem
-SpritePrincipal01.prototype.atualiza = function(){
-
+SpritePrincipal01.prototype.load = function(canvas){
+	Sprite.prototype.load.call(
+		this, canvas, "../sprites/SpritePrincipal01.json");
 };
 
 
@@ -157,8 +215,7 @@ function SpriteFactory(canvas, onload){
 
 	//Carregar todas as classes finais de sprite
 	this.sprites["SpritePrincipal01"] = newSpritePrincipal01();
-	this.sprites["SpritePrincipal01"].carrega(
-		canvas, "../sprites/SpritePrincipal01.json", this.loading);
+	this.sprites["SpritePrincipal01"].carrega(canvas);
 
 	//Funcoes de factory
 	this.newSpritePrincipal = function(tipo){
