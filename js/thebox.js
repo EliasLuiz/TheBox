@@ -63,7 +63,7 @@ function Fase (canvas){
 	this.cenario = [
 
 	]; //cenario nao interagivel
-	this.elementoscenario = [
+	this.elementosCenario = [
 
 	]; //cenario interagivel
 	this.inimigos = [
@@ -92,8 +92,17 @@ Fase.prototype.botaoAcao = function(estado){
 };
 //Atualizar os elementos do Fase
 Fase.prototype.atualiza = function(now){
+	this.principal.atualiza();
 
-};
+	if(principal.acao.dir){
+		this.planodefundo.pos.x -= bgspeed;
+		for (var i = 0; i <= this.cenario.length - 1; i--) {
+			this.cenario[i].pos.x -= cenariospeed;
+		}
+		for (var i = 0; i <= this.elementosCenario.length - 1; i--) {
+			this.elementosCenario[i].pos.x -= this.principal.vel.x;
+		}
+	}
 //Desenhar os elementos do Fase
 Fase.prototype.desenha = function(now){
 

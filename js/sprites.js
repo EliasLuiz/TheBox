@@ -144,7 +144,7 @@ SpritePrincipal.prototype.atualiza = function(){
 
 ////////////////////////////////////////////////////////////////
 
-SpritePrincipal01.prototype = new Sprite();
+SpritePrincipal01.prototype = new SpritePrincipal();
 SpritePrincipal01.prototype.constructor = SpritePrincipal01;
 function SpritePrincipal01() {
 	//Velocidade e posicao atual

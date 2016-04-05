@@ -1,6 +1,9 @@
 //Definicao de constantes
 gravidade = -10;
 
+bgspeed = 1;
+cenariospeed = 5;
+
 //Inicializando singletons
 spritef = new SpriteFactory();
 som = new Som();
