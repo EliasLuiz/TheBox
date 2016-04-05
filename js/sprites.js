@@ -25,11 +25,22 @@ Sprite.prototype.load = function(canvas){
 	//</Javascript eh um trem muito louco>
 
 };
+//Retorna as dimensoes atuais do objeto
+Sprite.prototype.getPosAtual(){
+	return {
+		x: this.pos.x,
+		y: this.pos.y,
+		h: this.animacoes[this.spriteAtual.animacao].h[
+			this.spriteAtual.sprite] * this.altura,
+		w: this.animacoes[this.spriteAtual.animacao].w[
+			this.spriteAtual.sprite] * this.altura
+	};
+}
 //Desenha o objeto
 Sprite.prototype.desenha = function(){
 
 	// desenha o pedaço do sprite em tela
-	/*
+/*
     this.context.drawImage(
         this.imagem,
         this.centroImgX[this.proximaImg] - (this.width[this.proximaImg] / 2),
@@ -50,7 +61,7 @@ x 		The x coordinate where to place the image on the canvas
 y 		The y coordinate where to place the image on the canvas 	
 width 	Optional. The width of the image to use (stretch or reduce the image) 	
 height 	Optional. The height of the image to use (stretch or reduce the image)
-	*/
+*/
 };
 
 
@@ -77,6 +88,7 @@ function SpritePrincipal() {
 		"cim": false,
 		"bxo": false
 	};
+	this.spriteAtual = { "animacao": "dir", "frame": 0 };
 };
 //Funcoes para acoes do personagem
 SpritePrincipal.prototype.botaoDireita = function(estado){
@@ -140,6 +152,8 @@ function SpritePrincipal01() {
 	this.vel = { x: 0, y: 0 };
 	//Velocidade de corrida e pulo
 	this.acc = { x: 10, y: 1000 };
+	//Multiplicador de tamanho do sprite
+	this.altura = 1;
 };
 SpritePrincipal01.prototype.load = function(canvas){
 	Sprite.prototype.load.call(
