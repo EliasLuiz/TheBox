@@ -1,14 +1,16 @@
 //Inicializando singletons
-spritef = new SpriteFactory();
-som = new Som();
+// spritef = new SpriteFactory();
+// som = new Som();
 
 //Inicializador do jogo
-canvas = document.getElementById('canvas').getContext('2d');
-jogo = new Jogo(canvas);
+// canvas = document.getElementById('canvas').getContext('2d');
+// jogo = new Jogo(canvas);
 
 //Gatilhos de eventos
 
-
+var canvas = document.getElementById("canvas");
+canvas.addEventListener('keydown', doKeyDown, true);
+canvas.addEventListener('keyup', doKeyUp, true);
 //Outras funcoes
 function LoadJSON(filename, callback){
 	var xmlhttp = new XMLHttpRequest();
@@ -21,32 +23,26 @@ function LoadJSON(filename, callback){
 	xmlhttp.send();
 };
 function doKeyDown(e) {
-
-alert( e.keyCode );
 switch (e.keyCode) {
-        case 37,38,39,40,32,80,27: console.log("vish " + e.keyCode); kDown(true,e.keyCode); break; //Left key
-        // case 38: alert("Up"); kDown(true); break; //Up key
-        // case 39: alert("Right"); kDown(true); break; //Right key
-        // case 40: alert("Down"); kDown(true); break; //Down key
-		// case 32: alert("Action"); kDown(true); break; //Down key
-		// case 80: alert("Pause"); kDown(true); break; //Down key
-		// case 27: alert("Esc"); kDown(true); break; //Down key
-        default: alert(e.keyCode); //Everything else
+        case 37: botaoEsquerda(true);break; 
+        case 38: botaoCima(true);break; 
+        case 39: botaoDireita(true);break; 
+        case 40: botaoBaixo(true);break; 
+		case 32: botaoAcao(true);break; //space
+		case 80: botaoPause();break; //p
+		case 27: botaoVoltar();break;//esc
+        default: console.log("erroooou1! "+ e.keyCode);break; //Everything else
     }
 
 }
 function doKeyUp(e) {
-
-alert( e.keyCode )
 switch (e.keyCode) {
-        case 37,38,39,40,32,80,27: console.log("parou " + e.keyCode); kDown(false,e.keyCode); break; //Left key
-        // case 38: alert("Up"); upDownDown=false; break; //Up key
-        // case 39: alert("Right"); rightDown=false; break; //Right key
-        // case 40: alert("Down"); downDown=false; break; //Down key
-		// case 32: alert("Action"); actionDown=false; break; //Down key
-		// case 80: alert("Pause"); pauseDown=false; break; //Down key
-		// case 27: alert("Esc"); escDown=false; break; //Down key
-        default: console.log("erroooou! "+ e.keyCode);icq(); //Everything else
+        case 37: botaoEsquerda(false);break; 
+        case 38: botaoCima(false);break; 
+        case 39: botaoDireita(false);break; 
+        case 40: botaoBaixo(false);break; 
+		case 32: botaoAcao(false);break; //space		
+        default: console.log("erroooou2! "+ e.keyCode);break; //Everything else
     }
 }
 
