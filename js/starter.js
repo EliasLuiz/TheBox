@@ -1,16 +1,24 @@
 //Definicao de constantes
 gravidade = -10;
 
-bgspeed = 1;
-cenariospeed = 5;
+
+//(1 - Velocidade de movimento da camada intermediaria relativo ao personagem)
+cenariospeed = 1 - 0.5;
+
+viewport = {
+	x: 0,
+	y: 0,
+	h: 400,
+	w: 500
+};
 
 //Inicializando singletons
-// spritef = new SpriteFactory();
-// som = new Som();
+spritef = new SpriteFactory();
+som = new Som();
 
 //Inicializador do jogo
-// canvas = document.getElementById('canvas').getContext('2d');
-// jogo = new Jogo(canvas);
+canvas = document.getElementById('canvas').getContext('2d');
+jogo = new Jogo(canvas);
 
 //Gatilhos de eventos
 

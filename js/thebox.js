@@ -13,10 +13,6 @@ function Jogo (canvas) {
 	this.canvas = canvas;
 	this.fase = [
 		new Fase1(canvas),
-		new Fase2(canvas),
-		new Fase3(canvas),
-		new Fase4(canvas),
-		new Fase5(canvas),
 	];
 	this.faseAtual = 0;
 };
@@ -60,15 +56,9 @@ function Fase (canvas){
 	//Construtor de Fase
 	this.canvas = canvas;
 	this.planodefundo = ;
-	this.cenario = [
-
-	]; //cenario nao interagivel
-	this.elementosCenario = [
-
-	]; //cenario interagivel
-	this.inimigos = [
-
-	];
+	this.cenario = []; //cenario nao interagivel - 2a camada
+	this.elementosCenario = []; //cenario interagivel
+	this.inimigos = [];
 };
 //Gatilhos para os botoes
 Fase.prototype.botaoDireita = function(estado){
@@ -94,17 +84,34 @@ Fase.prototype.botaoAcao = function(estado){
 Fase.prototype.atualiza = function(now){
 	this.principal.atualiza();
 
-	if(principal.acao.dir){
-		this.planodefundo.pos.x -= bgspeed;
-		for (var i = 0; i <= this.cenario.length - 1; i--) {
-			this.cenario[i].pos.x -= cenariospeed;
-		}
-		for (var i = 0; i <= this.elementosCenario.length - 1; i--) {
-			this.elementosCenario[i].pos.x -= this.principal.vel.x;
-		}
+	//Desloca a fase
+	var vel = this.principal.vel.x;
+	viewport.x += vel;
+
+	//Atualiza quem nao se move junto com a tela
+	this.planodefundo.atualiza(vel);
+	for (var i = 0; i <= this.cenario.length - 1; i--) {
+		this.cenario[i].pos.atualiza(vel);
 	}
+	for (var i = 0; i < this.inimigos.length; i++) {
+		this.inimigos[i].atualiza(vel);
+	};
+
+};
 //Desenhar os elementos do Fase
-Fase.prototype.desenha = function(now){
+Fase.prototype.desenha = function(){
+
+	this.planodefundo.desenha();
+	for (var i = 0; i <= this.cenario.length - 1; i--) {
+		this.cenario[i].pos.desenha();
+	}
+	for (var i = 0; i <= this.elementosCenario.length - 1; i--) {
+		this.elementosCenario[i].pos.desenha();
+	}
+	for (var i = 0; i <= this.inimigos.length - 1; i--) {
+		this.inimigos[i].pos.desenha();
+	}
+	this.principal.desenha();
 
 };
 
@@ -114,27 +121,13 @@ Fase.prototype.desenha = function(now){
 //Classes para gerenciar cada fase
 ////////////////////////////////////////////////////////////////
 
-Menu.prototype = new Fase("");
-Menu.prototype.construtor = Menu;
-function Menu (canvas){
-	//Construtor de Menu
-	this.canvas = canvas;
-};
-//Chamada para elementos sonoros de Fase - musica, sons da fase, etc
-Menu.prototype.som = function(){
-
-};
-Menu.prototype.atualiza = function(now){
-
-};
-
-////////////////////////////////////////////////////////////////
-
 Fase1.prototype = new Fase("");
 Fase1.prototype.construtor = Fase1;
 function Fase1 (canvas){
 	//Construtor de Fase1
-	this.canvas = canvas;
+	Fase.prototype.construtor.call(this, canvas);
+	this.principal = new SpritePrincipal01(canvas);
+	this.planodefundo = new Backgroung01(canvas);
 };
 //Chamada para elementos sonoros de Fase - musica, sons da fase, etc
 Fase1.prototype.som = function(){
@@ -142,7 +135,6 @@ Fase1.prototype.som = function(){
 };
 //Atualiza os elementos especificos da Fase
 Fase1.prototype.atualiza = function(now){
-
 	Fase.prototype.atualiza.call(this);
 };
 
