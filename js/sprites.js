@@ -8,8 +8,14 @@
 function Sprite(){
 };
 //Carrega sprites a partir de arquivo
-Sprite.prototype.load = function(canvas){
+Sprite.prototype.load = function(canvas, filename){
 	this.context = canvas;
+
+	//Variaveis basicas
+		//Velocidade e posicao atual
+	this.pos = { x: 0, y: 0 };
+		//(1 - Velocidade de movimento do background relativo ao personagem)
+	this.vel = { x: 1 - 0.1, y: 0 };
 
 	//<Javascript eh um trem muito louco>
 	var gambi = this;
@@ -24,6 +30,19 @@ Sprite.prototype.load = function(canvas){
 	LoadJSON(filename, __loadsprite__);
 	//</Javascript eh um trem muito louco>
 
+	this.spriteAtual = { "animacao": "", "frame": 0 };
+
+	//Criando delay de idle (GAMBI)
+	if(this.animacoes["idle"]){
+		for(i in this.animacoes["idle"]){
+			var prim = this.animacoes["idle"][i][0];
+			var parado = [];
+			for(var idx = 0; idx < 300; idx++){
+				parado.push(prim);
+			}
+			this.animacao["idle"][i] = parado.concat(this.animacao["idle"][i])
+		}
+	}
 };
 //Retorna as dimensoes atuais do objeto
 Sprite.prototype.getPosAtual(){
@@ -40,29 +59,62 @@ Sprite.prototype.getPosAtual(){
 Sprite.prototype.desenha = function(){
 
 	// desenha o pedaço do sprite em tela
-/*
-    this.context.drawImage(
-        this.imagem,
-        this.centroImgX[this.proximaImg] - (this.width[this.proximaImg] / 2),
-        this.centroImgY[this.proximaImg] - (this.height[this.proximaImg] / 2),
-        this.width[this.proximaImg],
-        this.height[this.proximaImg],
-        this.novoSx,
-        this.novoSy,
-        this.novoWidth,
-        this.novoHeight);
+	var p = this.getPosAtual();
 
-img 	Specifies the image, canvas, or video element to use 	 	
-sx 		Optional. The x coordinate where to start clipping 	
-sy 		Optional. The y coordinate where to start clipping 	
-swidth 	Optional. The width of the clipped image 	
-sheight Optional. The height of the clipped image 	
-x 		The x coordinate where to place the image on the canvas 	
-y 		The y coordinate where to place the image on the canvas 	
-width 	Optional. The width of the image to use (stretch or reduce the image) 	
-height 	Optional. The height of the image to use (stretch or reduce the image)
-*/
+	//Se estiver visivel imprime
+	if(this.x + p.w - viewframe.x > 0 &&
+	   this.x - viewframe.x < viewframe.w &&
+	   this.y - p.h - viewframe.y > 0 &&
+	   this.y - viewframe.y < viewframe.h &&){
+
+	    this.context.drawImage(
+	        this.imagem,		//img 	Specifies the image, canvas, or video element to use 	 	
+	        this.animacoes[this.spriteAtual.animacao].x[this.spriteAtual.frame],	//sx 		Optional. The x coordinate where to start clipping 	
+	        this.animacoes[this.spriteAtual.animacao].y[this.spriteAtual.frame],	//sy 		Optional. The y coordinate where to start clipping 	
+	        this.animacoes[this.spriteAtual.animacao].w[this.spriteAtual.frame],	//swidth 	Optional. The width of the clipped image 	
+	        this.animacoes[this.spriteAtual.animacao].h[this.spriteAtual.frame],	//sheight 	Optional. The height of the clipped image 	
+	        p.x - viewframe.x,	//x 		The x coordinate where to place the image on the canvas 	
+	        p.y - viewframe.y,	//y 		The y coordinate where to place the image on the canvas 	
+	        p.w, 	//width 	Optional. The width of the image to use (stretch or reduce the image) 	
+	        p.h); 	//height 	Optional. The height of the image to use (stretch or reduce the image)
+
+	}
 };
+
+
+
+
+
+////////////////////////////////////////////////////////////////
+//Classe para gerenciar o b
+////////////////////////////////////////////////////////////////
+
+Background.prototype = new Sprite();
+Background.prototype.constructor = Background;
+function Background() {
+};
+//Atualiza o estado do background
+Background.prototype.atualiza = function(vel){
+	this.pos.x += vel * this.vel.x;
+};
+
+////////////////////////////////////////////////////////////////
+
+Background01.prototype = new Background();
+Background01.prototype.constructor = Background01;
+function Background01(canvas) {
+	Sprite.prototype.load.call(this, canvas, "bg01.json");
+};
+Background01.prototype.getPosAtual(){
+	return {
+		x: this.pos.x,
+		y: this.pos.y,
+		h: viewport.h,
+		w: viewport.w
+	};
+}
+
+
 
 
 
@@ -88,7 +140,6 @@ function SpritePrincipal() {
 		"cim": false,
 		"bxo": false
 	};
-	this.spriteAtual = { "animacao": "dir", "frame": 0 };
 };
 //Funcoes para acoes do personagem
 SpritePrincipal.prototype.botaoDireita = function(estado){
@@ -129,35 +180,54 @@ SpritePrincipal.prototype.atualiza = function(){
 		if(this.acao["cim"]){
 			this.acao["cim"] = false;
 			this.vel.y = this.acc.y;
+			this.spriteAtual.animacao = "jumping";
+			this.spriteAtual.frame = -1;
 		}
 		//Se estiver escorado no chao
 		else if(this.vel.y < 0){
-			this.vel.y = 0;		
+			this.vel.y = 0;
+			//Se estiver abaixando
+			if(this.acao["bxo"]){
+				this.spriteAtual.animacao = "ducking";
+				this.spriteAtual.frame = -1;
+			}
+			else {
+				this.spriteAtual.animacao = "idle";
+				this.spriteAtual.frame = -1;				
+			}
 		}
 	}
 	//Se estiver colidindo com o teto
-	if(this.colisao["cim"] && this.vel.y > 0)
-		this.vel.y = 0;
+	if(this.colisao["cim"] && this.vel.y > 0){
+		this.vel.y = 0;	
+	}
 
-	if()
+	//Se estiver andando para o lado
+	if(this.acao["dir"] && !this.colisao["dir"]){
+		this.vel.x = this.acc.x;
+		if(this.spriteAtual.animacao !== "walking"){
+			this.spriteAtual.animacao = "walking";
+			this.spriteAtual.frame = -1;
+		}
+	}
+	else if(this.acao["esq"] && !this.colisao["esq"]){
+		this.vel.x = -this.acc.x;
+	}
+
+	//Vai para o proximo frame da animacao
+	this.spriteAtual.frame = (this.spriteAtual.frame + 1) % (this.animacoes[this.spriteAtual.animacao].x.length);
 };
 
 ////////////////////////////////////////////////////////////////
 
-SpritePrincipal01.prototype = new Sprite();
+SpritePrincipal01.prototype = new SpritePrincipal();
 SpritePrincipal01.prototype.constructor = SpritePrincipal01;
-function SpritePrincipal01() {
-	//Velocidade e posicao atual
-	this.pos = { x: 0, y: 0 };
-	this.vel = { x: 0, y: 0 };
-	//Velocidade de corrida e pulo
-	this.acc = { x: 10, y: 1000 };
-	//Multiplicador de tamanho do sprite
-	this.altura = 1;
+function SpritePrincipal01(canvas) {
+	Sprite.prototype.load.call(this, canvas, "../sprites/SpritePrincipal01.json");
+	SpritePrincipal.prototype.constructor.call(this, canvas);
 };
-SpritePrincipal01.prototype.load = function(canvas){
-	Sprite.prototype.load.call(
-		this, canvas, "../sprites/SpritePrincipal01.json");
+SpritePrincipal01.prototype.atualiza = function(){
+	SpritePrincipal.prototype.atualiza.call(this);
 };
 
 
