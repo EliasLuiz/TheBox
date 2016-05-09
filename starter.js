@@ -12,13 +12,14 @@ viewport = {
 	w: 500
 };
 
-//Inicializando singletons
-spritef = new SpriteFactory();
-som = new Som();
-
 //Inicializador do jogo
 canvas = document.getElementById('canvas').getContext('2d');
-jogo = new Jogo(canvas);
+spritef = new SpriteFactory(canvas, function(){
+    jogo = new Jogo(canvas);
+});
+som = new Som();
+
+
 
 //Gatilhos de eventos
 
@@ -28,14 +29,16 @@ canvas.addEventListener('keyup', doKeyUp, true);
 //Outras funcoes
 function LoadJSON(filename, callback){
 	var xmlhttp = new XMLHttpRequest();
+    xmlhttp.overrideMimeType("application/json");
 	xmlhttp.onreadystatechange = function() {
 		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 		    callback(JSON.parse(xmlhttp.responseText));
 		}
 	};
-	xmlhttp.open("GET", filename, true);
+	xmlhttp.open("GET", filename, false);
 	xmlhttp.send();
 };
+
 function doKeyDown(e) {
 switch (e.keyCode) {
         case 37: botaoEsquerda(true);break; 
@@ -63,13 +66,13 @@ switch (e.keyCode) {
 
 function Colisao(sprite1, sprite2){
     var colisao = {
-        1: {
+        um: {
             dir: false,
             esq: false,
             cim: false,
             bxo: false
         },
-        2: {
+        dois: {
             dir: false,
             esq: false,
             cim: false,
@@ -90,11 +93,11 @@ function Colisao(sprite1, sprite2){
         //dir com esq
         if(pos1.x + pos1.w <= pos2.x + margemErro &&
            pos1.x + pos1.w >= pos2.x - margemErro)
-            colisao.1.dir = colisao.2.esq = true;
+            colisao.um.dir = colisao.dois.esq = true;
         //esq com dir
         else if(pos1.x <= pos2.x + pos2.w + margemErro &&
                 pos1.x >= pos2.x + pos2.w - margemErro)
-            colisao.1.esq = colisao.2.dir = true;
+            colisao.um.esq = colisao.dois.dir = true;
     }
     //Se em alcance horizontal
     if(pos1.x + pos1.w >= pos2.x ||
@@ -102,11 +105,11 @@ function Colisao(sprite1, sprite2){
         //cim com bxo
         if(pos1.y >= pos2.y - pos2.h + margemErro &&
            pos1.y <= pos2.y - pos2.h - margemErro)
-            colisao.1.cim = colisao.2.bxo = true;
+            colisao.um.cim = colisao.dois.bxo = true;
         //bxo com cim
         else if(pos1.y - pos1.h <= pos2.y + margemErro &&
                 pos1.y - pos1.h >= pos2.y - margemErro)
-            colisao.1.bxo = colisao.2.cim = true;
+            colisao.um.bxo = colisao.dois.cim = true;
     }
 
     return colisao;

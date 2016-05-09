@@ -40,12 +40,12 @@ Sprite.prototype.load = function(canvas, filename){
 			for(var idx = 0; idx < 300; idx++){
 				parado.push(prim);
 			}
-			this.animacao["idle"][i] = parado.concat(this.animacao["idle"][i])
+			this.animacoes["idle"][i] = parado.concat(this.animacoes["idle"][i])
 		}
 	}
 };
 //Retorna as dimensoes atuais do objeto
-Sprite.prototype.getPosAtual(){
+Sprite.prototype.getPosAtual = function(){
 	return {
 		x: this.pos.x,
 		y: this.pos.y,
@@ -65,7 +65,7 @@ Sprite.prototype.desenha = function(){
 	if(this.x + p.w - viewframe.x > 0 &&
 	   this.x - viewframe.x < viewframe.w &&
 	   this.y - p.h - viewframe.y > 0 &&
-	   this.y - viewframe.y < viewframe.h &&){
+	   this.y - viewframe.y < viewframe.h){
 
 	    this.context.drawImage(
 	        this.imagem,		//img 	Specifies the image, canvas, or video element to use 	 	
@@ -105,7 +105,7 @@ Background01.prototype.constructor = Background01;
 function Background01(canvas) {
 	Sprite.prototype.load.call(this, canvas, "bg01.json");
 };
-Background01.prototype.getPosAtual(){
+Background01.prototype.getPosAtual = function(){
 	return {
 		x: this.pos.x,
 		y: this.pos.y,
@@ -142,33 +142,15 @@ function SpritePrincipal() {
 	};
 };
 //Funcoes para acoes do personagem
-SpritePrincipal.prototype.botaoDireita = function(estado){
-	this.acao["dir"] = estado;
-};
-SpritePrincipal.prototype.botaoEsquerda = function(estado){
-	this.acao["esq"] = estado;
-};
-SpritePrincipal.prototype.botaoCima = function(estado){
-	this.acao["cim"] = estado;
-};
-SpritePrincipal.prototype.botaoBaixo = function(estado){
-	this.acao["bxo"] = estado;
-};
-SpritePrincipal.prototype.botaoAcao = function(estado){
-	this.acao["spa"] = estado;
-};
-SpritePrincipal.prototype.colisaoDireita = function(){
-	this.colisao["dir"] = true;
-};
-SpritePrincipal.prototype.colisaoEsquerda = function(){
-	this.colisao["esq"] = true;
-};
-SpritePrincipal.prototype.colisaoCima = function(){
-	this.colisao["cim"] = true;
-};
-SpritePrincipal.prototype.colisaoBaixo = function(){
-	this.colisao["bxo"] = true;
-};
+SpritePrincipal.prototype.botaoDireita = function(estado){ 	this.acao["dir"] = estado; };
+SpritePrincipal.prototype.botaoEsquerda = function(estado){	this.acao["esq"] = estado; };
+SpritePrincipal.prototype.botaoCima = function(estado){		this.acao["cim"] = estado; };
+SpritePrincipal.prototype.botaoBaixo = function(estado){	this.acao["bxo"] = estado; };
+SpritePrincipal.prototype.botaoAcao = function(estado){		this.acao["spa"] = estado; };
+SpritePrincipal.prototype.colisaoDireita = function(){ 		this.colisao["dir"] = true; };
+SpritePrincipal.prototype.colisaoEsquerda = function(){		this.colisao["esq"] = true; };
+SpritePrincipal.prototype.colisaoCima = function(){			this.colisao["cim"] = true; };
+SpritePrincipal.prototype.colisaoBaixo = function(){ 		this.colisao["bxo"] = true; };
 //Atualiza o estado do personagem
 SpritePrincipal.prototype.atualiza = function(){
 	//Se estiver livre
@@ -223,8 +205,8 @@ SpritePrincipal.prototype.atualiza = function(){
 SpritePrincipal01.prototype = new SpritePrincipal();
 SpritePrincipal01.prototype.constructor = SpritePrincipal01;
 function SpritePrincipal01(canvas) {
-	Sprite.prototype.load.call(this, canvas, "../sprites/SpritePrincipal01.json");
 	SpritePrincipal.prototype.constructor.call(this, canvas);
+	Sprite.prototype.load.call(this, canvas, "sprites/SpritePrincipal01.json");
 };
 SpritePrincipal01.prototype.atualiza = function(){
 	SpritePrincipal.prototype.atualiza.call(this);
@@ -284,8 +266,7 @@ function SpriteFactory(canvas, onload){
 	//============================================================
 
 	//Carregar todas as classes finais de sprite
-	this.sprites["SpritePrincipal01"] = newSpritePrincipal01();
-	this.sprites["SpritePrincipal01"].carrega(canvas);
+	this.sprites["SpritePrincipal01"] = new SpritePrincipal01(canvas);
 
 	//Funcoes de factory
 	this.newSpritePrincipal = function(tipo){

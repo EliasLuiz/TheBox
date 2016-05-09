@@ -55,7 +55,7 @@ Jogo.prototype.botaoVoltar = function(){
 function Fase (canvas){
 	//Construtor de Fase
 	this.canvas = canvas;
-	this.planodefundo = ;
+	this.planodefundo = undefined;
 	this.cenario = []; //cenario nao interagivel - 2a camada
 	this.elementosCenario = []; //cenario interagivel
 	this.inimigos = [];
