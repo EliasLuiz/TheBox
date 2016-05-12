@@ -1,3 +1,8 @@
+(function () {
+    var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+    window.requestAnimationFrame = requestAnimationFrame;
+})();
+
 //Definicao de constantes
 gravidade = -10;
 
@@ -5,24 +10,16 @@ gravidade = -10;
 //(1 - Velocidade de movimento da camada intermediaria relativo ao personagem)
 cenariospeed = 1 - 0.5;
 
-viewport = {
+window.viewport = {
 	x: 0,
 	y: 0,
 	h: 400,
 	w: 500
 };
 
-//Inicializador do jogo
-canvas = document.getElementById('canvas').getContext('2d');
-spritef = new SpriteFactory(canvas, function(){
-    jogo = new Jogo(canvas);
-});
-som = new Som();
-
-
+carregado = false;
 
 //Gatilhos de eventos
-
 var canvas = document.getElementById("canvas");
 canvas.addEventListener('keydown', doKeyDown, true);
 canvas.addEventListener('keyup', doKeyUp, true);
@@ -114,5 +111,17 @@ function Colisao(sprite1, sprite2){
 
     return colisao;
 };
+
+
+//Inicializador do jogo
+canvas = document.getElementById('canvas').getContext('2d');
+som = new Som();
+spritef = new SpriteFactory(canvas);
+while(true){
+    if(carregado){
+        jogo = new Jogo(canvas);
+        break;
+    }
+}
 
 //# sourceURL=starter.js

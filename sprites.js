@@ -8,13 +8,13 @@
 function Sprite(){
 };
 //Carrega sprites a partir de arquivo
-Sprite.prototype.load = function(canvas, filename){
+Sprite.prototype.load = function(canvas, filename, onload){
 	this.context = canvas;
 
 	//Variaveis basicas
-		//Velocidade e posicao atual
+	//Velocidade e posicao atual
 	this.pos = { x: 0, y: 0 };
-		//(1 - Velocidade de movimento do background relativo ao personagem)
+	//(1 - Velocidade de movimento do background relativo ao personagem)
 	this.vel = { x: 1 - 0.1, y: 0 };
 
 	//<Javascript eh um trem muito louco>
@@ -30,7 +30,7 @@ Sprite.prototype.load = function(canvas, filename){
 	LoadJSON(filename, __loadsprite__);
 	//</Javascript eh um trem muito louco>
 
-	this.spriteAtual = { "animacao": "", "frame": 0 };
+	this.spriteAtual = { "animacao": "idle", "frame": 0 };
 
 	//Criando delay de idle (GAMBI)
 	if(this.animacoes["idle"]){
@@ -43,6 +43,8 @@ Sprite.prototype.load = function(canvas, filename){
 			this.animacoes["idle"][i] = parado.concat(this.animacoes["idle"][i])
 		}
 	}
+
+	onload();
 };
 //Retorna as dimensoes atuais do objeto
 Sprite.prototype.getPosAtual = function(){
@@ -62,10 +64,10 @@ Sprite.prototype.desenha = function(){
 	var p = this.getPosAtual();
 
 	//Se estiver visivel imprime
-	if(this.x + p.w - viewframe.x > 0 &&
-	   this.x - viewframe.x < viewframe.w &&
-	   this.y - p.h - viewframe.y > 0 &&
-	   this.y - viewframe.y < viewframe.h){
+	if(p.x + p.w - viewport.x > 0 &&
+	   p.x - viewport.x < viewport.w &&
+	   p.y - p.h - viewport.y > 0 &&
+	   p.y - viewport.y < viewport.h){
 
 	    this.context.drawImage(
 	        this.imagem,		//img 	Specifies the image, canvas, or video element to use 	 	
@@ -73,8 +75,8 @@ Sprite.prototype.desenha = function(){
 	        this.animacoes[this.spriteAtual.animacao].y[this.spriteAtual.frame],	//sy 		Optional. The y coordinate where to start clipping 	
 	        this.animacoes[this.spriteAtual.animacao].w[this.spriteAtual.frame],	//swidth 	Optional. The width of the clipped image 	
 	        this.animacoes[this.spriteAtual.animacao].h[this.spriteAtual.frame],	//sheight 	Optional. The height of the clipped image 	
-	        p.x - viewframe.x,	//x 		The x coordinate where to place the image on the canvas 	
-	        p.y - viewframe.y,	//y 		The y coordinate where to place the image on the canvas 	
+	        p.x - viewport.x,	//x 		The x coordinate where to place the image on the canvas 	
+	        p.y - viewport.y,	//y 		The y coordinate where to place the image on the canvas 	
 	        p.w, 	//width 	Optional. The width of the image to use (stretch or reduce the image) 	
 	        p.h); 	//height 	Optional. The height of the image to use (stretch or reduce the image)
 
@@ -204,9 +206,9 @@ SpritePrincipal.prototype.atualiza = function(){
 
 SpritePrincipal01.prototype = new SpritePrincipal();
 SpritePrincipal01.prototype.constructor = SpritePrincipal01;
-function SpritePrincipal01(canvas) {
+function SpritePrincipal01(canvas, onload) {
 	SpritePrincipal.prototype.constructor.call(this, canvas);
-	Sprite.prototype.load.call(this, canvas, "sprites/SpritePrincipal01.json");
+	Sprite.prototype.load.call(this, canvas, "sprites/SpritePrincipal01.json", onload);
 };
 SpritePrincipal01.prototype.atualiza = function(){
 	SpritePrincipal.prototype.atualiza.call(this);
@@ -224,7 +226,7 @@ SpritePrincipal01.prototype.atualiza = function(){
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 
-function SpriteFactory(canvas, onload){
+function SpriteFactory(canvas){
 	//Criando singleton
 	if (arguments.callee._singletonInstance) {
 		return arguments.callee._singletonInstance;
@@ -239,43 +241,70 @@ function SpriteFactory(canvas, onload){
 	this.loadCallback = onload;
 
 	//Funcao que copia um objeto (shallow copy)
-	this.copiaRasa = function(original){
-		//Criando copia com prototype de original
-	    var copia = Object.create(Object.getPrototypeOf(original));
+	this.copiaProfunda = function(obj){		
+	    var copy;
 
-	    //Iterando por cada propriedade de original
-	    var i , keys = Object.getOwnPropertyNames(original);
-	    for (i = 0; i < keys.length; i++){
-	        //Copiando a propriedade para copia
-	        Object.defineProperty(copia , keys[i] ,
-	            Object.getOwnPropertyDescriptor(original , keys[i]));
+	    // Handle the 3 simple types, and null or undefined
+	    if (null == obj || "object" != typeof obj) 
+	    	return obj;
+
+	    // Handle Date
+	    else if (obj instanceof Date) {
+	        copy = new Date();
+	        copy.setTime(obj.getTime());
+	        return copy;
 	    }
 
-	    return copia;
+	    // Handle Array
+	    else if (obj instanceof Array) {
+	        copy = [];
+	        for (var i = 0, len = obj.length; i < len; i++) {
+	            copy[i] = this.copiaProfunda(obj[i]);
+	        }
+	        return copy;
+	    }
+
+	    // Handle Object
+	    else if (obj instanceof Object) {
+	        copy = {};
+	        for (var attr in obj) {
+	            if (obj.hasOwnProperty(attr)) 
+	            	copy[attr] = this.copiaProfunda(obj[attr]);
+	        }
+	        return copy;
+	    }
+
+	    else if (obj instanceof Object) {
+	    	
+	    }
 	};
 
 	//Funcao que chama callback quando todos os sprites carregarem
+	var gambi = this;
 	this.loading = function(){
-		this.carregados++;
-		if(this.carregados < this.sprites.length)
+		gambi.carregados++;
+		if(gambi.carregados < gambi.sprites.length)
 			return;
-		this.loadCallback();
+		carregado = true;
 	};
 
 	//============================================================
 	//============================================================
 
-	//Carregar todas as classes finais de sprite
-	this.sprites["SpritePrincipal01"] = new SpritePrincipal01(canvas);
-
 	//Funcoes de factory
-	this.newSpritePrincipal = function(tipo){
+	this.newSpritePrincipal = function(tipo, x, y){
 		//tipo = int com numero da fase do personagem principal
 		switch(tipo){
 			case 1:
-				return this.copiaRasa(this.sprites["SpritePrincipal01"]);
+				var aux = this.copiaProfunda(this.sprites.SpritePrincipal01);
+				aux.pos.x = x;
+				aux.pos.y = y;
+				return aux;
 		}
 	};
+
+	//Carregar todas as classes finais de sprite
+	this.sprites.SpritePrincipal01 = new SpritePrincipal01(canvas, this.loading);
 };
 
 
