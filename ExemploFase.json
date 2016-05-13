@@ -1,0 +1,38 @@
+{
+    "planodefundo": {
+        "tipo": "",
+        "x": ,
+        "y": ,
+        "escala": 
+    },
+    "cenario": [
+        {
+            "tipo": "",
+            "x": ,
+            "y": ,
+            "escala": 
+        }
+    ],
+    "elementosCenario": [
+        {
+            "tipo": "",
+            "x": ,
+            "y": ,
+            "escala": 
+        }
+    ],
+    "inimigos": [
+        {
+            "tipo": "",
+            "x": ,
+            "y": ,
+            "escala": 
+        }
+    ],
+    "principal": {
+        "tipo": "",
+        "x": ,
+        "y": ,
+        "escala": 
+    }
+}
