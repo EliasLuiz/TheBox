@@ -13,8 +13,8 @@ cenariospeed = 1 - 0.5;
 window.viewport = {
 	x: 0,
 	y: 0,
-	h: 400,
-	w: 500
+	h: 576,
+	w: 1024
 };
 
 carregado = false;
@@ -37,26 +37,24 @@ function LoadJSON(filename, callback){
 };
 
 function doKeyDown(e) {
-switch (e.keyCode) {
-        case 37: botaoEsquerda(true);break; 
-        case 38: botaoCima(true);break; 
-        case 39: botaoDireita(true);break; 
-        case 40: botaoBaixo(true);break; 
-		case 32: botaoAcao(true);break; //space
-		case 80: botaoPause();break; //p
-		case 27: botaoVoltar();break;//esc
-        default: console.log("erroooou1! "+ e.keyCode);break; //Everything else
+    switch (e.keyCode) {
+        case 37: Jogo().botaoEsquerda(true);break; 
+        case 38: Jogo().botaoCima(true);break; 
+        case 39: Jogo().botaoDireita(true);break; 
+        case 40: Jogo().botaoBaixo(true);break; 
+		case 32: Jogo().botaoAcao(true);break; //space
+		case 80: Jogo().botaoPause();break; //p
+		case 27: Jogo().botaoVoltar();break;//esc
     }
 
 }
 function doKeyUp(e) {
-switch (e.keyCode) {
-        case 37: botaoEsquerda(false);break; 
-        case 38: botaoCima(false);break; 
-        case 39: botaoDireita(false);break; 
-        case 40: botaoBaixo(false);break; 
-		case 32: botaoAcao(false);break; //space		
-        default: console.log("erroooou2! "+ e.keyCode);break; //Everything else
+    switch (e.keyCode) {
+        case 37: Jogo().botaoEsquerda(false);break; 
+        case 38: Jogo().botaoCima(false);break; 
+        case 39: Jogo().botaoDireita(false);break; 
+        case 40: Jogo().botaoBaixo(false);break; 
+		case 32: Jogo().botaoAcao(false);break; //space	
     }
 }
 
@@ -111,6 +109,10 @@ function Colisao(sprite1, sprite2){
 
     return colisao;
 };
+
+window.funcaoAtualiza = function(){
+    Jogo().atualiza();
+}
 
 
 //Inicializador do jogo

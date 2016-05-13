@@ -49,7 +49,7 @@ Jogo.prototype.botaoVoltar = function(){
 Jogo.prototype.atualiza = function(now){
 	Jogo().fase[this.faseAtual].atualiza();
 	Jogo().fase[this.faseAtual].desenha();
-	requestNextAnimationFrame(Jogo().atualiza);
+	requestNextAnimationFrame(window.funcaoAtualiza);
 };
 
 
@@ -97,14 +97,16 @@ Fase.prototype.botaoAcao = function(estado){
 //Atualizar os elementos do Fase
 Fase.prototype.atualiza = function(now){
 	this.principal.atualiza();
-
+	var vel = 0;
 	//Desloca a fase
-	var vel = this.principal.vel.x;
-	viewport.x += vel;
+	if(this.principal.acao["dir"] || this.principal.acao["esq"]){
+		vel = this.principal.vel.x;
+		viewport.x += vel;	
+	}
 
 	//Atualiza quem nao se move junto com a tela
 	this.planodefundo.atualiza(vel);
-	for (var i = 0; i < this.cenario.length - 1; i--) {
+	for (var i = 0; i < this.cenario.length; i++) {
 		this.cenario[i].atualiza(vel);
 	}
 	for (var i = 0; i < this.inimigos.length; i++) {
@@ -116,13 +118,13 @@ Fase.prototype.atualiza = function(now){
 Fase.prototype.desenha = function(){
 
 	this.planodefundo.desenha();
-	for (var i = 0; i < this.cenario.length - 1; i--) {
+	for (var i = 0; i < this.cenario.length; i++) {
 		this.cenario[i].desenha();
 	}
-	for (var i = 0; i < this.elementosCenario.length - 1; i--) {
+	for (var i = 0; i < this.elementosCenario.length; i++) {
 		this.elementosCenario[i].desenha();
 	}
-	for (var i = 0; i < this.inimigos.length - 1; i--) {
+	for (var i = 0; i < this.inimigos.length; i++) {
 		this.inimigos[i].desenha();
 	}
 	this.principal.desenha();
@@ -140,11 +142,11 @@ Fase1.prototype.construtor = Fase1;
 function Fase1 (canvas){
 	//Construtor de Fase1
 	Fase.prototype.construtor.call(this, canvas);
-	this.principal = SpriteFactory().newSpritePrincipal(1, 100, 100);
-	this.planodefundo = SpriteFactory().newSpritePrincipal(1);
-	this.cenario = [SpriteFactory().newSpritePrincipal(1)]; //cenario nao interagivel - 2a camada
-	this.elementosCenario = [SpriteFactory().newSpritePrincipal(1)]; //cenario interagivel
-	this.inimigos = [SpriteFactory().newSpritePrincipal(1)];
+	this.principal = SpriteFactory().newSprite("SpritePrincipal01", 100, 300);
+	this.planodefundo = SpriteFactory().newSprite("Background01", 0, 0);
+	this.cenario = [SpriteFactory().newSprite("SpritePrincipal01", 1000, 600)]; //cenario nao interagivel - 2a camada
+	this.elementosCenario = [SpriteFactory().newSprite("SpritePrincipal01", 1000, 500)]; //cenario interagivel
+	this.inimigos = [SpriteFactory().newSprite("SpritePrincipal01", 100, 600)];
 };
 //Chamada para elementos sonoros de Fase - musica, sons da fase, etc
 Fase1.prototype.som = function(){

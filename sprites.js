@@ -52,9 +52,9 @@ Sprite.prototype.getPosAtual = function(){
 		x: this.pos.x,
 		y: this.pos.y,
 		h: this.animacoes[this.spriteAtual.animacao].h[
-			this.spriteAtual.sprite] * this.altura,
+			this.spriteAtual.frame] * this.altura,
 		w: this.animacoes[this.spriteAtual.animacao].w[
-			this.spriteAtual.sprite] * this.altura
+			this.spriteAtual.frame] * this.altura
 	};
 }
 //Desenha o objeto
@@ -66,7 +66,7 @@ Sprite.prototype.desenha = function(){
 	//Se estiver visivel imprime
 	if(p.x + p.w - viewport.x > 0 &&
 	   p.x - viewport.x < viewport.w &&
-	   p.y - p.h - viewport.y > 0 &&
+	   p.y + p.h - viewport.y > 0 &&
 	   p.y - viewport.y < viewport.h){
 
 	    this.context.drawImage(
@@ -76,7 +76,7 @@ Sprite.prototype.desenha = function(){
 	        this.animacoes[this.spriteAtual.animacao].w[this.spriteAtual.frame],	//swidth 	Optional. The width of the clipped image 	
 	        this.animacoes[this.spriteAtual.animacao].h[this.spriteAtual.frame],	//sheight 	Optional. The height of the clipped image 	
 	        p.x - viewport.x,	//x 		The x coordinate where to place the image on the canvas 	
-	        p.y - viewport.y,	//y 		The y coordinate where to place the image on the canvas 	
+	        viewport.h - (p.y + p.h + viewport.y),	//y 		The y coordinate where to place the image on the canvas 	
 	        p.w, 	//width 	Optional. The width of the image to use (stretch or reduce the image) 	
 	        p.h); 	//height 	Optional. The height of the image to use (stretch or reduce the image)
 
@@ -94,6 +94,7 @@ Sprite.prototype.desenha = function(){
 Background.prototype = new Sprite();
 Background.prototype.constructor = Background;
 function Background() {
+	this.vel = {x: 0.01, y: 0.01};
 };
 //Atualiza o estado do background
 Background.prototype.atualiza = function(vel){
@@ -104,8 +105,8 @@ Background.prototype.atualiza = function(vel){
 
 Background01.prototype = new Background();
 Background01.prototype.constructor = Background01;
-function Background01(canvas) {
-	Sprite.prototype.load.call(this, canvas, "bg01.json");
+function Background01(canvas, onload) {
+	Sprite.prototype.load.call(this, canvas, "sprites/bg01.json", onload);
 };
 Background01.prototype.getPosAtual = function(){
 	return {
@@ -129,6 +130,7 @@ Background01.prototype.getPosAtual = function(){
 SpritePrincipal.prototype = new Sprite();
 SpritePrincipal.prototype.constructor = SpritePrincipal;
 function SpritePrincipal() {
+	this.acc = {x: 5, y: 10};
 	this.acao = {
 		"dir": false,
 		"esq": false,
@@ -157,7 +159,9 @@ SpritePrincipal.prototype.colisaoBaixo = function(){ 		this.colisao["bxo"] = tru
 SpritePrincipal.prototype.atualiza = function(){
 	//Se estiver livre
 	if(!this.colisao["bxo"]){
-		this.vel.y += gravidade;	
+		//this.vel.y += gravidade;
+		//this.spriteAtual.animacao = "falling";
+		//this.spriteAtual.frame = -1;	
 	}
 	else{
 		//Se estiver pulando
@@ -189,13 +193,19 @@ SpritePrincipal.prototype.atualiza = function(){
 	//Se estiver andando para o lado
 	if(this.acao["dir"] && !this.colisao["dir"]){
 		this.vel.x = this.acc.x;
+		this.pos.x += this.vel.x;
 		if(this.spriteAtual.animacao !== "walking"){
 			this.spriteAtual.animacao = "walking";
-			this.spriteAtual.frame = -1;
+			this.spriteAtual.frame = 0;
 		}
 	}
 	else if(this.acao["esq"] && !this.colisao["esq"]){
 		this.vel.x = -this.acc.x;
+		this.pos.x += this.vel.x;
+	}
+	else if(this.spriteAtual.animacao !== "idle"){
+		this.spriteAtual.animacao = "idle";
+		this.spriteAtual.frame = 0;
 	}
 
 	//Vai para o proximo frame da animacao
@@ -240,8 +250,9 @@ function SpriteFactory(canvas){
 	//Callback para quando todos os sprites forem carregados
 	this.loadCallback = onload;
 
-	//Funcao que copia um objeto (shallow copy)
-	this.copiaProfunda = function(obj){		
+	//Funcao que copia um objeto (deep copy)
+	this.copiaProfunda = function(obj){	
+		/*	
 	    var copy;
 
 	    // Handle the 3 simple types, and null or undefined
@@ -274,9 +285,11 @@ function SpriteFactory(canvas){
 	        return copy;
 	    }
 
-	    else if (obj instanceof Object) {
-	    	
+	    else if (obj instanceof Function) {
+	    	return obj;
 	    }
+	    */
+	    return jQuery.extend(true, {}, obj);
 	};
 
 	//Funcao que chama callback quando todos os sprites carregarem
@@ -292,19 +305,26 @@ function SpriteFactory(canvas){
 	//============================================================
 
 	//Funcoes de factory
-	this.newSpritePrincipal = function(tipo, x, y){
-		//tipo = int com numero da fase do personagem principal
+	this.newSprite = function(tipo, x, y, altura){
+		var copia;
 		switch(tipo){
-			case 1:
-				var aux = this.copiaProfunda(this.sprites.SpritePrincipal01);
-				aux.pos.x = x;
-				aux.pos.y = y;
-				return aux;
+			case "SpritePrincipal01":
+				copia = this.copiaProfunda(this.sprites.SpritePrincipal01);break;
+			case "Background01":
+				copia = this.copiaProfunda(this.sprites.Background01);break;
 		}
+		copia.pos.x = x;
+		copia.pos.y = y;
+		if(altura === undefined) 
+			copia.altura = 1; 
+		else 
+			copia.altura = altura;
+		return copia;
 	};
 
 	//Carregar todas as classes finais de sprite
 	this.sprites.SpritePrincipal01 = new SpritePrincipal01(canvas, this.loading);
+	this.sprites.Background01 = new Background01(canvas, this.loading);
 };
 
 

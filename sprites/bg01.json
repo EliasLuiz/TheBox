@@ -1,9 +1,11 @@
 {
-	"imagem": "bg01.png",
+	"imagem": "sprites/background-objects.png",
 	"animacoes": {
-		"bg": {
+		"idle": {
 			"x": [0],
 			"y": [0],
-			"h": [50],
-			"w": [50]
+			"h": [1000],
+			"w": [1000]
+        }
+    }
 }
