@@ -43,6 +43,26 @@ Sprite.prototype.load = function(canvas, filename, onload){
 			this.animacoes["idle"][i] = parado.concat(this.animacoes["idle"][i])
 		}
 	}
+	if(this.animacoes["idleDir"]){
+		for(i in this.animacoes["idleDir"]){
+			var prim = this.animacoes["idleDir"][i][0];
+			var parado = [];
+			for(var idx = 0; idx < 300; idx++){
+				parado.push(prim);
+			}
+			this.animacoes["idleDir"][i] = parado.concat(this.animacoes["idleDir"][i])
+		}
+	}
+	if(this.animacoes["idleEsq"]){
+		for(i in this.animacoes["idleEsq"]){
+			var prim = this.animacoes["idleEsq"][i][0];
+			var parado = [];
+			for(var idx = 0; idx < 300; idx++){
+				parado.push(prim);
+			}
+			this.animacoes["idleEsq"][i] = parado.concat(this.animacoes["idleEsq"][i])
+		}
+	}
 
 	onload();
 };
@@ -131,6 +151,8 @@ SpritePrincipal.prototype = new Sprite();
 SpritePrincipal.prototype.constructor = SpritePrincipal;
 function SpritePrincipal() {
 	this.acc = {x: 5, y: 10};
+	this.lado = "Dir";
+	this.spriteAtual = { "animacao": "idle", "frame": 0 };
 	this.acao = {
 		"dir": false,
 		"esq": false,
@@ -191,24 +213,39 @@ SpritePrincipal.prototype.atualiza = function(){
 	}
 
 	//Se estiver andando para o lado
-	if(this.acao["dir"] && !this.colisao["dir"]){
-		this.vel.x = this.acc.x;
-		this.pos.x += this.vel.x;
-		if(this.spriteAtual.animacao !== "walking"){
-			this.spriteAtual.animacao = "walking";
-			this.spriteAtual.frame = 0;
+	if(this.acao["dir"]){
+		this.lado = "Dir";
+		if(!this.colisao["dir"]){
+			this.vel.x = this.acc.x;
+			this.pos.x += this.vel.x;
+			if(this.spriteAtual.animacao !== ("walking" + this.lado)){
+				this.spriteAtual.animacao = "walking";
+				this.spriteAtual.frame = 0;
+			}
 		}
 	}
-	else if(this.acao["esq"] && !this.colisao["esq"]){
-		this.vel.x = -this.acc.x;
-		this.pos.x += this.vel.x;
+	else if(this.acao["esq"]){
+		this.lado = "Esq";
+		if(!this.colisao["esq"]){
+			this.vel.x = -this.acc.x;
+			this.pos.x += this.vel.x;
+			if(this.spriteAtual.animacao !== ("walking" + this.lado)){
+				this.spriteAtual.animacao = "walking";
+				this.spriteAtual.frame = 0;
+			}
+		}
 	}
-	else if(this.spriteAtual.animacao !== "idle"){
+	else if(this.spriteAtual.animacao !== ("idle" + this.lado)){
 		this.spriteAtual.animacao = "idle";
 		this.spriteAtual.frame = 0;
 	}
 
 	//Vai para o proximo frame da animacao
+
+	if(!(this.spriteAtual.animacao.endsWith("Dir") || this.spriteAtual.animacao.endsWith("Esq")))
+		this.spriteAtual.animacao += this.lado;
+	else
+	 	this.spriteAtual.animacao = this.spriteAtual.animacao.slice(0, this.spriteAtual.animacao.length-3) + this.lado;
 	this.spriteAtual.frame = (this.spriteAtual.frame + 1) % (this.animacoes[this.spriteAtual.animacao].x.length);
 };
 

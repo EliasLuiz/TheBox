@@ -144,9 +144,9 @@ function Fase1 (canvas){
 	Fase.prototype.construtor.call(this, canvas);
 	this.principal = SpriteFactory().newSprite("SpritePrincipal01", 100, 300);
 	this.planodefundo = SpriteFactory().newSprite("Background01", 0, 0);
-	this.cenario = [SpriteFactory().newSprite("SpritePrincipal01", 1000, 600)]; //cenario nao interagivel - 2a camada
-	this.elementosCenario = [SpriteFactory().newSprite("SpritePrincipal01", 1000, 500)]; //cenario interagivel
-	this.inimigos = [SpriteFactory().newSprite("SpritePrincipal01", 100, 600)];
+	//this.cenario = [SpriteFactory().newSprite("SpritePrincipal01", 1000, 600)]; //cenario nao interagivel - 2a camada
+	//this.elementosCenario = [SpriteFactory().newSprite("SpritePrincipal01", 1000, 500)]; //cenario interagivel
+	//this.inimigos = [SpriteFactory().newSprite("SpritePrincipal01", 100, 600)];
 };
 //Chamada para elementos sonoros de Fase - musica, sons da fase, etc
 Fase1.prototype.som = function(){
