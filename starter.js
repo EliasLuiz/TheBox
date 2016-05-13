@@ -4,7 +4,7 @@
 })();
 
 //Definicao de constantes
-gravidade = -10;
+gravidade = -2;
 
 
 //(1 - Velocidade de movimento da camada intermediaria relativo ao personagem)

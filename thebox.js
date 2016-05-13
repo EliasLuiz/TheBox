@@ -142,7 +142,7 @@ Fase1.prototype.construtor = Fase1;
 function Fase1 (canvas){
 	//Construtor de Fase1
 	Fase.prototype.construtor.call(this, canvas);
-	this.principal = SpriteFactory().newSprite("SpritePrincipal01", 100, 300);
+	this.principal = SpriteFactory().newSprite("SpritePrincipal01", 300, 400);
 	this.planodefundo = SpriteFactory().newSprite("Background01", 0, 0);
 	//this.cenario = [SpriteFactory().newSprite("SpritePrincipal01", 1000, 600)]; //cenario nao interagivel - 2a camada
 	//this.elementosCenario = [SpriteFactory().newSprite("SpritePrincipal01", 1000, 500)]; //cenario interagivel

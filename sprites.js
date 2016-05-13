@@ -150,7 +150,7 @@ Background01.prototype.getPosAtual = function(){
 SpritePrincipal.prototype = new Sprite();
 SpritePrincipal.prototype.constructor = SpritePrincipal;
 function SpritePrincipal() {
-	this.acc = {x: 5, y: 10};
+	this.acc = {x: 30, y: 30};
 	this.lado = "Dir";
 	this.spriteAtual = { "animacao": "idle", "frame": 0 };
 	this.acao = {
@@ -180,30 +180,56 @@ SpritePrincipal.prototype.colisaoBaixo = function(){ 		this.colisao["bxo"] = tru
 //Atualiza o estado do personagem
 SpritePrincipal.prototype.atualiza = function(){
 	//Se estiver livre
+	if(this.pos.y > 0 && this.pos.y < 100) 
+		this.colisao["bxo"] = true;
+	else
+		this.colisao["bxo"] = false;
 	if(!this.colisao["bxo"]){
-		//this.vel.y += gravidade;
-		//this.spriteAtual.animacao = "falling";
-		//this.spriteAtual.frame = -1;	
+		this.vel.y += gravidade;
+		if(this.vel.y <= 0 && this.spriteAtual.animacao !== ("falling" + this.lado)){
+			this.spriteAtual.animacao = "falling";
+			this.spriteAtual.frame = -1;		
+		}
 	}
 	else{
 		//Se estiver pulando
 		if(this.acao["cim"]){
 			this.acao["cim"] = false;
-			this.vel.y = this.acc.y;
-			this.spriteAtual.animacao = "jumping";
-			this.spriteAtual.frame = -1;
-		}
-		//Se estiver escorado no chao
-		else if(this.vel.y < 0){
-			this.vel.y = 0;
-			//Se estiver abaixando
-			if(this.acao["bxo"]){
-				this.spriteAtual.animacao = "ducking";
+			if(this.vel.y == 0){
+				this.vel.y = this.acc.y;
+				this.spriteAtual.animacao = "jumping";
 				this.spriteAtual.frame = -1;
 			}
-			else {
+		}
+		//Se estiver escorado no chao
+		else if(this.vel.y <= 0){
+			this.vel.y = 0;
+			//Se estiver andando para o lado
+			if(this.acao["dir"]){
+				this.lado = "Dir";
+				if(!this.colisao["dir"]){
+					this.vel.x = this.acc.x;
+					if(this.spriteAtual.animacao !== ("walking" + this.lado)){
+						this.spriteAtual.animacao = "walking";
+						this.spriteAtual.frame = 0;
+					}
+				}
+			}
+			else if(this.acao["esq"]){
+				this.lado = "Esq";
+				if(!this.colisao["esq"]){
+					this.vel.x = -this.acc.x;
+					if(this.spriteAtual.animacao !== ("walking" + this.lado)){
+						this.spriteAtual.animacao = "walking";
+						this.spriteAtual.frame = 0;
+					}
+				}
+			}
+			else if(this.spriteAtual.animacao !== ("idle" + this.lado)){
+				this.vel.x = 0;
+				this.vel.x = 0;
 				this.spriteAtual.animacao = "idle";
-				this.spriteAtual.frame = -1;				
+				this.spriteAtual.frame = 0;
 			}
 		}
 	}
@@ -211,42 +237,31 @@ SpritePrincipal.prototype.atualiza = function(){
 	if(this.colisao["cim"] && this.vel.y > 0){
 		this.vel.y = 0;	
 	}
-
-	//Se estiver andando para o lado
 	if(this.acao["dir"]){
 		this.lado = "Dir";
 		if(!this.colisao["dir"]){
 			this.vel.x = this.acc.x;
-			this.pos.x += this.vel.x;
-			if(this.spriteAtual.animacao !== ("walking" + this.lado)){
-				this.spriteAtual.animacao = "walking";
-				this.spriteAtual.frame = 0;
-			}
 		}
 	}
 	else if(this.acao["esq"]){
 		this.lado = "Esq";
 		if(!this.colisao["esq"]){
 			this.vel.x = -this.acc.x;
-			this.pos.x += this.vel.x;
-			if(this.spriteAtual.animacao !== ("walking" + this.lado)){
-				this.spriteAtual.animacao = "walking";
-				this.spriteAtual.frame = 0;
-			}
 		}
 	}
-	else if(this.spriteAtual.animacao !== ("idle" + this.lado)){
-		this.spriteAtual.animacao = "idle";
-		this.spriteAtual.frame = 0;
+	else{
+		this.vel.x = 0;
 	}
 
-	//Vai para o proximo frame da animacao
 
+	//Vai para o proximo frame da animacao
+	this.pos.x += this.vel.x;
+	this.pos.y += this.vel.y;
 	if(!(this.spriteAtual.animacao.endsWith("Dir") || this.spriteAtual.animacao.endsWith("Esq")))
 		this.spriteAtual.animacao += this.lado;
 	else
 	 	this.spriteAtual.animacao = this.spriteAtual.animacao.slice(0, this.spriteAtual.animacao.length-3) + this.lado;
-	this.spriteAtual.frame = (this.spriteAtual.frame + 1) % (this.animacoes[this.spriteAtual.animacao].x.length);
+	this.spriteAtual.frame = (this.spriteAtual.frame + 1) % (this.animacoes[this.spriteAtual.animacao].x.length - 1);
 };
 
 ////////////////////////////////////////////////////////////////
