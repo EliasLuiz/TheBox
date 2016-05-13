@@ -183,11 +183,14 @@ SpritePrincipal.prototype.atualiza = function(){
 	}
 	else{
 		//Se estiver pulando
-		if(this.acao["cim"]){
+		if(this.acao["cim"]){			
 			this.acao["cim"] = false;
 			if(this.vel.y == 0){
 				this.vel.y = this.acc.y * this.altura;
 				this.spriteAtual.animacao = "jumping";
+				laser = new Audio("sounds/MarioJump.wav");
+				laser.volume = .12;				
+				laser.play();
 				this.spriteAtual.frame = -1;
 			}
 		}
