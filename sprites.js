@@ -33,16 +33,6 @@ Sprite.prototype.load = function(canvas, filename, onload){
 	this.spriteAtual = { "animacao": "idle", "frame": 0 };
 
 	//Criando delay de idle (GAMBI)
-	if(this.animacoes["idle"]){
-		for(i in this.animacoes["idle"]){
-			var prim = this.animacoes["idle"][i][0];
-			var parado = [];
-			for(var idx = 0; idx < 300; idx++){
-				parado.push(prim);
-			}
-			this.animacoes["idle"][i] = parado.concat(this.animacoes["idle"][i])
-		}
-	}
 	if(this.animacoes["idleDir"]){
 		for(i in this.animacoes["idleDir"]){
 			var prim = this.animacoes["idleDir"][i][0];
@@ -132,8 +122,8 @@ Background01.prototype.getPosAtual = function(){
 	return {
 		x: this.pos.x,
 		y: this.pos.y,
-		h: viewport.h,
-		w: viewport.w
+		h: this.animacoes["idle"].h[0],
+		w: this.animacoes["idle"].w[0]
 	};
 }
 
