@@ -13,44 +13,50 @@ function Jogo (canvas) {
 	if (arguments.callee._singletonInstance) {
 		return arguments.callee._singletonInstance;
 	}
+	this.now = +new Date();
 	arguments.callee._singletonInstance = this;
 
 	//Construtor de Jogo
 	this.canvas = canvas;
-	this.fase = [
-		new Menu(canvas),
-		new Fase1(canvas),
-	];
-	this.faseAtual = 0;
+	this.fase = FaseFactory().newFase("Menu");
 	this.pausado = false;
 	this.atualiza();
 };
 //Gatilhos para os botoes
 Jogo.prototype.botaoDireita = function(estado){
-	this.fase[this.faseAtual].botaoDireita(estado);
+	this.fase.botaoDireita(estado);
 };
 Jogo.prototype.botaoEsquerda = function(estado){
-	this.fase[this.faseAtual].botaoEsquerda(estado);
+	this.fase.botaoEsquerda(estado);
 };
 Jogo.prototype.botaoCima = function(estado){
-	this.fase[this.faseAtual].botaoCima(estado);
+	this.fase.botaoCima(estado);
 };
 Jogo.prototype.botaoBaixo = function(estado){
-	this.fase[this.faseAtual].botaoBaixo(estado);
+	this.fase.botaoBaixo(estado);
 };
 Jogo.prototype.botaoAcao = function(estado){
-	this.fase[this.faseAtual].botaoAcao(estado);
+	this.fase.botaoAcao(estado);
 };
 Jogo.prototype.botaoPause = function(estado){
 	this.pausado = !this.pausado;
 };
 Jogo.prototype.botaoVoltar = function(estado){
-	this.fase[this.faseAtual].botaoVoltar(estado);
+	this.fase.botaoVoltar(estado);
 };
-Jogo.prototype.atualiza = function(now){
-	Jogo().fase[this.faseAtual].atualiza();
-	Jogo().fase[this.faseAtual].desenha();
+Jogo.prototype.click = function(x, y){
+	this.fase.click(x, y);
+};
+Jogo.prototype.hover = function(x, y){
+	this.fase.hover(x, y);
+};
+Jogo.prototype.atualiza = function(){
+	var now = +new Date();
+	$('#fps').html((1000/(now-this.now)).toFixed(0) + " fps");
+	Jogo().fase.atualiza();
+	Jogo().fase.desenha();
 	requestNextAnimationFrame(window.funcaoAtualiza);
+	this.now = now;
 };
 
 
@@ -121,6 +127,10 @@ Fase.prototype.botaoBaixo = function(estado){
 
 Fase.prototype.botaoAcao = function(estado){
 	this.principal.botaoAcao(estado);
+};
+Fase.prototype.click = function(x, y){
+};
+Fase.prototype.hover = function(x, y){
 };
 //Atualizar os elementos do Fase
 Fase.prototype.atualiza = function(){
@@ -201,6 +211,12 @@ Menu.prototype.botaoAcao = function(estado){
 Menu.prototype.botaoVoltar = function(estado){
 	this.planodefundo.botao["voltar"] = !estado;
 };
+Menu.prototype.click = function(x, y){
+	this.planodefundo.click(x, y);
+};
+Fase.prototype.hover = function(x, y){
+	this.planodefundo.hover(x, y);
+};
 //Desenhar os elementos do Menu
 Menu.prototype.desenha = function(){
 	this.planodefundo.desenha();
@@ -218,6 +234,7 @@ function Fase1 (canvas){
 };
 //Atualiza os elementos especificos da Fase
 Fase1.prototype.atualiza = function(now){
+	document.getElementById("canvas").removeEventListener("mousemove", hover);
 	Fase.prototype.atualiza.call(this);
 	if(this.tocando === ""){
 		Som().playMusic("Fase01Intro");
@@ -288,6 +305,51 @@ function Fase5 (canvas){
 Fase5.prototype.atualiza = function(now){
 
 	Fase.prototype.atualiza.call(this);
+};
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+//Classe para gerenciar criacao de fases
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+
+function FaseFactory(canvas){
+	//Criando singleton
+	if (arguments.callee._singletonInstance) {
+		return arguments.callee._singletonInstance;
+	}
+	arguments.callee._singletonInstance = this;
+
+	//Guarda as classes de sprite
+	this.fases = {};
+
+	//Funcao que copia um objeto (deep copy)
+	this.copiaProfunda = function(obj){	
+	    return jQuery.extend(true, {}, obj);
+	};
+
+	//============================================================
+	//============================================================
+
+	//Funcoes de factory
+	this.newFase = function(tipo){
+		switch(tipo){
+			case "Menu":
+				return this.copiaProfunda(this.fases.Menu);break;
+			case "Fase1":
+				return this.copiaProfunda(this.fases.Fase1);break;
+		}
+	};
+
+	//Carregar todas as classes finais de sprite
+	this.fases.Menu = new Menu(canvas);
+	this.fases.Fase1 = new Fase1(canvas);
 };
 
 

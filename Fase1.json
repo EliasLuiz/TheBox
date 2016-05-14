@@ -17,7 +17,7 @@
     "principal": {
         "tipo": "SpritePrincipal01",
         "x": 300,
-        "y": 200,
+        "y": 700,
         "escala": 0.3
     }
 }

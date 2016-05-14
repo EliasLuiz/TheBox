@@ -123,7 +123,7 @@ function BackgroundMenu(canvas, onload) {
 		"acao": false,
 		"voltar": false
 	}
-	this.fase = ""; //Vai ser setado depois por fase
+	this.mouse = "";
 	this.spriteAtual = { "animacao": "idle", "frame": 1 };
 	this.w = (this.animacoes["idle"].w[0] / this.animacoes["idle"].h[0]) * viewport.h;
 };
@@ -135,75 +135,125 @@ BackgroundMenu.prototype.getPosAtual = function(){
 		w: this.w
 	};
 }
+BackgroundMenu.prototype.click = function(x, y){
+	if(this.spriteAtual.animacao === "idle"){
+		if (x >= 398 && x <= 629 &&
+			y >= 374 && y <= 475)
+			this.mouse = "play";
+		else if (x >= 145 && x <= 375 &&
+			y >= 374 && y <= 475)
+			this.mouse = "opcoes";
+		else if (x >= 656 && x <= 886 &&
+			y >= 374 && y <= 475)
+			this.mouse = "creditos";
+	}
+	else if(this.spriteAtual.animacao === "opcoes"){
+		if (x >= 68 && x <= 174 &&
+			y >= 182 && y <= 211)
+			this.mouse = "volume0";
+		else if (x >= 175 && x <= 264 &&
+			y >= 182 && y <= 211)
+			this.mouse = "volume1";
+		else if (x >= 265 && x <= 357 &&
+			y >= 182 && y <= 211)
+			this.mouse = "volume2";
+	}
+	else if(this.spriteAtual.animacao === "creditos"){
+		if(x >= 757 && x <= 872 &&
+			y >= 468 && y <= 516)
+			this.mouse = "idle";
+	}
+	if(this.mouse !== ""){
+		switch(this.mouse){
+			case "idle": this.toIdle();break;
+			case "opcoes": this.toOpcoes();break;
+			case "creditos": this.toCreditos();break;
+			case "play": this.play();break;
+			case "volume0": this.volume(0);break;
+			case "volume1": this.volume(0.5);break;
+			case "volume2": this.volume(1);break;
+		}
+	}
+};
+BackgroundMenu.prototype.hover = function(x, y){
+	if(this.spriteAtual.animacao === "idle"){
+		if (x >= 398 && x <= 629 &&
+			y >= 374 && y <= 475)
+			this.spriteAtual.frame = 1;
+		else if (x >= 145 && x <= 375 &&
+			y >= 374 && y <= 475)
+			this.spriteAtual.frame = 0;
+		else if (x >= 656 && x <= 886 &&
+			y >= 374 && y <= 475)
+			this.spriteAtual.frame = 2;
+	}
+};
 BackgroundMenu.prototype.atualiza = function(){
 	if(this.spriteAtual.animacao === "idle"){
 		if(this.botao["dir"]){
 			this.spriteAtual.frame = this.spriteAtual.frame !== 2 ? this.spriteAtual.frame + 1 : 2;
-			this.botao["dir"] = false;
 		}
 		else if(this.botao["esq"]){
 			this.spriteAtual.frame = this.spriteAtual.frame !== 0 ? this.spriteAtual.frame - 1 : 0;
-			this.botao["esq"] = false;
 		}
 		if(this.botao["acao"]){
 			switch(this.spriteAtual.frame){
-				case 0: 
-					this.spriteAtual.animacao = "opcoes";
-					this.spriteAtual.frame = Som().volume * 2;
-					break;
-				case 1: 
-					this.fase.faseAtual++;
-					break;
-				case 2: 
-					this.spriteAtual.animacao = "creditos";
-					this.spriteAtual.frame = 0;
-					break;
+				case 0: this.toOpcoes();break;
+				case 1: this.play();break;
+				case 2: this.toCreditos();break;
 			}
-			this.botao["acao"] = false;
 		}
 	}
 	else {
 		if(this.botao["voltar"]){
-			this.spriteAtual.animacao = "idle";
-			this.spriteAtual.frame = 1;
-			this.botao["voltar"] = false;
+			this.toIdle();
 		}
 		if(this.spriteAtual.animacao === "opcoes"){
 			if(this.botao["dir"]){
 				if(this.spriteAtual.frame < 2){
-					this.spriteAtual.frame++;
-					Som().volume += 0.5;
-					Som().music["Menu"].volume += 0.5;
+					this.volume((this.spriteAtual.frame+1) / 2);
 				}
-				this.botao["dir"] = false;
 			}
 			else if(this.botao["esq"]){
 				if(this.spriteAtual.frame > 0){
-					this.spriteAtual.frame--;
-					Som().volume -= 0.5;
-					Som().music["Menu"].volume -= 0.5;
+					this.volume((this.spriteAtual.frame-1) / 2);
 				}
-				this.botao["esq"] = false;
-			}
-			if(this.botao["acao"]){
-				switch(this.spriteAtual.frame){
-					case 0: 
-						this.spriteAtual.animacao = "opcoes";
-						this.spriteAtual.frame = Som().volume * 2;
-						break;
-					case 1: 
-						this.fase.faseAtual++;
-						break;
-					case 2: 
-						this.spriteAtual.animacao = "creditos";
-						this.spriteAtual.frame = 0;
-						break;
-				}
-				this.botao["acao"] = false;
 			}
 		}
 	}
+	this.botao = {
+		"dir": false,
+		"esq": false,
+		"acao": false,
+		"voltar": false
+	}
+	this.mouse = "";
 };
+BackgroundMenu.prototype.toIdle = function(){
+	this.spriteAtual.animacao = "idle";
+	this.spriteAtual.frame = 1;
+	this.botao["voltar"] = false;
+};
+BackgroundMenu.prototype.toOpcoes = function(){
+	this.spriteAtual.animacao = "opcoes";
+	this.spriteAtual.frame = Som().volume * 2;
+};
+BackgroundMenu.prototype.toCreditos = function(){
+	this.spriteAtual.animacao = "creditos";
+	this.spriteAtual.frame = 0;
+};
+BackgroundMenu.prototype.play = function(){
+	Som().stopMusic("Menu");
+	Jogo().fase = FaseFactory().newFase("Fase1");
+};
+BackgroundMenu.prototype.volume = function(volume){
+	if(volume == Som().volume)
+		return;
+	this.spriteAtual.frame = volume * 2;
+	Som().volume = volume;
+	Som().music["Menu"].volume = volume;
+};
+
 
 ////////////////////////////////////////////////////////////////
 
@@ -436,7 +486,7 @@ function SpriteFactory(canvas){
 		gambi.carregados++;
 		if(gambi.carregados < gambi.sprites.length)
 			return;
-		carregado = true;
+		carregadoSprites = true;
 	};
 
 	//============================================================
