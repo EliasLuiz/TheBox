@@ -65,7 +65,7 @@ function doKeyUp(e) {
     }
 }
 function click(e){
-    //console.log(e.layerX - 160, e.layerY - 30);
+    console.log(e.layerX - 160, e.layerY - 30);
     Jogo().click(e.layerX - 160, e.layerY - 30);
 }
 function hover(e){

@@ -307,6 +307,9 @@ BackgroundMenu.prototype.click = function(x, y){
 		else if (x >= 265 && x <= 357 &&
 			y >= 182 && y <= 211)
 			this.mouse = "volume2";
+		else if (x >= 172 && x <= 260 &&
+			y >= 486 && y <= 513)
+			this.mouse = "idle";
 	}
 	else if(this.spriteAtual.animacao === "creditos"){
 		if(x >= 757 && x <= 872 &&
