@@ -5,28 +5,19 @@
         "y": 0,
         "escala": 1
     },
-    "cenario": [{
-        "tipo": "SpritePrincipal01",
-        "x": 400,
-        "y": 300,
-        "escala": 0.6
-    }],
-    "elementosCenario": [{
-        "tipo": "SpritePrincipal01",
-        "x": 500,
-        "y": 100,
-        "escala": 0.2
-    }],
-    "inimigos": [{
-        "tipo": "SpritePrincipal01",
-        "x": 800,
-        "y": 200,
-        "escala": 0.9
-    }],
+    "cenario": [
+
+    ],
+    "elementosCenario": [
+
+    ],
+    "inimigos": [
+
+    ],
     "principal": {
         "tipo": "SpritePrincipal01",
         "x": 300,
         "y": 200,
-        "escala": 1
+        "escala": 0.3
     }
 }

@@ -41,6 +41,7 @@ function Som(){
 
 	//Lista com nome dos arquivos music
 	this.musicNames = [
+		{ nome: "Menu", filename: "music/Menu.mp3" },
 		{ nome: "Fase01Intro", filename: "music/Fase01Intro.mp3" },
 		{ nome: "Fase01Loop", filename: "music/Fase01Loop.mp3" },
 		{ nome: "Fase01End", filename: "music/Fase01End.mp3" }

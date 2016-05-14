@@ -4,12 +4,12 @@ Fase1:
 	Fase1Intro	Inicio da fase
 	Fase1Loop	Fim de Fase1Intro até gatilho (passagem para tela oculta atrás)
 	Fase1End	Gatilho até fim de Fase1End
-Fase2:
+Fase2:	
 	Fase2Intro	Inicio da fase
 	Fase2Loop	Fim de Fase2Intro até gatilho (10o inimigo a morto?)
 	Fase2End	Gatilho até fim de Fase2End
 Fase3:
-	
+	Nocturne Op. 9 No. 2
 Fase4:
 	Fase4.1Intro	Inicio da fase
 	Fase4.1Loop	Fim de Fase4.1Intro até gatilho (aproximação do buraco?)
@@ -18,5 +18,5 @@ Fase4:
 	Fase4.2End	Gatilho até fim de Fase4.2End
 	Fase4.3		Gatilho (6a queda?) até fim de Fase4.3
 	Fase4.4		Gatilho (9a queda?) até fim de Fase4.4
-Fase5:
-	
+Fase5:	
+	Air

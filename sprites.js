@@ -113,17 +113,112 @@ Background.prototype.atualiza = function(vel){
 
 ////////////////////////////////////////////////////////////////
 
+BackgroundMenu.prototype = new Background();
+BackgroundMenu.prototype.constructor = BackgroundMenu;
+function BackgroundMenu(canvas, onload) {
+	Sprite.prototype.load.call(this, canvas, "sprites/Menu/BackgroundMenu.json", onload);
+	this.botao = {
+		"dir": false,
+		"esq": false,
+		"acao": false,
+		"voltar": false
+	}
+	this.fase = ""; //Vai ser setado depois por fase
+	this.spriteAtual = { "animacao": "idle", "frame": 1 };
+	this.w = (this.animacoes["idle"].w[0] / this.animacoes["idle"].h[0]) * viewport.h;
+};
+BackgroundMenu.prototype.getPosAtual = function(){
+	return {
+		x: this.pos.x,
+		y: this.pos.y,
+		h: viewport.h,
+		w: this.w
+	};
+}
+BackgroundMenu.prototype.atualiza = function(){
+	if(this.spriteAtual.animacao === "idle"){
+		if(this.botao["dir"]){
+			this.spriteAtual.frame = this.spriteAtual.frame !== 2 ? this.spriteAtual.frame + 1 : 2;
+			this.botao["dir"] = false;
+		}
+		else if(this.botao["esq"]){
+			this.spriteAtual.frame = this.spriteAtual.frame !== 0 ? this.spriteAtual.frame - 1 : 0;
+			this.botao["esq"] = false;
+		}
+		if(this.botao["acao"]){
+			switch(this.spriteAtual.frame){
+				case 0: 
+					this.spriteAtual.animacao = "opcoes";
+					this.spriteAtual.frame = Som().volume * 2;
+					break;
+				case 1: 
+					this.fase.faseAtual++;
+					break;
+				case 2: 
+					this.spriteAtual.animacao = "creditos";
+					this.spriteAtual.frame = 0;
+					break;
+			}
+			this.botao["acao"] = false;
+		}
+	}
+	else {
+		if(this.botao["voltar"]){
+			this.spriteAtual.animacao = "idle";
+			this.spriteAtual.frame = 1;
+			this.botao["voltar"] = false;
+		}
+		if(this.spriteAtual.animacao === "opcoes"){
+			if(this.botao["dir"]){
+				if(this.spriteAtual.frame < 2){
+					this.spriteAtual.frame++;
+					Som().volume += 0.5;
+					Som().music["Menu"].volume += 0.5;
+				}
+				this.botao["dir"] = false;
+			}
+			else if(this.botao["esq"]){
+				if(this.spriteAtual.frame > 0){
+					this.spriteAtual.frame--;
+					Som().volume -= 0.5;
+					Som().music["Menu"].volume -= 0.5;
+				}
+				this.botao["esq"] = false;
+			}
+			if(this.botao["acao"]){
+				switch(this.spriteAtual.frame){
+					case 0: 
+						this.spriteAtual.animacao = "opcoes";
+						this.spriteAtual.frame = Som().volume * 2;
+						break;
+					case 1: 
+						this.fase.faseAtual++;
+						break;
+					case 2: 
+						this.spriteAtual.animacao = "creditos";
+						this.spriteAtual.frame = 0;
+						break;
+				}
+				this.botao["acao"] = false;
+			}
+		}
+	}
+};
+
+////////////////////////////////////////////////////////////////
+
 Background01.prototype = new Background();
 Background01.prototype.constructor = Background01;
 function Background01(canvas, onload) {
-	Sprite.prototype.load.call(this, canvas, "sprites/bg01.json", onload);
+	Sprite.prototype.load.call(this, canvas, "sprites/Fase01/Background01.json", onload);
+	this.w = (this.animacoes["idle"].w[0] / this.animacoes["idle"].h[0]) * viewport.h;
 };
 Background01.prototype.getPosAtual = function(){
 	return {
 		x: this.pos.x,
 		y: this.pos.y,
-		h: this.animacoes["idle"].h[0],
-		w: this.animacoes["idle"].w[0]
+		h: viewport.h,
+		w: this.w
 	};
 }
 
@@ -261,7 +356,7 @@ SpritePrincipal01.prototype = new SpritePrincipal();
 SpritePrincipal01.prototype.constructor = SpritePrincipal01;
 function SpritePrincipal01(canvas, onload) {
 	SpritePrincipal.prototype.constructor.call(this, canvas);
-	Sprite.prototype.load.call(this, canvas, "sprites/SpritePrincipal01.json", onload);
+	Sprite.prototype.load.call(this, canvas, "sprites/Fase01/SpritePrincipal01.json", onload);
 };
 SpritePrincipal01.prototype.atualiza = function(){
 	SpritePrincipal.prototype.atualiza.call(this);
@@ -353,6 +448,8 @@ function SpriteFactory(canvas){
 		switch(tipo){
 			case "SpritePrincipal01":
 				copia = this.copiaProfunda(this.sprites.SpritePrincipal01);break;
+			case "BackgroundMenu":
+				copia = this.copiaProfunda(this.sprites.BackgroundMenu);break;
 			case "Background01":
 				copia = this.copiaProfunda(this.sprites.Background01);break;
 		}
@@ -367,6 +464,7 @@ function SpriteFactory(canvas){
 
 	//Carregar todas as classes finais de sprite
 	this.sprites.SpritePrincipal01 = new SpritePrincipal01(canvas, this.loading);
+	this.sprites.BackgroundMenu = new BackgroundMenu(canvas, this.loading);
 	this.sprites.Background01 = new Background01(canvas, this.loading);
 };
 

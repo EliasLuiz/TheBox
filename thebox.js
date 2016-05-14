@@ -18,6 +18,7 @@ function Jogo (canvas) {
 	//Construtor de Jogo
 	this.canvas = canvas;
 	this.fase = [
+		new Menu(canvas),
 		new Fase1(canvas),
 	];
 	this.faseAtual = 0;
@@ -40,11 +41,11 @@ Jogo.prototype.botaoBaixo = function(estado){
 Jogo.prototype.botaoAcao = function(estado){
 	this.fase[this.faseAtual].botaoAcao(estado);
 };
-Jogo.prototype.botaoPause = function(){
+Jogo.prototype.botaoPause = function(estado){
 	this.pausado = !this.pausado;
 };
-Jogo.prototype.botaoVoltar = function(){
-
+Jogo.prototype.botaoVoltar = function(estado){
+	this.fase[this.faseAtual].botaoVoltar(estado);
 };
 Jogo.prototype.atualiza = function(now){
 	Jogo().fase[this.faseAtual].atualiza();
@@ -72,30 +73,32 @@ Fase.prototype.load = function(filename){
 	var gambi = this;
 	function __loadfase__(json){
 		var aux = json["planodefundo"];
-		gambi.planodefundo = SpriteFactory().newSprite(aux.tipo, aux.x, aux.y, aux.escala);
+		if(aux !== "")
+			gambi.planodefundo = SpriteFactory().newSprite(aux.tipo, aux.x, aux.y, aux.escala);
 
 		//cenario nao interagivel - 2a camada
 		aux = json["cenario"];
 		gambi.cenario = [];
-		for(var i = 0; i < aux.length; i++){
-			gambi.cenario.push(SpriteFactory().newSprite(aux[i].tipo, aux[i].x, aux[i].y, aux[i].escala));
-		}
+		if(aux !== [])
+			for(var i = 0; i < aux.length; i++)
+				gambi.cenario.push(SpriteFactory().newSprite(aux[i].tipo, aux[i].x, aux[i].y, aux[i].escala));
 
 		//cenario interagivel
 		aux = json["elementosCenario"];
 		gambi.elementosCenario = [];
-		for(var i = 0; i < aux.length; i++){
-			gambi.elementosCenario.push(SpriteFactory().newSprite(aux[i].tipo, aux[i].x, aux[i].y, aux[i].escala));
-		}
+		if(aux !== [])
+			for(var i = 0; i < aux.length; i++)
+				gambi.elementosCenario.push(SpriteFactory().newSprite(aux[i].tipo, aux[i].x, aux[i].y, aux[i].escala));
 
 		aux = json["inimigos"];
 		gambi.inimigos = [];
-		for(var i = 0; i < aux.length; i++){
-			gambi.inimigos.push(SpriteFactory().newSprite(aux[i].tipo, aux[i].x, aux[i].y, aux[i].escala));
-		}
+		if(aux !== [])
+			for(var i = 0; i < aux.length; i++)
+				gambi.inimigos.push(SpriteFactory().newSprite(aux[i].tipo, aux[i].x, aux[i].y, aux[i].escala));
 
 		var aux = json["principal"];
-		gambi.principal = SpriteFactory().newSprite(aux.tipo, aux.x, aux.y, aux.escala);
+		if(aux !== "")
+			gambi.principal = SpriteFactory().newSprite(aux.tipo, aux.x, aux.y, aux.escala);
 	}
 	LoadJSON(filename, __loadfase__);
 };
@@ -120,7 +123,7 @@ Fase.prototype.botaoAcao = function(estado){
 	this.principal.botaoAcao(estado);
 };
 //Atualizar os elementos do Fase
-Fase.prototype.atualiza = function(now){
+Fase.prototype.atualiza = function(){
 
 	//Atualiza elementos fixos em relacao a tela
 	this.principal.atualiza();
@@ -168,23 +171,59 @@ Fase.prototype.desenha = function(){
 //Classes para gerenciar cada fase
 ////////////////////////////////////////////////////////////////
 
+Menu.prototype = new Fase("");
+Menu.prototype.construtor = Menu;
+function Menu (canvas){
+	//Construtor de Menu
+	Fase.prototype.construtor.call(this, canvas);
+	Fase.prototype.load.call(this, "Menu.json");
+	this.tocando = "";
+}
+//Atualiza os elementos especificos da Fase
+Menu.prototype.atualiza = function(now){
+	if(this.tocando === ""){
+		Som().music["Menu"].loop = true;
+		Som().playMusic("Menu");
+		this.tocando = "Menu";
+	}
+	this.planodefundo.atualiza()
+};
+//Gatilhos para os botoes
+Menu.prototype.botaoDireita = function(estado){
+	this.planodefundo.botao["dir"] = !estado;
+};
+Menu.prototype.botaoEsquerda = function(estado){
+	this.planodefundo.botao["esq"] = !estado;
+};
+Menu.prototype.botaoAcao = function(estado){
+	this.planodefundo.botao["acao"] = !estado;
+};
+Menu.prototype.botaoVoltar = function(estado){
+	this.planodefundo.botao["voltar"] = !estado;
+};
+//Desenhar os elementos do Menu
+Menu.prototype.desenha = function(){
+	this.planodefundo.desenha();
+};
+
+////////////////////////////////////////////////////////////////
+
 Fase1.prototype = new Fase("");
 Fase1.prototype.construtor = Fase1;
 function Fase1 (canvas){
 	//Construtor de Fase1
 	Fase.prototype.construtor.call(this, canvas);
 	Fase.prototype.load.call(this, "Fase1.json");
-	this.tocando = "Intro";
-	Som().playMusic("Fase01Intro");
-};
-//Chamada para elementos sonoros de Fase - musica, sons da fase, etc
-Fase1.prototype.som = function(){
-
+	this.tocando = "";
 };
 //Atualiza os elementos especificos da Fase
 Fase1.prototype.atualiza = function(now){
 	Fase.prototype.atualiza.call(this);
-	if(this.tocando === "Intro" && Som().music["Fase01Intro"].ended){
+	if(this.tocando === ""){
+		Som().playMusic("Fase01Intro");
+		this.tocando = "Intro";
+	}
+	else if(this.tocando === "Intro" && Som().music["Fase01Intro"].ended){
 		this.tocando = "Loop";
 		Som().music["Fase01Loop"].loop = true;
 		Som().playMusic("Fase01Loop");
@@ -199,10 +238,6 @@ function Fase2 (canvas){
 	//Construtor de Fase2
 	Fase.prototype.construtor.call(this, canvas);
 	Fase.prototype.load.call(this, "Fase2.json");
-};
-//Chamada para elementos sonoros de Fase - musica, sons da fase, etc
-Fase2.prototype.som = function(){
-
 };
 //Atualiza os elementos especificos da Fase
 Fase2.prototype.atualiza = function(now){
@@ -219,10 +254,6 @@ function Fase3 (canvas){
 	Fase.prototype.construtor.call(this, canvas);
 	Fase.prototype.load.call(this, "Fase3.json");
 };
-//Chamada para elementos sonoros de Fase - musica, sons da fase, etc
-Fase3.prototype.som = function(){
-
-};
 //Atualiza os elementos especificos da Fase
 Fase3.prototype.atualiza = function(now){
 
@@ -238,10 +269,6 @@ function Fase4 (canvas){
 	Fase.prototype.construtor.call(this, canvas);
 	Fase.prototype.load.call(this, "Fase4.json");
 };
-//Chamada para elementos sonoros de Fase - musica, sons da fase, etc
-Fase4.prototype.som = function(){
-
-};
 //Atualiza os elementos especificos da Fase
 Fase4.prototype.atualiza = function(now){
 
@@ -256,10 +283,6 @@ function Fase5 (canvas){
 	//Construtor de Fase5
 	Fase.prototype.construtor.call(this, canvas);
 	Fase.prototype.load.call(this, "Fase5.json");
-};
-//Chamada para elementos sonoros de Fase - musica, sons da fase, etc
-Fase5.prototype.som = function(){
-
 };
 //Atualiza os elementos especificos da Fase
 Fase5.prototype.atualiza = function(now){
