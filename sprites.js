@@ -113,6 +113,156 @@ Background.prototype.atualiza = function(vel){
 
 ////////////////////////////////////////////////////////////////
 
+BackgroundAnimacao.prototype = new Background();
+BackgroundAnimacao.prototype.constructor = BackgroundAnimacao;
+function BackgroundAnimacao(canvas, onload) {
+	Sprite.prototype.load.call(this, canvas, "sprites/Animacao/BackgroundAnimacao.json", onload);
+	this.spriteAtual = { "animacao": "idle", "frame": 0 };
+	this.h = this.animacoes["idle"].h[1];
+	this.w = this.animacoes["idle"].w[1];
+	this.cont = 0;
+	this.quadrosBranco = 60;
+	this.quadrosFade = 5;
+	this.quadrosFull = 60;
+	this.estado = 0;
+	this.estados = ["1.0", "1.25", "1.50", "1.75", "1.100", "1.75", "1.50", "1.25", 
+				 "1.0", "2.25", "2.50", "2.75", "2.100", "2.75", "2.50", "2.25", 
+				 "1.0", "3.25", "3.50", "3.75", "0"];
+};
+BackgroundAnimacao.prototype.getPosAtual = function(){
+	return {
+		x: this.pos.x,
+		y: this.pos.y,
+		h: this.h,
+		w: this.w
+	};
+}
+BackgroundAnimacao.prototype.atualiza = function(){
+	this.cont++;
+	switch(this.estados[this.estado]){
+		case "0":
+			this.botaoAcao();
+			break;
+		case "1.0":
+			if(this.cont === this.quadrosBranco){
+				this.estado++;
+				this.cont = 0;
+			}
+			else if(this.cont === 1){
+				this.spriteAtual.frame = 0;
+			}
+			break;
+		case "1.25":
+			if(this.cont === this.quadrosFade){
+				this.estado++;
+				this.cont = 0;
+			}
+			else if(this.cont === 1){
+				this.spriteAtual.frame = 1;
+			}
+			break;
+		case "1.50":
+			if(this.cont === this.quadrosFade){
+				this.estado++;
+				this.cont = 0;
+			}
+			else if(this.cont === 1){
+				this.spriteAtual.frame = 2;
+			}
+			break;
+		case "1.75":
+			if(this.cont === this.quadrosFade){
+				this.estado++;
+				this.cont = 0;
+			}
+			else if(this.cont === 1){
+				this.spriteAtual.frame = 3;
+			}
+			break;
+		case "1.100":
+			if(this.cont === this.quadrosFull){
+				this.estado++;
+				this.cont = 0;
+			}
+			else if(this.cont === 1){
+				this.spriteAtual.frame = 4;
+			}
+			break;
+		case "2.25":
+			if(this.cont === this.quadrosFade){
+				this.estado++;
+				this.cont = 0;
+			}
+			else if(this.cont === 1){
+				this.spriteAtual.frame = 5;
+			}
+			break;
+		case "2.50":
+			if(this.cont === this.quadrosFade){
+				this.estado++;
+				this.cont = 0;
+			}
+			else if(this.cont === 1){
+				this.spriteAtual.frame = 6;
+			}
+			break;
+		case "2.75":
+			if(this.cont === this.quadrosFade){
+				this.estado++;
+				this.cont = 0;
+			}
+			else if(this.cont === 1){
+				this.spriteAtual.frame = 7;
+			}
+			break;
+		case "2.100":
+			if(this.cont === this.quadrosFull){
+				this.estado++;
+				this.cont = 0;
+			}
+			else if(this.cont === 1){
+				this.spriteAtual.frame = 8;
+			}
+			break;
+		case "3.25":
+			if(this.cont === this.quadrosFade){
+				this.estado++;
+				this.cont = 0;
+			}
+			else if(this.cont === 1){
+				this.spriteAtual.frame = 9;
+				this.pos.x = 0;
+				this.pos.y = 0;
+				this.h = viewport.h;
+				this.w = viewport.w;
+			}
+			break;
+		case "3.50":
+			if(this.cont === this.quadrosFade){
+				this.estado++;
+				this.cont = 0;
+			}
+			else if(this.cont === 1){
+				this.spriteAtual.frame = 10;
+			}
+			break;
+		case "3.75":
+			if(this.cont === this.quadrosFade){
+				this.estado++;
+				this.cont = 0;
+			}
+			else if(this.cont === 1){
+				this.spriteAtual.frame = 11;
+			}
+			break;
+	}
+};
+BackgroundAnimacao.prototype.botaoAcao = function(){
+	Jogo().fase = FaseFactory().newFase("Menu");
+};
+
+////////////////////////////////////////////////////////////////
+
 BackgroundMenu.prototype = new Background();
 BackgroundMenu.prototype.constructor = BackgroundMenu;
 function BackgroundMenu(canvas, onload) {
@@ -498,6 +648,8 @@ function SpriteFactory(canvas){
 		switch(tipo){
 			case "SpritePrincipal01":
 				copia = this.copiaProfunda(this.sprites.SpritePrincipal01);break;
+			case "BackgroundAnimacao":
+				copia = this.copiaProfunda(this.sprites.BackgroundAnimacao);break;
 			case "BackgroundMenu":
 				copia = this.copiaProfunda(this.sprites.BackgroundMenu);break;
 			case "Background01":
@@ -514,6 +666,7 @@ function SpriteFactory(canvas){
 
 	//Carregar todas as classes finais de sprite
 	this.sprites.SpritePrincipal01 = new SpritePrincipal01(canvas, this.loading);
+	this.sprites.BackgroundAnimacao = new BackgroundAnimacao(canvas, this.loading);
 	this.sprites.BackgroundMenu = new BackgroundMenu(canvas, this.loading);
 	this.sprites.Background01 = new Background01(canvas, this.loading);
 };

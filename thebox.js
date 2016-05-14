@@ -18,7 +18,7 @@ function Jogo (canvas) {
 
 	//Construtor de Jogo
 	this.canvas = canvas;
-	this.fase = FaseFactory().newFase("Menu");
+	this.fase = FaseFactory().newFase("Animacao");
 	this.pausado = false;
 	this.atualiza();
 };
@@ -53,8 +53,8 @@ Jogo.prototype.hover = function(x, y){
 Jogo.prototype.atualiza = function(){
 	var now = +new Date();
 	$('#fps').html((1000/(now-this.now)).toFixed(0) + " fps");
-	Jogo().fase.atualiza();
-	Jogo().fase.desenha();
+	this.fase.atualiza();
+	this.fase.desenha();
 	requestNextAnimationFrame(window.funcaoAtualiza);
 	this.now = now;
 };
@@ -181,6 +181,27 @@ Fase.prototype.desenha = function(){
 //Classes para gerenciar cada fase
 ////////////////////////////////////////////////////////////////
 
+Animacao.prototype = new Fase("");
+Animacao.prototype.construtor = Animacao;
+function Animacao (canvas){
+	//Construtor de Animacao
+	Fase.prototype.construtor.call(this, canvas);
+	Fase.prototype.load.call(this, "Animacao.json");
+}
+//Atualiza os elementos especificos da Fase
+Animacao.prototype.atualiza = function(){
+	this.planodefundo.atualiza();
+};
+Animacao.prototype.botaoAcao = function(estado){
+	if(!estado)
+		this.planodefundo.botaoAcao();
+};
+Animacao.prototype.desenha = function(){
+	this.planodefundo.desenha();
+};
+
+////////////////////////////////////////////////////////////////
+
 Menu.prototype = new Fase("");
 Menu.prototype.construtor = Menu;
 function Menu (canvas){
@@ -188,9 +209,14 @@ function Menu (canvas){
 	Fase.prototype.construtor.call(this, canvas);
 	Fase.prototype.load.call(this, "Menu.json");
 	this.tocando = "";
+	this.addHover = false;
 }
 //Atualiza os elementos especificos da Fase
-Menu.prototype.atualiza = function(now){
+Menu.prototype.atualiza = function(){
+	if(!this.addHover){
+		document.getElementById("canvas").addEventListener('mousemove', hover, false);
+		this.addHover = true;
+	}
 	if(this.tocando === ""){
 		Som().music["Menu"].loop = true;
 		Som().playMusic("Menu");
@@ -214,7 +240,7 @@ Menu.prototype.botaoVoltar = function(estado){
 Menu.prototype.click = function(x, y){
 	this.planodefundo.click(x, y);
 };
-Fase.prototype.hover = function(x, y){
+Menu.prototype.hover = function(x, y){
 	this.planodefundo.hover(x, y);
 };
 //Desenhar os elementos do Menu
@@ -231,10 +257,14 @@ function Fase1 (canvas){
 	Fase.prototype.construtor.call(this, canvas);
 	Fase.prototype.load.call(this, "Fase1.json");
 	this.tocando = "";
+	this.removeHover = false;
 };
 //Atualiza os elementos especificos da Fase
-Fase1.prototype.atualiza = function(now){
-	document.getElementById("canvas").removeEventListener("mousemove", hover);
+Fase1.prototype.atualiza = function(){
+	if(!this.removeHover){
+		document.getElementById("canvas").removeEventListener("mousemove", hover);
+		this.removeHover = true;
+	}
 	Fase.prototype.atualiza.call(this);
 	if(this.tocando === ""){
 		Som().playMusic("Fase01Intro");
@@ -257,7 +287,7 @@ function Fase2 (canvas){
 	Fase.prototype.load.call(this, "Fase2.json");
 };
 //Atualiza os elementos especificos da Fase
-Fase2.prototype.atualiza = function(now){
+Fase2.prototype.atualiza = function(){
 
 	Fase.prototype.atualiza.call(this);
 };
@@ -272,7 +302,7 @@ function Fase3 (canvas){
 	Fase.prototype.load.call(this, "Fase3.json");
 };
 //Atualiza os elementos especificos da Fase
-Fase3.prototype.atualiza = function(now){
+Fase3.prototype.atualiza = function(){
 
 	Fase.prototype.atualiza.call(this);
 };
@@ -287,7 +317,7 @@ function Fase4 (canvas){
 	Fase.prototype.load.call(this, "Fase4.json");
 };
 //Atualiza os elementos especificos da Fase
-Fase4.prototype.atualiza = function(now){
+Fase4.prototype.atualiza = function(){
 
 	Fase.prototype.atualiza.call(this);
 };
@@ -302,7 +332,7 @@ function Fase5 (canvas){
 	Fase.prototype.load.call(this, "Fase5.json");
 };
 //Atualiza os elementos especificos da Fase
-Fase5.prototype.atualiza = function(now){
+Fase5.prototype.atualiza = function(){
 
 	Fase.prototype.atualiza.call(this);
 };
@@ -340,6 +370,8 @@ function FaseFactory(canvas){
 	//Funcoes de factory
 	this.newFase = function(tipo){
 		switch(tipo){
+			case "Animacao":
+				return this.copiaProfunda(this.fases.Animacao);break;
 			case "Menu":
 				return this.copiaProfunda(this.fases.Menu);break;
 			case "Fase1":
@@ -348,6 +380,7 @@ function FaseFactory(canvas){
 	};
 
 	//Carregar todas as classes finais de sprite
+	this.fases.Animacao = new Animacao(canvas);
 	this.fases.Menu = new Menu(canvas);
 	this.fases.Fase1 = new Fase1(canvas);
 };
