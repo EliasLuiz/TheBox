@@ -1,5 +1,5 @@
 {
-	"imagem": "sprites/background-objects2.png",
+	"imagem": "sprites/bg01.png",
 	"animacoes": {
 		"idle": {
 			"x": [0],

@@ -140,7 +140,7 @@ Background01.prototype.getPosAtual = function(){
 SpritePrincipal.prototype = new Sprite();
 SpritePrincipal.prototype.constructor = SpritePrincipal;
 function SpritePrincipal() {
-	this.acc = {x: 30, y: 30};
+	this.acc = {x: 25, y: 35};
 	this.lado = "Dir";
 	this.spriteAtual = { "animacao": "idle", "frame": 0 };
 	this.acao = {
@@ -175,7 +175,7 @@ SpritePrincipal.prototype.atualiza = function(){
 	else
 		this.colisao["bxo"] = false;
 	if(!this.colisao["bxo"]){
-		this.vel.y += gravidade;
+		this.vel.y += gravidade * this.altura;
 		if(this.vel.y <= 0 && this.spriteAtual.animacao !== ("falling" + this.lado)){
 			this.spriteAtual.animacao = "falling";
 			this.spriteAtual.frame = -1;		
@@ -186,7 +186,7 @@ SpritePrincipal.prototype.atualiza = function(){
 		if(this.acao["cim"]){			
 			this.acao["cim"] = false;
 			if(this.vel.y == 0){
-				this.vel.y = this.acc.y;
+				this.vel.y = this.acc.y * this.altura;
 				this.spriteAtual.animacao = "jumping";
 				laser = new Audio("sounds/MarioJump.wav");
 				laser.volume = .12;				
@@ -201,7 +201,7 @@ SpritePrincipal.prototype.atualiza = function(){
 			if(this.acao["dir"]){
 				this.lado = "Dir";
 				if(!this.colisao["dir"]){
-					this.vel.x = this.acc.x;
+					this.vel.x = this.acc.x * this.altura;
 					if(this.spriteAtual.animacao !== ("walking" + this.lado)){
 						this.spriteAtual.animacao = "walking";
 						this.spriteAtual.frame = 0;
@@ -211,7 +211,7 @@ SpritePrincipal.prototype.atualiza = function(){
 			else if(this.acao["esq"]){
 				this.lado = "Esq";
 				if(!this.colisao["esq"]){
-					this.vel.x = -this.acc.x;
+					this.vel.x = -this.acc.x * this.altura;
 					if(this.spriteAtual.animacao !== ("walking" + this.lado)){
 						this.spriteAtual.animacao = "walking";
 						this.spriteAtual.frame = 0;
@@ -233,13 +233,13 @@ SpritePrincipal.prototype.atualiza = function(){
 	if(this.acao["dir"]){
 		this.lado = "Dir";
 		if(!this.colisao["dir"]){
-			this.vel.x = this.acc.x;
+			this.vel.x = this.acc.x * this.altura;
 		}
 	}
 	else if(this.acao["esq"]){
 		this.lado = "Esq";
 		if(!this.colisao["esq"]){
-			this.vel.x = -this.acc.x;
+			this.vel.x = -this.acc.x * this.altura;
 		}
 	}
 	else{
