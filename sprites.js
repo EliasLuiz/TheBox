@@ -188,9 +188,7 @@ SpritePrincipal.prototype.atualiza = function(){
 			if(this.vel.y == 0){
 				this.vel.y = this.acc.y * this.altura;
 				this.spriteAtual.animacao = "jumping";
-				laser = new Audio("sounds/MarioJump.wav");
-				laser.volume = .12;				
-				laser.play();
+				Som().playSfx("MarioJump");
 				this.spriteAtual.frame = -1;
 			}
 		}

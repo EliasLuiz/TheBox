@@ -125,5 +125,6 @@ while(true){
         break;
     }
 }
+document.getElementById('canvas').focus()
 
 //# sourceURL=starter.js

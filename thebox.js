@@ -174,6 +174,8 @@ function Fase1 (canvas){
 	//Construtor de Fase1
 	Fase.prototype.construtor.call(this, canvas);
 	Fase.prototype.load.call(this, "Fase1.json");
+	this.tocando = "Intro";
+	Som().playMusic("Fase01Intro");
 };
 //Chamada para elementos sonoros de Fase - musica, sons da fase, etc
 Fase1.prototype.som = function(){
@@ -182,6 +184,11 @@ Fase1.prototype.som = function(){
 //Atualiza os elementos especificos da Fase
 Fase1.prototype.atualiza = function(now){
 	Fase.prototype.atualiza.call(this);
+	if(this.tocando === "Intro" && Som().music["Fase01Intro"].ended){
+		this.tocando = "Loop";
+		Som().music["Fase01Loop"].loop = true;
+		Som().playMusic("Fase01Loop");
+	}
 };
 
 ////////////////////////////////////////////////////////////////
