@@ -11,62 +11,57 @@ function Som(){
 	}
 	arguments.callee._singletonInstance = this;
 
+	//definicao dos metodos de som
+	this.stop = function(audio){
+		audio.pause();
+		audio.currentTime = 0;
+	}
+	this.carrega = function(filename){
+		audio = new Audio(filename);
+		audio.volume = this.volume;
+		audio.load();
+		return audio
+	}
+	this.playMusic = function(audio){
+		this.music[audio].volume = this.volume;
+		this.stop(this.music[audio]);
+		this.music[audio].play();
+	}
+	this.playSfx = function(audio){
+		this.sfx[audio].volume = this.volume;
+		this.stop(this.sfx[audio]);
+		this.sfx[audio].play();
+	}
+	this.stopMusic = function(audio){
+		this.stop(this.music[audio]);
+	}
+	this.stopSfx = function(audio){
+		this.stop(this.sfx[audio]);
+	}
+
 	//Lista com nome dos arquivos music
-	this.musicNames = [];
+	this.musicNames = [
+		{ nome: "Menu", filename: "music/Menu.mp3" },
+		{ nome: "Fase01Intro", filename: "music/Fase01Intro.mp3" },
+		{ nome: "Fase01Loop", filename: "music/Fase01Loop.mp3" },
+		{ nome: "Fase01End", filename: "music/Fase01End.mp3" }
+	];
 	//Lista com nome dos arquivos sfx
-	this.sfxNames = [];
+	this.sfxNames = [
+		{ nome: "MarioJump", filename: "sfx/MarioJump.wav" }
+	];
 
 	this.music = {};
 	this.sfx = {};
 
-	for(name in this.musicNames){
-		this.music[name] = this.carrega(name);
-	}
-	for(name in this.sfxNames){
-		this.sfx[name] = this.carrega(name);
-	}
+	this.volume = 0.5;
 
-	//=========================================================
-	//=========================================================
-};
-function SoundPool(maxSize) {
-	var size = maxSize; // Max sounds allowed in the pool
-	var pool = [];
-	this.pool = pool;
-	var currSound = 0;
-	/*
-	 * Populates the pool array with the given sound
-	 */
-	this.init = function(object) {
-		if (object == "laser") {
-			for (var i = 0; i < size; i++) {
-				// Initalize the sound
-				laser = new Audio("sounds/MarioJump.wav");
-				laser.volume = .12;
-				laser.load();
-				pool[i] = laser;
-			}
-		}
-		else if (object == "explosion") {
-			for (var i = 0; i < size; i++) {
-				var explosion = new Audio("sounds/explosion.wav");
-				explosion.volume = .1;
-				explosion.load();
-				pool[i] = explosion;
-			}
-		}
-	};
-	/*
-	 * Plays a sound
-	 */
-	this.get = function() {
-		if(pool[currSound].currentTime == 0 || pool[currSound].ended) {
-			pool[currSound].play();
-		}
-		currSound = (currSound + 1) % size;
-	};
+	for(var i = 0; i < this.musicNames.length; i++){
+		this.music[this.musicNames[i].nome] = this.carrega(this.musicNames[i].filename);
+	}
+	for(var i = 0; i < this.sfxNames.length; i++){
+		this.sfx[this.sfxNames[i].nome] = this.carrega(this.sfxNames[i].filename);
+	}
 }
-
-
 
 //# sourceURL=som.js

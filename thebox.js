@@ -13,43 +13,50 @@ function Jogo (canvas) {
 	if (arguments.callee._singletonInstance) {
 		return arguments.callee._singletonInstance;
 	}
+	this.now = +new Date();
 	arguments.callee._singletonInstance = this;
 
 	//Construtor de Jogo
 	this.canvas = canvas;
-	this.fase = [
-		new Fase1(canvas),
-	];
-	this.faseAtual = 0;
+	this.fase = FaseFactory().newFase("Animacao");
 	this.pausado = false;
 	this.atualiza();
 };
 //Gatilhos para os botoes
 Jogo.prototype.botaoDireita = function(estado){
-	this.fase[this.faseAtual].botaoDireita(estado);
+	this.fase.botaoDireita(estado);
 };
 Jogo.prototype.botaoEsquerda = function(estado){
-	this.fase[this.faseAtual].botaoEsquerda(estado);
+	this.fase.botaoEsquerda(estado);
 };
 Jogo.prototype.botaoCima = function(estado){
-	this.fase[this.faseAtual].botaoCima(estado);
+	this.fase.botaoCima(estado);
 };
 Jogo.prototype.botaoBaixo = function(estado){
-	this.fase[this.faseAtual].botaoBaixo(estado);
+	this.fase.botaoBaixo(estado);
 };
 Jogo.prototype.botaoAcao = function(estado){
-	this.fase[this.faseAtual].botaoAcao(estado);
+	this.fase.botaoAcao(estado);
 };
-Jogo.prototype.botaoPause = function(){
+Jogo.prototype.botaoPause = function(estado){
 	this.pausado = !this.pausado;
 };
-Jogo.prototype.botaoVoltar = function(){
-
+Jogo.prototype.botaoVoltar = function(estado){
+	this.fase.botaoVoltar(estado);
 };
-Jogo.prototype.atualiza = function(now){
-	Jogo().fase[this.faseAtual].atualiza();
-	Jogo().fase[this.faseAtual].desenha();
+Jogo.prototype.click = function(x, y){
+	this.fase.click(x, y);
+};
+Jogo.prototype.hover = function(x, y){
+	this.fase.hover(x, y);
+};
+Jogo.prototype.atualiza = function(){
+	var now = +new Date();
+	$('#fps').html((1000/(now-this.now)).toFixed(0) + " fps");
+	this.fase.atualiza();
+	this.fase.desenha();
 	requestNextAnimationFrame(window.funcaoAtualiza);
+	this.now = now;
 };
 
 
@@ -72,30 +79,32 @@ Fase.prototype.load = function(filename){
 	var gambi = this;
 	function __loadfase__(json){
 		var aux = json["planodefundo"];
-		gambi.planodefundo = SpriteFactory().newSprite(aux.tipo, aux.x, aux.y, aux.escala);
+		if(aux !== "")
+			gambi.planodefundo = SpriteFactory().newSprite(aux.tipo, aux.x, aux.y, aux.escala);
 
 		//cenario nao interagivel - 2a camada
 		aux = json["cenario"];
 		gambi.cenario = [];
-		for(var i = 0; i < aux.length; i++){
-			gambi.cenario.push(SpriteFactory().newSprite(aux[i].tipo, aux[i].x, aux[i].y, aux[i].escala));
-		}
+		if(aux !== [])
+			for(var i = 0; i < aux.length; i++)
+				gambi.cenario.push(SpriteFactory().newSprite(aux[i].tipo, aux[i].x, aux[i].y, aux[i].escala));
 
 		//cenario interagivel
 		aux = json["elementosCenario"];
 		gambi.elementosCenario = [];
-		for(var i = 0; i < aux.length; i++){
-			gambi.elementosCenario.push(SpriteFactory().newSprite(aux[i].tipo, aux[i].x, aux[i].y, aux[i].escala));
-		}
+		if(aux !== [])
+			for(var i = 0; i < aux.length; i++)
+				gambi.elementosCenario.push(SpriteFactory().newSprite(aux[i].tipo, aux[i].x, aux[i].y, aux[i].escala));
 
 		aux = json["inimigos"];
 		gambi.inimigos = [];
-		for(var i = 0; i < aux.length; i++){
-			gambi.inimigos.push(SpriteFactory().newSprite(aux[i].tipo, aux[i].x, aux[i].y, aux[i].escala));
-		}
+		if(aux !== [])
+			for(var i = 0; i < aux.length; i++)
+				gambi.inimigos.push(SpriteFactory().newSprite(aux[i].tipo, aux[i].x, aux[i].y, aux[i].escala));
 
 		var aux = json["principal"];
-		gambi.principal = SpriteFactory().newSprite(aux.tipo, aux.x, aux.y, aux.escala);
+		if(aux !== "")
+			gambi.principal = SpriteFactory().newSprite(aux.tipo, aux.x, aux.y, aux.escala);
 	}
 	LoadJSON(filename, __loadfase__);
 };
@@ -119,8 +128,12 @@ Fase.prototype.botaoBaixo = function(estado){
 Fase.prototype.botaoAcao = function(estado){
 	this.principal.botaoAcao(estado);
 };
+Fase.prototype.click = function(x, y){
+};
+Fase.prototype.hover = function(x, y){
+};
 //Atualizar os elementos do Fase
-Fase.prototype.atualiza = function(now){
+Fase.prototype.atualiza = function(){
 
 	//Atualiza elementos fixos em relacao a tela
 	this.principal.atualiza();
@@ -168,20 +181,100 @@ Fase.prototype.desenha = function(){
 //Classes para gerenciar cada fase
 ////////////////////////////////////////////////////////////////
 
+Animacao.prototype = new Fase("");
+Animacao.prototype.construtor = Animacao;
+function Animacao (canvas){
+	//Construtor de Animacao
+	Fase.prototype.construtor.call(this, canvas);
+	Fase.prototype.load.call(this, "Animacao.json");
+}
+//Atualiza os elementos especificos da Fase
+Animacao.prototype.atualiza = function(){
+	this.planodefundo.atualiza();
+};
+Animacao.prototype.botaoAcao = function(estado){
+	if(!estado)
+		this.planodefundo.botaoAcao();
+};
+Animacao.prototype.desenha = function(){
+	this.planodefundo.desenha();
+};
+
+////////////////////////////////////////////////////////////////
+
+Menu.prototype = new Fase("");
+Menu.prototype.construtor = Menu;
+function Menu (canvas){
+	//Construtor de Menu
+	Fase.prototype.construtor.call(this, canvas);
+	Fase.prototype.load.call(this, "Menu.json");
+	this.tocando = "";
+	this.addHover = false;
+}
+//Atualiza os elementos especificos da Fase
+Menu.prototype.atualiza = function(){
+	if(!this.addHover){
+		document.getElementById("canvas").addEventListener('mousemove', hover, false);
+		this.addHover = true;
+	}
+	if(this.tocando === ""){
+		Som().music["Menu"].loop = true;
+		Som().playMusic("Menu");
+		this.tocando = "Menu";
+	}
+	this.planodefundo.atualiza()
+};
+//Gatilhos para os botoes
+Menu.prototype.botaoDireita = function(estado){
+	this.planodefundo.botao["dir"] = !estado;
+};
+Menu.prototype.botaoEsquerda = function(estado){
+	this.planodefundo.botao["esq"] = !estado;
+};
+Menu.prototype.botaoAcao = function(estado){
+	this.planodefundo.botao["acao"] = !estado;
+};
+Menu.prototype.botaoVoltar = function(estado){
+	this.planodefundo.botao["voltar"] = !estado;
+};
+Menu.prototype.click = function(x, y){
+	this.planodefundo.click(x, y);
+};
+Menu.prototype.hover = function(x, y){
+	this.planodefundo.hover(x, y);
+};
+//Desenhar os elementos do Menu
+Menu.prototype.desenha = function(){
+	this.planodefundo.desenha();
+};
+
+////////////////////////////////////////////////////////////////
+
 Fase1.prototype = new Fase("");
 Fase1.prototype.construtor = Fase1;
 function Fase1 (canvas){
 	//Construtor de Fase1
 	Fase.prototype.construtor.call(this, canvas);
 	Fase.prototype.load.call(this, "Fase1.json");
-};
-//Chamada para elementos sonoros de Fase - musica, sons da fase, etc
-Fase1.prototype.som = function(){
-
+	this.tocando = "";
+	this.removeHover = false;
 };
 //Atualiza os elementos especificos da Fase
-Fase1.prototype.atualiza = function(now){
+Fase1.prototype.atualiza = function(){
+	if(!this.removeHover){
+		document.getElementById("canvas").removeEventListener("mousemove", hover);
+		this.removeHover = true;
+	}
 	Fase.prototype.atualiza.call(this);
+	if(this.tocando === ""){
+		Som().playMusic("Fase01Intro");
+		this.tocando = "Intro";
+	}
+	else if(this.tocando === "Intro" && Som().music["Fase01Intro"].ended){
+		this.tocando = "Loop";
+		Som().music["Fase01Loop"].loop = true;
+		Som().playMusic("Fase01Loop");
+	}
 };
 
 ////////////////////////////////////////////////////////////////
@@ -193,12 +286,8 @@ function Fase2 (canvas){
 	Fase.prototype.construtor.call(this, canvas);
 	Fase.prototype.load.call(this, "Fase2.json");
 };
-//Chamada para elementos sonoros de Fase - musica, sons da fase, etc
-Fase2.prototype.som = function(){
-
-};
 //Atualiza os elementos especificos da Fase
-Fase2.prototype.atualiza = function(now){
+Fase2.prototype.atualiza = function(){
 
 	Fase.prototype.atualiza.call(this);
 };
@@ -212,12 +301,8 @@ function Fase3 (canvas){
 	Fase.prototype.construtor.call(this, canvas);
 	Fase.prototype.load.call(this, "Fase3.json");
 };
-//Chamada para elementos sonoros de Fase - musica, sons da fase, etc
-Fase3.prototype.som = function(){
-
-};
 //Atualiza os elementos especificos da Fase
-Fase3.prototype.atualiza = function(now){
+Fase3.prototype.atualiza = function(){
 
 	Fase.prototype.atualiza.call(this);
 };
@@ -231,12 +316,8 @@ function Fase4 (canvas){
 	Fase.prototype.construtor.call(this, canvas);
 	Fase.prototype.load.call(this, "Fase4.json");
 };
-//Chamada para elementos sonoros de Fase - musica, sons da fase, etc
-Fase4.prototype.som = function(){
-
-};
 //Atualiza os elementos especificos da Fase
-Fase4.prototype.atualiza = function(now){
+Fase4.prototype.atualiza = function(){
 
 	Fase.prototype.atualiza.call(this);
 };
@@ -250,14 +331,58 @@ function Fase5 (canvas){
 	Fase.prototype.construtor.call(this, canvas);
 	Fase.prototype.load.call(this, "Fase5.json");
 };
-//Chamada para elementos sonoros de Fase - musica, sons da fase, etc
-Fase5.prototype.som = function(){
-
-};
 //Atualiza os elementos especificos da Fase
-Fase5.prototype.atualiza = function(now){
+Fase5.prototype.atualiza = function(){
 
 	Fase.prototype.atualiza.call(this);
+};
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+//Classe para gerenciar criacao de fases
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+
+function FaseFactory(canvas){
+	//Criando singleton
+	if (arguments.callee._singletonInstance) {
+		return arguments.callee._singletonInstance;
+	}
+	arguments.callee._singletonInstance = this;
+
+	//Guarda as classes de sprite
+	this.fases = {};
+
+	//Funcao que copia um objeto (deep copy)
+	this.copiaProfunda = function(obj){	
+	    return jQuery.extend(true, {}, obj);
+	};
+
+	//============================================================
+	//============================================================
+
+	//Funcoes de factory
+	this.newFase = function(tipo){
+		switch(tipo){
+			case "Animacao":
+				return this.copiaProfunda(this.fases.Animacao);break;
+			case "Menu":
+				return this.copiaProfunda(this.fases.Menu);break;
+			case "Fase1":
+				return this.copiaProfunda(this.fases.Fase1);break;
+		}
+	};
+
+	//Carregar todas as classes finais de sprite
+	this.fases.Animacao = new Animacao(canvas);
+	this.fases.Menu = new Menu(canvas);
+	this.fases.Fase1 = new Fase1(canvas);
 };
 
 

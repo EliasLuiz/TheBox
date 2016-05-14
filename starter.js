@@ -23,6 +23,7 @@ carregado = false;
 var canvas = document.getElementById("canvas");
 canvas.addEventListener('keydown', doKeyDown, true);
 canvas.addEventListener('keyup', doKeyUp, true);
+canvas.addEventListener('click', click, false);
 //Outras funcoes
 function LoadJSON(filename, callback){
 	var xmlhttp = new XMLHttpRequest();
@@ -42,9 +43,11 @@ function doKeyDown(e) {
         case 38: Jogo().botaoCima(true);break; 
         case 39: Jogo().botaoDireita(true);break; 
         case 40: Jogo().botaoBaixo(true);break; 
-		case 32: Jogo().botaoAcao(true);break; //space
-		case 80: Jogo().botaoPause();break; //p
-		case 27: Jogo().botaoVoltar();break;//esc
+        case 13:                                //enter
+		case 32: Jogo().botaoAcao(true);break;  //space
+		case 80: Jogo().botaoPause(true);break; //p
+        case 8:                                 //backspace
+		case 27: Jogo().botaoVoltar(true);break;//esc
     }
 
 }
@@ -54,8 +57,20 @@ function doKeyUp(e) {
         case 38: Jogo().botaoCima(false);break; 
         case 39: Jogo().botaoDireita(false);break; 
         case 40: Jogo().botaoBaixo(false);break; 
-		case 32: Jogo().botaoAcao(false);break; //space	
+        case 13:                                 //enter
+		case 32: Jogo().botaoAcao(false);break;  //space	
+        case 80: Jogo().botaoPause(false);break; //p
+        case 8:                                  //backspace
+        case 27: Jogo().botaoVoltar(false);break;//esc
     }
+}
+function click(e){
+    //console.log(e.layerX - 160, e.layerY - 30);
+    Jogo().click(e.layerX - 160, e.layerY - 30);
+}
+function hover(e){
+    //console.log(e.layerX - 160, e.layerY - 30);
+    Jogo().hover(e.layerX - 160, e.layerY - 30);
 }
 
 
@@ -119,11 +134,13 @@ window.funcaoAtualiza = function(){
 canvas = document.getElementById('canvas').getContext('2d');
 som = new Som();
 spritef = new SpriteFactory(canvas);
+fasef = new FaseFactory(canvas);
 while(true){
-    if(carregado){
+    if(carregadoSprites){
         jogo = new Jogo(canvas);
         break;
     }
 }
+document.getElementById('canvas').focus()
 
 //# sourceURL=starter.js

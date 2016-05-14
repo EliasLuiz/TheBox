@@ -113,17 +113,312 @@ Background.prototype.atualiza = function(vel){
 
 ////////////////////////////////////////////////////////////////
 
+BackgroundAnimacao.prototype = new Background();
+BackgroundAnimacao.prototype.constructor = BackgroundAnimacao;
+function BackgroundAnimacao(canvas, onload) {
+	Sprite.prototype.load.call(this, canvas, "sprites/Animacao/BackgroundAnimacao.json", onload);
+	this.spriteAtual = { "animacao": "idle", "frame": 0 };
+	this.h = this.animacoes["idle"].h[1];
+	this.w = this.animacoes["idle"].w[1];
+	this.cont = 0;
+	this.quadrosBranco = 60;
+	this.quadrosFade = 5;
+	this.quadrosFull = 60;
+	this.estado = 0;
+	this.estados = ["1.0", "1.25", "1.50", "1.75", "1.100", "1.75", "1.50", "1.25", 
+				 "1.0", "2.25", "2.50", "2.75", "2.100", "2.75", "2.50", "2.25", 
+				 "1.0", "3.25", "3.50", "3.75", "0"];
+};
+BackgroundAnimacao.prototype.getPosAtual = function(){
+	return {
+		x: this.pos.x,
+		y: this.pos.y,
+		h: this.h,
+		w: this.w
+	};
+}
+BackgroundAnimacao.prototype.atualiza = function(){
+	this.cont++;
+	switch(this.estados[this.estado]){
+		case "0":
+			this.botaoAcao();
+			break;
+		case "1.0":
+			if(this.cont === this.quadrosBranco){
+				this.estado++;
+				this.cont = 0;
+			}
+			else if(this.cont === 1){
+				this.spriteAtual.frame = 0;
+			}
+			break;
+		case "1.25":
+			if(this.cont === this.quadrosFade){
+				this.estado++;
+				this.cont = 0;
+			}
+			else if(this.cont === 1){
+				this.spriteAtual.frame = 1;
+			}
+			break;
+		case "1.50":
+			if(this.cont === this.quadrosFade){
+				this.estado++;
+				this.cont = 0;
+			}
+			else if(this.cont === 1){
+				this.spriteAtual.frame = 2;
+			}
+			break;
+		case "1.75":
+			if(this.cont === this.quadrosFade){
+				this.estado++;
+				this.cont = 0;
+			}
+			else if(this.cont === 1){
+				this.spriteAtual.frame = 3;
+			}
+			break;
+		case "1.100":
+			if(this.cont === this.quadrosFull){
+				this.estado++;
+				this.cont = 0;
+			}
+			else if(this.cont === 1){
+				this.spriteAtual.frame = 4;
+			}
+			break;
+		case "2.25":
+			if(this.cont === this.quadrosFade){
+				this.estado++;
+				this.cont = 0;
+			}
+			else if(this.cont === 1){
+				this.spriteAtual.frame = 5;
+			}
+			break;
+		case "2.50":
+			if(this.cont === this.quadrosFade){
+				this.estado++;
+				this.cont = 0;
+			}
+			else if(this.cont === 1){
+				this.spriteAtual.frame = 6;
+			}
+			break;
+		case "2.75":
+			if(this.cont === this.quadrosFade){
+				this.estado++;
+				this.cont = 0;
+			}
+			else if(this.cont === 1){
+				this.spriteAtual.frame = 7;
+			}
+			break;
+		case "2.100":
+			if(this.cont === this.quadrosFull){
+				this.estado++;
+				this.cont = 0;
+			}
+			else if(this.cont === 1){
+				this.spriteAtual.frame = 8;
+			}
+			break;
+		case "3.25":
+			if(this.cont === this.quadrosFade){
+				this.estado++;
+				this.cont = 0;
+			}
+			else if(this.cont === 1){
+				this.spriteAtual.frame = 9;
+				this.pos.x = 0;
+				this.pos.y = 0;
+				this.h = viewport.h;
+				this.w = viewport.w;
+			}
+			break;
+		case "3.50":
+			if(this.cont === this.quadrosFade){
+				this.estado++;
+				this.cont = 0;
+			}
+			else if(this.cont === 1){
+				this.spriteAtual.frame = 10;
+			}
+			break;
+		case "3.75":
+			if(this.cont === this.quadrosFade){
+				this.estado++;
+				this.cont = 0;
+			}
+			else if(this.cont === 1){
+				this.spriteAtual.frame = 11;
+			}
+			break;
+	}
+};
+BackgroundAnimacao.prototype.botaoAcao = function(){
+	Jogo().fase = FaseFactory().newFase("Menu");
+};
+
+////////////////////////////////////////////////////////////////
+
+BackgroundMenu.prototype = new Background();
+BackgroundMenu.prototype.constructor = BackgroundMenu;
+function BackgroundMenu(canvas, onload) {
+	Sprite.prototype.load.call(this, canvas, "sprites/Menu/BackgroundMenu.json", onload);
+	this.botao = {
+		"dir": false,
+		"esq": false,
+		"acao": false,
+		"voltar": false
+	}
+	this.mouse = "";
+	this.spriteAtual = { "animacao": "idle", "frame": 1 };
+	this.w = (this.animacoes["idle"].w[0] / this.animacoes["idle"].h[0]) * viewport.h;
+};
+BackgroundMenu.prototype.getPosAtual = function(){
+	return {
+		x: this.pos.x,
+		y: this.pos.y,
+		h: viewport.h,
+		w: this.w
+	};
+}
+BackgroundMenu.prototype.click = function(x, y){
+	if(this.spriteAtual.animacao === "idle"){
+		if (x >= 398 && x <= 629 &&
+			y >= 374 && y <= 475)
+			this.mouse = "play";
+		else if (x >= 145 && x <= 375 &&
+			y >= 374 && y <= 475)
+			this.mouse = "opcoes";
+		else if (x >= 656 && x <= 886 &&
+			y >= 374 && y <= 475)
+			this.mouse = "creditos";
+	}
+	else if(this.spriteAtual.animacao === "opcoes"){
+		if (x >= 68 && x <= 174 &&
+			y >= 182 && y <= 211)
+			this.mouse = "volume0";
+		else if (x >= 175 && x <= 264 &&
+			y >= 182 && y <= 211)
+			this.mouse = "volume1";
+		else if (x >= 265 && x <= 357 &&
+			y >= 182 && y <= 211)
+			this.mouse = "volume2";
+	}
+	else if(this.spriteAtual.animacao === "creditos"){
+		if(x >= 757 && x <= 872 &&
+			y >= 468 && y <= 516)
+			this.mouse = "idle";
+	}
+	if(this.mouse !== ""){
+		switch(this.mouse){
+			case "idle": this.toIdle();break;
+			case "opcoes": this.toOpcoes();break;
+			case "creditos": this.toCreditos();break;
+			case "play": this.play();break;
+			case "volume0": this.volume(0);break;
+			case "volume1": this.volume(0.5);break;
+			case "volume2": this.volume(1);break;
+		}
+	}
+};
+BackgroundMenu.prototype.hover = function(x, y){
+	if(this.spriteAtual.animacao === "idle"){
+		if (x >= 398 && x <= 629 &&
+			y >= 374 && y <= 475)
+			this.spriteAtual.frame = 1;
+		else if (x >= 145 && x <= 375 &&
+			y >= 374 && y <= 475)
+			this.spriteAtual.frame = 0;
+		else if (x >= 656 && x <= 886 &&
+			y >= 374 && y <= 475)
+			this.spriteAtual.frame = 2;
+	}
+};
+BackgroundMenu.prototype.atualiza = function(){
+	if(this.spriteAtual.animacao === "idle"){
+		if(this.botao["dir"]){
+			this.spriteAtual.frame = this.spriteAtual.frame !== 2 ? this.spriteAtual.frame + 1 : 2;
+		}
+		else if(this.botao["esq"]){
+			this.spriteAtual.frame = this.spriteAtual.frame !== 0 ? this.spriteAtual.frame - 1 : 0;
+		}
+		if(this.botao["acao"]){
+			switch(this.spriteAtual.frame){
+				case 0: this.toOpcoes();break;
+				case 1: this.play();break;
+				case 2: this.toCreditos();break;
+			}
+		}
+	}
+	else {
+		if(this.botao["voltar"]){
+			this.toIdle();
+		}
+		if(this.spriteAtual.animacao === "opcoes"){
+			if(this.botao["dir"]){
+				if(this.spriteAtual.frame < 2){
+					this.volume((this.spriteAtual.frame+1) / 2);
+				}
+			}
+			else if(this.botao["esq"]){
+				if(this.spriteAtual.frame > 0){
+					this.volume((this.spriteAtual.frame-1) / 2);
+				}
+			}
+		}
+	}
+	this.botao = {
+		"dir": false,
+		"esq": false,
+		"acao": false,
+		"voltar": false
+	}
+	this.mouse = "";
+};
+BackgroundMenu.prototype.toIdle = function(){
+	this.spriteAtual.animacao = "idle";
+	this.spriteAtual.frame = 1;
+	this.botao["voltar"] = false;
+};
+BackgroundMenu.prototype.toOpcoes = function(){
+	this.spriteAtual.animacao = "opcoes";
+	this.spriteAtual.frame = Som().volume * 2;
+};
+BackgroundMenu.prototype.toCreditos = function(){
+	this.spriteAtual.animacao = "creditos";
+	this.spriteAtual.frame = 0;
+};
+BackgroundMenu.prototype.play = function(){
+	Som().stopMusic("Menu");
+	Jogo().fase = FaseFactory().newFase("Fase1");
+};
+BackgroundMenu.prototype.volume = function(volume){
+	if(volume == Som().volume)
+		return;
+	this.spriteAtual.frame = volume * 2;
+	Som().volume = volume;
+	Som().music["Menu"].volume = volume;
+};
+
+
+////////////////////////////////////////////////////////////////
+
 Background01.prototype = new Background();
 Background01.prototype.constructor = Background01;
 function Background01(canvas, onload) {
-	Sprite.prototype.load.call(this, canvas, "sprites/bg01.json", onload);
+	Sprite.prototype.load.call(this, canvas, "sprites/Fase01/Background01.json", onload);
+	this.w = (this.animacoes["idle"].w[0] / this.animacoes["idle"].h[0]) * viewport.h;
 };
 Background01.prototype.getPosAtual = function(){
 	return {
 		x: this.pos.x,
 		y: this.pos.y,
-		h: this.animacoes["idle"].h[0],
-		w: this.animacoes["idle"].w[0]
+		h: viewport.h,
+		w: this.w
 	};
 }
 
@@ -188,9 +483,7 @@ SpritePrincipal.prototype.atualiza = function(){
 			if(this.vel.y == 0){
 				this.vel.y = this.acc.y * this.altura;
 				this.spriteAtual.animacao = "jumping";
-				laser = new Audio("sounds/MarioJump.wav");
-				laser.volume = .12;				
-				laser.play();
+				Som().playSfx("MarioJump");
 				this.spriteAtual.frame = -1;
 			}
 		}
@@ -263,7 +556,7 @@ SpritePrincipal01.prototype = new SpritePrincipal();
 SpritePrincipal01.prototype.constructor = SpritePrincipal01;
 function SpritePrincipal01(canvas, onload) {
 	SpritePrincipal.prototype.constructor.call(this, canvas);
-	Sprite.prototype.load.call(this, canvas, "sprites/SpritePrincipal01.json", onload);
+	Sprite.prototype.load.call(this, canvas, "sprites/Fase01/SpritePrincipal01.json", onload);
 };
 SpritePrincipal01.prototype.atualiza = function(){
 	SpritePrincipal.prototype.atualiza.call(this);
@@ -343,7 +636,7 @@ function SpriteFactory(canvas){
 		gambi.carregados++;
 		if(gambi.carregados < gambi.sprites.length)
 			return;
-		carregado = true;
+		carregadoSprites = true;
 	};
 
 	//============================================================
@@ -355,6 +648,10 @@ function SpriteFactory(canvas){
 		switch(tipo){
 			case "SpritePrincipal01":
 				copia = this.copiaProfunda(this.sprites.SpritePrincipal01);break;
+			case "BackgroundAnimacao":
+				copia = this.copiaProfunda(this.sprites.BackgroundAnimacao);break;
+			case "BackgroundMenu":
+				copia = this.copiaProfunda(this.sprites.BackgroundMenu);break;
 			case "Background01":
 				copia = this.copiaProfunda(this.sprites.Background01);break;
 		}
@@ -369,6 +666,8 @@ function SpriteFactory(canvas){
 
 	//Carregar todas as classes finais de sprite
 	this.sprites.SpritePrincipal01 = new SpritePrincipal01(canvas, this.loading);
+	this.sprites.BackgroundAnimacao = new BackgroundAnimacao(canvas, this.loading);
+	this.sprites.BackgroundMenu = new BackgroundMenu(canvas, this.loading);
 	this.sprites.Background01 = new Background01(canvas, this.loading);
 };
 
