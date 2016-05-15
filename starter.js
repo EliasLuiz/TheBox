@@ -5,6 +5,7 @@
 
 //Definicao de constantes
 gravidade = -2;
+velocidadeTerminal = 10;
 
 
 //(1 - Velocidade de movimento da camada intermediaria relativo ao personagem)
@@ -65,7 +66,7 @@ function doKeyUp(e) {
     }
 }
 function click(e){
-    console.log(e.layerX - 160, e.layerY - 30);
+    //console.log(e.layerX - 160, e.layerY - 30);
     Jogo().click(e.layerX - 160, e.layerY - 30);
 }
 function hover(e){
@@ -95,32 +96,64 @@ function Colisao(sprite1, sprite2){
 
     //Margem de erro para igualdade
     //Menor -> mais preciso vel. baixas, mais erros em vel. altas
-    var margemErro = 10;
+    var margemErro = (velocidadeTerminal - 0.5) / 2;
 
     //Se em alcance vertical
-    if(pos1.y >= pos2.y - pos2.h ||
-       pos1.y - pos1.h <= pos2.y){
+    if(pos1.y < pos2.y && pos2.y < pos1.y + pos1.h ||
+       pos2.y < pos1.y && pos1.y < pos2.y + pos2.h){
         //dir com esq
         if(pos1.x + pos1.w <= pos2.x + margemErro &&
-           pos1.x + pos1.w >= pos2.x - margemErro)
+           pos1.x + pos1.w >= pos2.x - margemErro){
             colisao.um.dir = colisao.dois.esq = true;
+            //Arredondamento de posicao (margem de erro)
+            if(sprite1.movel)
+                sprite1.pos.x = pos2.x - pos1.w;
+            else
+                sprite2.pos.x = pos1.x + pos1.w;
+        }
         //esq com dir
-        else if(pos1.x <= pos2.x + pos2.w + margemErro &&
-                pos1.x >= pos2.x + pos2.w - margemErro)
+        else if(pos2.x + pos2.w <= pos1.x + margemErro &&
+                pos2.x + pos2.w >= pos1.x - margemErro){
             colisao.um.esq = colisao.dois.dir = true;
+            if(sprite1.movel)
+                sprite1.pos.x = pos2.x + pos2.w;
+            else
+                sprite2.pos.x = pos1.x - pos2.w;
+        }
     }
     //Se em alcance horizontal
-    if(pos1.x + pos1.w >= pos2.x ||
-       pos1.x <= pos2.x + pos2.w){
+    if(pos1.x < pos2.x && pos2.x < pos1.x + pos1.w ||
+       pos2.x < pos1.x && pos1.x < pos2.x + pos2.w){
         //cim com bxo
-        if(pos1.y >= pos2.y - pos2.h + margemErro &&
-           pos1.y <= pos2.y - pos2.h - margemErro)
+        if(pos1.y + pos1.h <= pos2.y + margemErro &&
+           pos1.y + pos1.h >= pos2.y - margemErro){
             colisao.um.cim = colisao.dois.bxo = true;
+            if(sprite1.movel)
+                sprite1.pos.y = pos2.y - pos1.h;
+            else
+                sprite2.pos.y = pos1.y + pos1.h;
+        }
         //bxo com cim
-        else if(pos1.y - pos1.h <= pos2.y + margemErro &&
-                pos1.y - pos1.h >= pos2.y - margemErro)
-            colisao.um.bxo = colisao.dois.cim = true;
+        else if(pos2.y + pos2.h <= pos1.y + margemErro &&
+                pos2.y + pos2.h >= pos1.y - margemErro){
+            colisao.um.bxo = colisao.dois.cim = true; 
+            if(sprite1.movel)
+                sprite1.pos.y = pos2.y + pos2.h;
+            else
+                sprite2.pos.y = pos1.y - pos2.h;
+        }
     }
+
+    sprite1.colisao["dir"] |= colisao["um"]["dir"];
+    sprite1.colisao["esq"] |= colisao["um"]["esq"];
+    sprite1.colisao["cim"] |= colisao["um"]["cim"];
+    sprite1.colisao["bxo"] |= colisao["um"]["bxo"];
+    sprite2.colisao["dir"] |= colisao["dois"]["dir"];
+    sprite2.colisao["esq"] |= colisao["dois"]["esq"];
+    sprite2.colisao["cim"] |= colisao["dois"]["cim"];
+    sprite2.colisao["bxo"] |= colisao["dois"]["bxo"];
+    sprite2.hp -= sprite1.dano(colisao["um"]);
+    sprite1.hp -= sprite2.dano(colisao["dois"]);
 
     return colisao;
 };

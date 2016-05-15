@@ -53,8 +53,8 @@ Jogo.prototype.hover = function(x, y){
 Jogo.prototype.atualiza = function(){
 	var now = +new Date();
 	$('#fps').html((1000/(now-this.now)).toFixed(0) + " fps");
-	this.fase.atualiza();
 	this.fase.desenha();
+	this.fase.atualiza();
 	requestNextAnimationFrame(window.funcaoAtualiza);
 	this.now = now;
 };
@@ -134,6 +134,17 @@ Fase.prototype.hover = function(x, y){
 };
 //Atualizar os elementos do Fase
 Fase.prototype.atualiza = function(){
+	//Testando colisoes
+	for (var i = 0; i < this.elementosCenario.length; i++) {
+		Colisao(this.elementosCenario[i], this.principal);
+		for (var j = 0; j < this.inimigos.length; j++) {
+			Colisao(this.elementosCenario[i], this.inimigos[j]);
+			if(i === 0){
+				Colisao(this.inimigos[j], this.principal);
+			}
+		}
+	}
+
 
 	//Atualiza elementos fixos em relacao a tela
 	this.principal.atualiza();
@@ -146,10 +157,8 @@ Fase.prototype.atualiza = function(){
 
 	var vel = 0;
 	//Desloca a fase
-	if(this.principal.acao["dir"] || this.principal.acao["esq"]) {
-		vel = this.principal.vel.x;
-		viewport.x += vel;	
-	}
+	vel = this.principal.vel.x;
+	viewport.x += vel;
 
 	//Atualiza quem nao se move junto com a tela
 	this.planodefundo.atualiza(vel);

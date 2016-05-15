@@ -9,15 +9,38 @@
 
     ],
     "elementosCenario": [
-
+    {
+        "tipo": "Chao100",
+        "x": 399,
+        "y": 0,
+        "escala": 2
+    },
+    {
+        "tipo": "Chao100",
+        "x": 599,
+        "y": 0,
+        "escala": 2
+    },
+    {
+        "tipo": "Chao100",
+        "x": 799,
+        "y": 0,
+        "escala": 2
+    },
+    {
+        "tipo": "Chao100",
+        "x": 999,
+        "y": 0,
+        "escala": 2
+    }
     ],
     "inimigos": [
 
     ],
     "principal": {
         "tipo": "SpritePrincipal01",
-        "x": 300,
-        "y": 700,
+        "x": 200,
+        "y": 600,
         "escala": 0.3
     }
 }

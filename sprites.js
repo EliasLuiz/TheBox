@@ -6,16 +6,27 @@
 ////////////////////////////////////////////////////////////////
 
 function Sprite(){
-};
-//Carrega sprites a partir de arquivo
-Sprite.prototype.load = function(canvas, filename, onload){
-	this.context = canvas;
+	this.colisao = {
+		"dir": false,
+		"esq": false,
+		"cim": false,
+		"bxo": false
+	};
 
 	//Variaveis basicas
 	//Velocidade e posicao atual
 	this.pos = { x: 0, y: 0 };
 	//(1 - Velocidade de movimento do background relativo ao personagem)
-	this.vel = { x: 1 - 0.1, y: 0 };
+	this.vel = { x: 1 , y: 0 };
+	//Vida do sprite - Por padrão NaN = infinito
+	this.hp = 0 / 0;
+	//Determina se o sprite se movimenta ou nao (causa ou sofre colisao)
+	this.movel = false;
+};
+//Carrega sprites a partir de arquivo
+Sprite.prototype.load = function(canvas, filename, onload){
+	this.context = canvas;
+
 
 	//<Javascript eh um trem muito louco>
 	var gambi = this;
@@ -56,6 +67,10 @@ Sprite.prototype.load = function(canvas, filename, onload){
 
 	onload();
 };
+//Retorna o dano inflingido por quem enconstar na direcao (ex: cima, baixo)
+Sprite.prototype.dano = function(direcao){
+	return 0;
+};
 //Retorna as dimensoes atuais do objeto
 Sprite.prototype.getPosAtual = function(){
 	return {
@@ -67,6 +82,8 @@ Sprite.prototype.getPosAtual = function(){
 			this.spriteAtual.frame] * this.altura
 	};
 }
+//Atualiza o comportamento do objeto
+Sprite.prototype.atualiza = function(){};
 //Desenha o objeto
 Sprite.prototype.desenha = function(){
 
@@ -98,7 +115,7 @@ Sprite.prototype.desenha = function(){
 
 
 ////////////////////////////////////////////////////////////////
-//Classe para gerenciar o b
+//Classe para gerenciar o background
 ////////////////////////////////////////////////////////////////
 
 Background.prototype = new Sprite();
@@ -432,13 +449,65 @@ Background01.prototype.getPosAtual = function(){
 
 
 ////////////////////////////////////////////////////////////////
+//Classe para gerenciar o cenario nao interagivel
+////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////
+//Classe para gerenciar o cenario interagivel
+////////////////////////////////////////////////////////////////
+
+Chao10.prototype = new Sprite();
+Chao10.prototype.constructor = Chao10;
+function Chao10(canvas, onload) {
+	Sprite.prototype.load.call(this, canvas, "sprites/lvls/Chao10.json", onload);
+	this.h = this.animacoes["idle"].h;
+	this.w = this.animacoes["idle"].w;
+};
+Chao10.prototype.getPosAtual = function(){
+	return {
+		x: this.pos.x,
+		y: this.pos.y,
+		h: this.h * this.altura,
+		w: this.w * this.altura
+	};
+}
+
+Chao100.prototype = new Sprite();
+Chao100.prototype.constructor = Chao100;
+function Chao100(canvas, onload) {
+	Sprite.prototype.load.call(this, canvas, "sprites/lvls/Chao100.json", onload);
+	this.h = this.animacoes["idle"].h;
+	this.w = this.animacoes["idle"].w;
+};
+Chao100.prototype.getPosAtual = function(){
+	return {
+		x: this.pos.x,
+		y: this.pos.y,
+		h: this.h * this.altura,
+		w: this.w * this.altura
+	};
+}
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////
 //Classe para gerenciar o personagem principal
 ////////////////////////////////////////////////////////////////
 
 SpritePrincipal.prototype = new Sprite();
 SpritePrincipal.prototype.constructor = SpritePrincipal;
 function SpritePrincipal() {
-	this.acc = {x: 25, y: 35};
+	this.acc = {x: 25, y: 55};
 	this.lado = "Dir";
 	this.spriteAtual = { "animacao": "idle", "frame": 0 };
 	this.acao = {
@@ -448,12 +517,7 @@ function SpritePrincipal() {
 		"bxo": false,
 		"spa": false
 	};
-	this.colisao = {
-		"dir": false,
-		"esq": false,
-		"cim": false,
-		"bxo": false
-	};
+	this.movel = true;
 };
 //Funcoes para acoes do personagem
 SpritePrincipal.prototype.botaoDireita = function(estado){ 	this.acao["dir"] = estado; };
@@ -468,12 +532,9 @@ SpritePrincipal.prototype.colisaoBaixo = function(){ 		this.colisao["bxo"] = tru
 //Atualiza o estado do personagem
 SpritePrincipal.prototype.atualiza = function(){
 	//Se estiver livre
-	if(this.pos.y > 0 && this.pos.y < 100) 
-		this.colisao["bxo"] = true;
-	else
-		this.colisao["bxo"] = false;
 	if(!this.colisao["bxo"]){
 		this.vel.y += gravidade * this.altura;
+		this.vel.y = this.vel.y < velocidadeTerminal ? - velocidadeTerminal : this.vel.y;
 		if(this.vel.y <= 0 && this.spriteAtual.animacao !== ("falling" + this.lado)){
 			this.spriteAtual.animacao = "falling";
 			this.spriteAtual.frame = -1;		
@@ -538,10 +599,14 @@ SpritePrincipal.prototype.atualiza = function(){
 			this.vel.x = -this.acc.x * this.altura;
 		}
 	}
-	else{
-		this.vel.x = 0;
-	}
 
+
+	this.colisao = {
+		"dir": false,
+		"esq": false,
+		"cim": false,
+		"bxo": false
+	};
 
 	//Vai para o proximo frame da animacao
 	this.pos.x += this.vel.x;
@@ -649,14 +714,18 @@ function SpriteFactory(canvas){
 	this.newSprite = function(tipo, x, y, altura){
 		var copia;
 		switch(tipo){
-			case "SpritePrincipal01":
-				copia = this.copiaProfunda(this.sprites.SpritePrincipal01);break;
 			case "BackgroundAnimacao":
 				copia = this.copiaProfunda(this.sprites.BackgroundAnimacao);break;
 			case "BackgroundMenu":
 				copia = this.copiaProfunda(this.sprites.BackgroundMenu);break;
 			case "Background01":
 				copia = this.copiaProfunda(this.sprites.Background01);break;
+			case "Chao10":
+				copia = this.copiaProfunda(this.sprites.Chao10);break;
+			case "Chao100":
+				copia = this.copiaProfunda(this.sprites.Chao100);break;
+			case "SpritePrincipal01":
+				copia = this.copiaProfunda(this.sprites.SpritePrincipal01);break;
 		}
 		copia.pos.x = x;
 		copia.pos.y = y;
@@ -668,10 +737,12 @@ function SpriteFactory(canvas){
 	};
 
 	//Carregar todas as classes finais de sprite
-	this.sprites.SpritePrincipal01 = new SpritePrincipal01(canvas, this.loading);
 	this.sprites.BackgroundAnimacao = new BackgroundAnimacao(canvas, this.loading);
 	this.sprites.BackgroundMenu = new BackgroundMenu(canvas, this.loading);
 	this.sprites.Background01 = new Background01(canvas, this.loading);
+	this.sprites.Chao10 = new Chao10(canvas, this.loading);
+	this.sprites.Chao100 = new Chao100(canvas, this.loading);
+	this.sprites.SpritePrincipal01 = new SpritePrincipal01(canvas, this.loading);
 };
 
 
