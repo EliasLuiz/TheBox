@@ -452,6 +452,23 @@ Background01.prototype.getPosAtual = function(){
 //Classe para gerenciar o cenario nao interagivel
 ////////////////////////////////////////////////////////////////
 
+Cenario01.prototype = new Background();
+Cenario01.prototype.constructor = Cenario01;
+function Cenario01(canvas, onload) {
+	Sprite.prototype.load.call(this, canvas, "sprites/Fase01/Cenario01.json", onload);
+	this.vel = { "x": 0.1, "y": 0.1 };
+};
+
+
+////////////////////////////////////////////////////////////////
+
+Cenario02.prototype = new Background();
+Cenario02.prototype.constructor = Cenario02;
+function Cenario02(canvas, onload) {
+	Sprite.prototype.load.call(this, canvas, "sprites/Fase01/Cenario02.json", onload);
+	this.vel = { "x": 0.1, "y": 0.1 };
+};
+
 
 
 
@@ -616,6 +633,17 @@ SpritePrincipal.prototype.atualiza = function(){
 	else
 	 	this.spriteAtual.animacao = this.spriteAtual.animacao.slice(0, this.spriteAtual.animacao.length-3) + this.lado;
 	this.spriteAtual.frame = (this.spriteAtual.frame + 1) % (this.animacoes[this.spriteAtual.animacao].x.length - 1);
+
+
+
+	//Se morreu
+	if(this.pos.y + this.animacoes[this.spriteAtual.animacao].h[this.spriteAtual.frame] < 0){
+		Jogo().fase.principal = SpriteFactory().newSprite("SpritePrincipal01");
+		Jogo().fase.principal.pos.x = Jogo().fase.principalOriginalX;
+		Jogo().fase.principal.pos.y = Jogo().fase.principalOriginalY;
+		Jogo().fase.principal.altura = Jogo().fase.principalOriginalEscala;
+		viewport.x = viewport.y = 0;
+	}
 };
 
 ////////////////////////////////////////////////////////////////
@@ -720,6 +748,10 @@ function SpriteFactory(canvas){
 				copia = this.copiaProfunda(this.sprites.BackgroundMenu);break;
 			case "Background01":
 				copia = this.copiaProfunda(this.sprites.Background01);break;
+			case "Cenario01":
+				copia = this.copiaProfunda(this.sprites.Cenario01);break;
+			case "Cenario02":
+				copia = this.copiaProfunda(this.sprites.Cenario02);break;
 			case "Chao10":
 				copia = this.copiaProfunda(this.sprites.Chao10);break;
 			case "Chao100":
@@ -740,6 +772,8 @@ function SpriteFactory(canvas){
 	this.sprites.BackgroundAnimacao = new BackgroundAnimacao(canvas, this.loading);
 	this.sprites.BackgroundMenu = new BackgroundMenu(canvas, this.loading);
 	this.sprites.Background01 = new Background01(canvas, this.loading);
+	this.sprites.Cenario01 = new Cenario01(canvas, this.loading);
+	this.sprites.Cenario02 = new Cenario02(canvas, this.loading);
 	this.sprites.Chao10 = new Chao10(canvas, this.loading);
 	this.sprites.Chao100 = new Chao100(canvas, this.loading);
 	this.sprites.SpritePrincipal01 = new SpritePrincipal01(canvas, this.loading);

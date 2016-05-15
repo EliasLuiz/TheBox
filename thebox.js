@@ -273,6 +273,9 @@ Fase1.prototype.atualiza = function(){
 	if(!this.removeHover){
 		document.getElementById("canvas").removeEventListener("mousemove", hover);
 		this.removeHover = true;
+		this.principalOriginalX = this.principal.pos.x;
+		this.principalOriginalY = this.principal.pos.y;
+		this.principalOriginalEscala = this.principal.altura;
 	}
 	Fase.prototype.atualiza.call(this);
 	if(this.tocando === ""){
@@ -384,7 +387,8 @@ function FaseFactory(canvas){
 			case "Menu":
 				return this.copiaProfunda(this.fases.Menu);break;
 			case "Fase1":
-				return this.copiaProfunda(this.fases.Fase1);break;
+				//return this.copiaProfunda(this.fases.Fase1);break;
+				return new Fase1(canvas);break;
 		}
 	};
 
