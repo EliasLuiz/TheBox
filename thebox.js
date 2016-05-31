@@ -165,15 +165,18 @@ Fase.prototype.atualiza = function(){
 		}
 	}
 
-	var vel = 0;
+	var velx = vely = 0;
 	//Desloca a fase
-	vel = this.principal.vel.x;
-	viewport.x += vel;
+	velx = this.principal.vel.x;
+	vely = this.principal.vel.y;
+	viewport.x += velx;
+	viewport.y += vely;
+
 
 	//Atualiza quem nao se move junto com a tela
-	this.planodefundo.atualiza(vel);
+	this.planodefundo.atualiza(velx, vely);
 	for (var i = 0; i < this.cenario.length; i++) {
-		this.cenario[i].atualiza(vel);
+		this.cenario[i].atualiza(velx);
 	}
 
 };

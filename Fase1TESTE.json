@@ -1,0 +1,63 @@
+{
+    "planodefundo": {
+        "tipo": "Background01",
+        "x": 50,
+        "y": 100,
+        "escala": 0.7
+    },
+    "cenario": [
+    {
+        "tipo": "Cenario01",
+        "x": 0,
+        "y": 0,
+        "escala": 0.45
+    },
+    {
+        "tipo": "Cenario02",
+        "x": 0,
+        "y": 0,
+        "escala": 0.45
+    }
+    ],
+    "elementosCenario": [
+    {
+        "tipo": "Chao100",
+        "x": 0,
+        "y": 0,
+        "escala": 4
+    },
+    {
+        "tipo": "Chao100",
+        "x": 599,
+        "y": 0,
+        "escala": 2
+    },
+    {
+        "tipo": "Chao100",
+        "x": 799,
+        "y": 0,
+        "escala": 4
+    },
+    {
+        "tipo": "Chao100",
+        "x": 1199,
+        "y": 0,
+        "escala": 2
+    },
+    {
+        "tipo": "Chao100",
+        "x": 1399,
+        "y": 0,
+        "escala": 2
+    }
+    ],
+    "inimigos": [
+
+    ],
+    "principal": {
+        "tipo": "SpritePrincipal01",
+        "x": 290,
+        "y": 600,
+        "escala": 0.6
+    }
+}
