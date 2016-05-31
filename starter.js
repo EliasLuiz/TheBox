@@ -5,7 +5,7 @@
 
 //Definicao de constantes
 gravidade = -2;
-velocidadeTerminal = 10;
+velocidadeTerminal = 18;
 
 
 //(1 - Velocidade de movimento da camada intermediaria relativo ao personagem)
@@ -96,11 +96,12 @@ function Colisao(sprite1, sprite2){
 
     //Margem de erro para igualdade
     //Menor -> mais preciso vel. baixas, mais erros em vel. altas
-    var margemErro = (velocidadeTerminal - 0.5) / 2;
+    //var margemErro = (velocidadeTerminal) / 2 + 1;
+    var margemErro = 17;
 
     //Se em alcance vertical
-    if(pos1.y < pos2.y && pos2.y < pos1.y + pos1.h ||
-       pos2.y < pos1.y && pos1.y < pos2.y + pos2.h){
+    if(pos1.y <= pos2.y && pos2.y < pos1.y + pos1.h ||
+       pos2.y <= pos1.y && pos1.y < pos2.y + pos2.h){
         //dir com esq
         if(pos1.x + pos1.w <= pos2.x + margemErro &&
            pos1.x + pos1.w >= pos2.x - margemErro){
@@ -121,9 +122,11 @@ function Colisao(sprite1, sprite2){
                 sprite2.pos.x = pos1.x - pos2.w;
         }
     }
+    var pos1 = sprite1.getPosAtual();
+    var pos2 = sprite2.getPosAtual();
     //Se em alcance horizontal
-    if(pos1.x < pos2.x && pos2.x < pos1.x + pos1.w ||
-       pos2.x < pos1.x && pos1.x < pos2.x + pos2.w){
+    if(pos1.x <= pos2.x && pos2.x < pos1.x + pos1.w ||
+       pos2.x <= pos1.x && pos1.x < pos2.x + pos2.w){
         //cim com bxo
         if(pos1.y + pos1.h <= pos2.y + margemErro &&
            pos1.y + pos1.h >= pos2.y - margemErro){

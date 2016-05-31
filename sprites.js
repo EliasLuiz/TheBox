@@ -84,18 +84,19 @@ Sprite.prototype.getPosAtual = function(){
 }
 //Atualiza o comportamento do objeto
 Sprite.prototype.atualiza = function(){};
-//Desenha o objeto
-Sprite.prototype.desenha = function(){
-
-	// desenha o pedaço do sprite em tela
+//Informa se o sprite esta visivel
+Sprite.prototype.isVisivel = function(){
 	var p = this.getPosAtual();
-
-	//Se estiver visivel imprime
-	if(p.x + p.w - viewport.x > 0 &&
+	return p.x + p.w - viewport.x > 0 &&
 	   p.x - viewport.x < viewport.w &&
 	   p.y + p.h - viewport.y > 0 &&
-	   p.y - viewport.y < viewport.h){
-
+	   p.y - viewport.y < viewport.h;
+}
+//Desenha o objeto
+Sprite.prototype.desenha = function(){
+	//Se estiver visivel imprime
+	var p = this.getPosAtual();
+	if(this.isVisivel()){
 	    this.context.drawImage(
 	        this.imagem,		//img 	Specifies the image, canvas, or video element to use 	 	
 	        this.animacoes[this.spriteAtual.animacao].x[this.spriteAtual.frame],	//sx 		Optional. The x coordinate where to start clipping 	
@@ -524,7 +525,7 @@ Chao100.prototype.getPosAtual = function(){
 SpritePrincipal.prototype = new Sprite();
 SpritePrincipal.prototype.constructor = SpritePrincipal;
 function SpritePrincipal() {
-	this.acc = {x: 25, y: 55};
+	this.acc = {x: 25, y: 45};
 	this.lado = "Dir";
 	this.spriteAtual = { "animacao": "idle", "frame": 0 };
 	this.acao = {
@@ -551,7 +552,10 @@ SpritePrincipal.prototype.atualiza = function(){
 	//Se estiver livre
 	if(!this.colisao["bxo"]){
 		this.vel.y += gravidade * this.altura;
-		this.vel.y = this.vel.y < velocidadeTerminal ? - velocidadeTerminal : this.vel.y;
+		if(this.vel.y > 0)
+			this.vel.y = this.vel.y > velocidadeTerminal ? velocidadeTerminal : this.vel.y;
+		else
+			this.vel.y = this.vel.y < - velocidadeTerminal ? - velocidadeTerminal : this.vel.y;
 		if(this.vel.y <= 0 && this.spriteAtual.animacao !== ("falling" + this.lado)){
 			this.spriteAtual.animacao = "falling";
 			this.spriteAtual.frame = -1;		
@@ -608,13 +612,21 @@ SpritePrincipal.prototype.atualiza = function(){
 		this.lado = "Dir";
 		if(!this.colisao["dir"]){
 			this.vel.x = this.acc.x * this.altura;
+			this.pos.x += 5;
+			viewport.x += 5;
 		}
+		else
+			this.vel.x = 0;
 	}
 	else if(this.acao["esq"]){
 		this.lado = "Esq";
 		if(!this.colisao["esq"]){
 			this.vel.x = -this.acc.x * this.altura;
+			this.pos.x -= 5;
+			viewport.x -= 5;
 		}
+		else
+			this.vel.x = 0;
 	}
 
 

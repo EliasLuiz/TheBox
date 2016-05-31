@@ -135,11 +135,17 @@ Fase.prototype.hover = function(x, y){
 //Atualizar os elementos do Fase
 Fase.prototype.atualiza = function(){
 	//Testando colisoes
+	inimigosPersonagem = false;
 	for (var i = 0; i < this.elementosCenario.length; i++) {
+		if(!this.elementosCenario[i].isVisivel())
+			continue;
 		Colisao(this.elementosCenario[i], this.principal);
 		for (var j = 0; j < this.inimigos.length; j++) {
+			if(!this.inimigos[i].isVisivel())
+				continue;
 			Colisao(this.elementosCenario[i], this.inimigos[j]);
-			if(i === 0){
+			if(!inimigosPersonagem){
+				inimigosPersonagem = true;
 				Colisao(this.inimigos[j], this.principal);
 			}
 		}
@@ -149,10 +155,14 @@ Fase.prototype.atualiza = function(){
 	//Atualiza elementos fixos em relacao a tela
 	this.principal.atualiza();
 	for (var i = 0; i < this.elementosCenario.length; i++) {
-		this.elementosCenario[i].atualiza();
+		if(this.elementosCenario[i].isVisivel()){
+			this.elementosCenario[i].atualiza();
+		}
 	}
 	for (var i = 0; i < this.inimigos.length; i++) {
-		this.inimigos[i].atualiza();
+		if(this.inimigos[i].isVisivel()){
+			this.inimigos[i].atualiza();
+		}
 	}
 
 	var vel = 0;

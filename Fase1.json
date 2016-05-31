@@ -22,9 +22,9 @@
     "elementosCenario": [
     {
         "tipo": "Chao100",
-        "x": 399,
+        "x": 0,
         "y": 0,
-        "escala": 2
+        "escala": 4
     },
     {
         "tipo": "Chao100",
@@ -36,13 +36,7 @@
         "tipo": "Chao100",
         "x": 799,
         "y": 0,
-        "escala": 2
-    },
-    {
-        "tipo": "Chao100",
-        "x": 999,
-        "y": 0,
-        "escala": 2
+        "escala": 4
     },
     {
         "tipo": "Chao100",
@@ -64,6 +58,6 @@
         "tipo": "SpritePrincipal01",
         "x": 290,
         "y": 600,
-        "escala": 0.3
+        "escala": 0.6
     }
 }
