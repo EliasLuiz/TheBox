@@ -182,6 +182,7 @@ Fase.prototype.atualiza = function(){
 };
 //Desenhar os elementos do Fase
 Fase.prototype.desenha = function(){
+	canvas.clearRect(viewport.x, viewport.y, viewport.w, viewport.h);
 
 	this.planodefundo.desenha();
 	for (var i = 0; i < this.cenario.length; i++) {
@@ -400,8 +401,8 @@ function FaseFactory(canvas){
 			case "Menu":
 				return this.copiaProfunda(this.fases.Menu);break;
 			case "Fase1":
-				//return this.copiaProfunda(this.fases.Fase1);break;
-				return new Fase1(canvas);break;
+				return this.copiaProfunda(this.fases.Fase1);break;
+				//return new Fase1(canvas);break;
 		}
 	};
 
