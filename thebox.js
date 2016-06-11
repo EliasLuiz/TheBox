@@ -18,6 +18,7 @@ function Jogo (canvas) {
 
 	//Construtor de Jogo
 	this.canvas = canvas;
+	this.faseAtual = "Animacao";
 	this.fase = FaseFactory().newFase("Animacao");
 	this.pausado = false;
 	this.atualiza();
@@ -43,6 +44,10 @@ Jogo.prototype.botaoPause = function(estado){
 };
 Jogo.prototype.botaoVoltar = function(estado){
 	this.fase.botaoVoltar(estado);
+};
+Jogo.prototype.restart = function(x, y){
+	this.fase = FaseFactory().newFase(this.faseAtual);
+	viewport.x = viewport.y = 0;
 };
 Jogo.prototype.click = function(x, y){
 	this.fase.click(x, y);
@@ -400,8 +405,8 @@ function FaseFactory(canvas){
 			case "Menu":
 				return this.copiaProfunda(this.fases.Menu);break;
 			case "Fase1":
-				//return this.copiaProfunda(this.fases.Fase1);break;
-				return new Fase1(canvas);break;
+				return this.copiaProfunda(this.fases.Fase1);break;
+				//return new Fase1(canvas);break;
 		}
 	};
 

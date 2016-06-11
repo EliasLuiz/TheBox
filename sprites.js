@@ -277,6 +277,7 @@ BackgroundAnimacao.prototype.atualiza = function(){
 	}
 };
 BackgroundAnimacao.prototype.botaoAcao = function(){
+	Jogo().faseAtual = "Menu";
 	Jogo().fase = FaseFactory().newFase("Menu");
 };
 
@@ -416,6 +417,7 @@ BackgroundMenu.prototype.toCreditos = function(){
 };
 BackgroundMenu.prototype.play = function(){
 	Som().stopMusic("Menu");
+	Jogo().faseAtual = "Fase1";
 	Jogo().fase = FaseFactory().newFase("Fase1");
 };
 BackgroundMenu.prototype.volume = function(volume){
@@ -668,10 +670,7 @@ SpritePrincipal.prototype.atualiza = function(){
 	//Se morreu
 	if(this.pos.y + this.animacoes[this.spriteAtual.animacao].h[this.spriteAtual.frame] < 0){
 		Jogo().fase.principal = SpriteFactory().newSprite("SpritePrincipal01");
-		Jogo().fase.principal.pos.x = Jogo().fase.principalOriginalX;
-		Jogo().fase.principal.pos.y = Jogo().fase.principalOriginalY;
-		Jogo().fase.principal.altura = Jogo().fase.principalOriginalEscala;
-		viewport.x = viewport.y = 0;
+		Jogo().restart();
 	}
 };
 
