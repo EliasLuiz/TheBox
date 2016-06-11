@@ -785,7 +785,7 @@ function SpriteFactory(canvas){
 			case "Chao10010":
 				copia = this.copiaProfunda(this.sprites.Chao10010);break;
 			case "Chao10100":
-				copia = this.copiaProfunda(this.sprites.Chao10010);break;
+				copia = this.copiaProfunda(this.sprites.Chao10100);break;
 			case "SpritePrincipal01":
 				copia = this.copiaProfunda(this.sprites.SpritePrincipal01);break;
 		}
@@ -806,6 +806,7 @@ function SpriteFactory(canvas){
 	this.sprites.Cenario02 = new Cenario02(canvas, this.loading);
 	this.sprites.Chao1010 = new Chao1010(canvas, this.loading);
 	this.sprites.Chao10010 = new Chao10010(canvas, this.loading);
+	this.sprites.Chao10100 = new Chao10100(canvas, this.loading);
 	this.sprites.SpritePrincipal01 = new SpritePrincipal01(canvas, this.loading);
 };
 

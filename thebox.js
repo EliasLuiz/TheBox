@@ -187,6 +187,7 @@ Fase.prototype.atualiza = function(){
 };
 //Desenhar os elementos do Fase
 Fase.prototype.desenha = function(){
+	canvas.clearRect(viewport.x, viewport.y, viewport.w, viewport.h);
 
 	this.planodefundo.desenha();
 	for (var i = 0; i < this.cenario.length; i++) {
