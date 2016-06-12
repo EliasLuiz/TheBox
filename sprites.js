@@ -22,6 +22,8 @@ function Sprite(){
 	this.hp = 0 / 0;
 	//Determina se o sprite se movimenta ou nao (causa ou sofre colisao)
 	this.movel = false;
+	//Determina se a camera deve seguir o sprite ou nao
+	this.moveCamera = false;
 };
 //Carrega sprites a partir de arquivo
 Sprite.prototype.load = function(canvas, filename, onload){
@@ -544,7 +546,7 @@ Chao10100.prototype.getPosAtual = function(){
 SpritePrincipal.prototype = new Sprite();
 SpritePrincipal.prototype.constructor = SpritePrincipal;
 function SpritePrincipal() {
-	this.acc = {x: 25, y: 45};
+	this.acc = {x: 35, y: 45};
 	this.lado = "Dir";
 	this.spriteAtual = { "animacao": "idle", "frame": 0 };
 	this.acao = {
@@ -555,6 +557,7 @@ function SpritePrincipal() {
 		"spa": false
 	};
 	this.movel = true;
+	this.moveCamera = true;
 };
 //Funcoes para acoes do personagem
 SpritePrincipal.prototype.botaoDireita = function(estado){ 	this.acao["dir"] = estado; };
@@ -631,8 +634,8 @@ SpritePrincipal.prototype.atualiza = function(){
 		this.lado = "Dir";
 		if(!this.colisao["dir"]){
 			this.vel.x = this.acc.x * this.altura;
-			this.pos.x += 5;
-			viewport.x += 5;
+			// this.pos.x += 5;
+			// viewport.x += 5;
 		}
 		else
 			this.vel.x = 0;
@@ -641,8 +644,8 @@ SpritePrincipal.prototype.atualiza = function(){
 		this.lado = "Esq";
 		if(!this.colisao["esq"]){
 			this.vel.x = -this.acc.x * this.altura;
-			this.pos.x -= 5;
-			viewport.x -= 5;
+			// this.pos.x -= 5;
+			// viewport.x -= 5;
 		}
 		else
 			this.vel.x = 0;

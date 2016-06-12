@@ -13,7 +13,7 @@ function Jogo (canvas) {
 	if (arguments.callee._singletonInstance) {
 		return arguments.callee._singletonInstance;
 	}
-	this.now = +new Date();
+	//this.now = +new Date();
 	arguments.callee._singletonInstance = this;
 
 	//Construtor de Jogo
@@ -56,12 +56,13 @@ Jogo.prototype.hover = function(x, y){
 	this.fase.hover(x, y);
 };
 Jogo.prototype.atualiza = function(){
-	var now = +new Date();
-	$('#fps').html((1000/(now-this.now)).toFixed(0) + " fps");
+	//var now = +new Date();
+	//$('#fps').html((1000/(now-this.now)).toFixed(0) + " fps");
+	canvas.clearRect(0, 0, viewport.w, viewport.h);
 	this.fase.desenha();
 	this.fase.atualiza();
 	requestNextAnimationFrame(window.funcaoAtualiza);
-	this.now = now;
+	//this.now = now;
 };
 
 
@@ -187,7 +188,6 @@ Fase.prototype.atualiza = function(){
 };
 //Desenhar os elementos do Fase
 Fase.prototype.desenha = function(){
-	canvas.clearRect(viewport.x, viewport.y, viewport.w, viewport.h);
 
 	this.planodefundo.desenha();
 	for (var i = 0; i < this.cenario.length; i++) {

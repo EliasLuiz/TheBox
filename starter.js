@@ -5,7 +5,7 @@
 
 //Definicao de constantes
 gravidade = -2;
-velocidadeTerminal = 18;
+velocidadeTerminal = 20;
 
 
 //(1 - Velocidade de movimento da camada intermediaria relativo ao personagem)
@@ -97,29 +97,52 @@ function Colisao(sprite1, sprite2){
     //Margem de erro para igualdade
     //Menor -> mais preciso vel. baixas, mais erros em vel. altas
     //var margemErro = (velocidadeTerminal) / 2 + 1;
-    var margemErro = 17;
+    var margemErroYDentro = 1;
+    var margemErroYFora = 25;
+    var margemErroXDentro = 10;
+    var margemErroXFora = 20;
 
     //Se em alcance vertical
     if(pos1.y <= pos2.y && pos2.y < pos1.y + pos1.h ||
        pos2.y <= pos1.y && pos1.y < pos2.y + pos2.h){
         //dir com esq
-        if(pos1.x + pos1.w <= pos2.x + margemErro &&
-           pos1.x + pos1.w >= pos2.x - margemErro){
+        if(pos1.x + pos1.w <= pos2.x + margemErroXFora &&
+           pos1.x + pos1.w >= pos2.x - margemErroXDentro){
             colisao.um.dir = colisao.dois.esq = true;
             //Arredondamento de posicao (margem de erro)
-            if(sprite1.movel)
-                sprite1.pos.x = pos2.x - pos1.w;
-            else
-                sprite2.pos.x = pos1.x + pos1.w;
+            if(sprite1.movel){
+                var variacao = (pos2.x - pos1.w) - sprite1.pos.x;
+                sprite1.pos.x += variacao;
+                if(sprite1.moveCamera){
+                    viewport.x += variacao;
+                }
+            }
+            else{
+                var variacao = (pos1.x + pos1.w) - sprite2.pos.x;
+                sprite2.pos.x += variacao;
+                if(sprite2.moveCamera){
+                    viewport.x += variacao;
+                }
+            }
         }
         //esq com dir
-        else if(pos2.x + pos2.w <= pos1.x + margemErro &&
-                pos2.x + pos2.w >= pos1.x - margemErro){
+        else if(pos2.x + pos2.w <= pos1.x + margemErroXFora &&
+                pos2.x + pos2.w >= pos1.x - margemErroXDentro){
             colisao.um.esq = colisao.dois.dir = true;
-            if(sprite1.movel)
-                sprite1.pos.x = pos2.x + pos2.w;
-            else
-                sprite2.pos.x = pos1.x - pos2.w;
+            if(sprite1.movel){
+                var variacao = (pos2.x + pos2.w) - sprite1.pos.x;
+                sprite1.pos.x += variacao;
+                if(sprite1.moveCamera){
+                    viewport.x += variacao;
+                }
+            }
+            else{
+                var variacao = (pos1.x - pos2.w) - sprite2.pos.x;
+                sprite2.pos.x += variacao;
+                if(sprite2.moveCamera){
+                    viewport.x += variacao;
+                }
+            }
         }
     }
     var pos1 = sprite1.getPosAtual();
@@ -128,22 +151,42 @@ function Colisao(sprite1, sprite2){
     if(pos1.x <= pos2.x && pos2.x < pos1.x + pos1.w ||
        pos2.x <= pos1.x && pos1.x < pos2.x + pos2.w){
         //cim com bxo
-        if(pos1.y + pos1.h <= pos2.y + margemErro &&
-           pos1.y + pos1.h >= pos2.y - margemErro){
+        if(pos1.y + pos1.h <= pos2.y + margemErroYFora &&
+           pos1.y + pos1.h >= pos2.y - margemErroYDentro){
             colisao.um.cim = colisao.dois.bxo = true;
-            if(sprite1.movel)
-                sprite1.pos.y = pos2.y - pos1.h;
-            else
-                sprite2.pos.y = pos1.y + pos1.h;
+            if(sprite1.movel){
+                var variacao = (pos2.y - pos1.h) - sprite1.pos.y;
+                sprite1.pos.y += variacao;
+                if(sprite1.moveCamera){
+                    viewport.y += variacao;
+                }
+            }
+            else{
+                var variacao = (pos1.y + pos1.h) - sprite2.pos.y;
+                sprite2.pos.y += variacao;
+                if(sprite2.moveCamera){
+                    viewport.y += variacao;
+                }
+            }
         }
         //bxo com cim
-        else if(pos2.y + pos2.h <= pos1.y + margemErro &&
-                pos2.y + pos2.h >= pos1.y - margemErro){
+        else if(pos2.y + pos2.h <= pos1.y + margemErroYFora &&
+                pos2.y + pos2.h >= pos1.y - margemErroYDentro){
             colisao.um.bxo = colisao.dois.cim = true; 
-            if(sprite1.movel)
-                sprite1.pos.y = pos2.y + pos2.h;
-            else
-                sprite2.pos.y = pos1.y - pos2.h;
+            if(sprite1.movel){
+                var variacao = (pos2.y + pos2.h) - sprite1.pos.y;
+                sprite1.pos.y += variacao;
+                if(sprite1.moveCamera){
+                    viewport.y += variacao;
+                }
+            }
+            else{
+                var variacao = (pos1.y - pos2.h) - sprite2.pos.y;
+                sprite2.pos.y += variacao;
+                if(sprite2.moveCamera){
+                    viewport.y += variacao;
+                }
+            }
         }
     }
 
