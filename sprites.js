@@ -533,6 +533,35 @@ Chao10100.prototype.getPosAtual = function(){
 	};
 }
 
+////////////////////////////////////////////////////////////////
+
+Inv1010.prototype = new Sprite();
+Inv1010.prototype.constructor = Inv1010;
+function Inv1010(canvas, onload) {
+	Sprite.prototype.load.call(this, canvas, "sprites/lvls/Inv1010.json", onload);
+	this.h = this.animacoes["idle"].h;
+	this.w = this.animacoes["idle"].w;
+};
+Inv1010.prototype.getPosAtual = function(){
+	return {
+		x: this.pos.x,
+		y: this.pos.y,
+		h: this.h * this.altura,
+		w: this.w * this.altura
+	};
+}
+Inv1010.prototype.desenha = function(){
+	if(this.colisao["esq"] || this.colisao["dir"] || this.colisao["cim"] || this.colisao["bxo"]){
+		Sprite.prototype.desenha.call(this);
+		this.colisao = {
+			"dir": false,
+			"esq": false,
+			"cim": false,
+			"bxo": false
+		};
+	}
+}
+
 
 
 
@@ -789,6 +818,12 @@ function SpriteFactory(canvas){
 				copia = this.copiaProfunda(this.sprites.Chao10010);break;
 			case "Chao10100":
 				copia = this.copiaProfunda(this.sprites.Chao10100);break;
+			case "Inv1010":
+				copia = this.copiaProfunda(this.sprites.Inv1010);break;
+			case "Inv10010":
+				copia = this.copiaProfunda(this.sprites.Inv10010);break;
+			case "Inv10100":
+				copia = this.copiaProfunda(this.sprites.Inv10100);break;
 			case "SpritePrincipal01":
 				copia = this.copiaProfunda(this.sprites.SpritePrincipal01);break;
 		}
@@ -810,6 +845,9 @@ function SpriteFactory(canvas){
 	this.sprites.Chao1010 = new Chao1010(canvas, this.loading);
 	this.sprites.Chao10010 = new Chao10010(canvas, this.loading);
 	this.sprites.Chao10100 = new Chao10100(canvas, this.loading);
+	this.sprites.Inv1010 = new Inv1010(canvas, this.loading);
+	/*this.sprites.Inv10010 = new Inv10010(canvas, this.loading);
+	this.sprites.Inv10100 = new Inv10100(canvas, this.loading);*/
 	this.sprites.SpritePrincipal01 = new SpritePrincipal01(canvas, this.loading);
 };
 

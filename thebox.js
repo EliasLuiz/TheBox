@@ -99,8 +99,23 @@ Fase.prototype.load = function(filename){
 		aux = json["elementosCenario"];
 		gambi.elementosCenario = [];
 		if(aux !== [])
-			for(var i = 0; i < aux.length; i++)
-				gambi.elementosCenario.push(SpriteFactory().newSprite(aux[i].tipo, aux[i].x, aux[i].y, aux[i].escala));
+			for(var i = 0; i < aux.length; i++){
+				//Blocos invisiveis multiplos
+				if(aux[i].tipo === "Inv10010"){
+					var w = SpriteFactory().newSprite("Inv1010", aux[i].x, aux[i].y, aux[i].escala).w
+					for (var j = 0; j < 10; j++){
+						gambi.elementosCenario.push(SpriteFactory().newSprite("Inv1010", aux[i].x + j*w*aux[i].escala, aux[i].y, aux[i].escala));
+					}
+				}
+				else if(aux[i].tipo === "Inv10100"){
+					var h = SpriteFactory().newSprite("Inv1010", aux[i].x, aux[i].y, aux[i].escala).h
+					for (var j = 0; j < 10; j++){
+						gambi.elementosCenario.push(SpriteFactory().newSprite("Inv1010", aux[i].x, aux[i].y + j*h*aux[i].escala, aux[i].escala));
+					}
+				}
+				else
+					gambi.elementosCenario.push(SpriteFactory().newSprite(aux[i].tipo, aux[i].x, aux[i].y, aux[i].escala));
+			}
 
 		aux = json["inimigos"];
 		gambi.inimigos = [];
