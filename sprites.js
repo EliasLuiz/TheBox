@@ -462,7 +462,7 @@ Cenario01.prototype = new Background();
 Cenario01.prototype.constructor = Cenario01;
 function Cenario01(canvas, onload) {
 	Sprite.prototype.load.call(this, canvas, "sprites/Fase01/Cenario01.json", onload);
-	this.vel = { "x": 0.1, "y": 0.1 };
+	this.vel = { "x": 0.15, "y": 0.5 };
 };
 
 
@@ -472,7 +472,7 @@ Cenario02.prototype = new Background();
 Cenario02.prototype.constructor = Cenario02;
 function Cenario02(canvas, onload) {
 	Sprite.prototype.load.call(this, canvas, "sprites/Fase01/Cenario02.json", onload);
-	this.vel = { "x": 0.1, "y": 0.1 };
+	this.vel = { "x": 0.15, "y": 0.5 };
 };
 
 

@@ -90,6 +90,7 @@ function Colisao(sprite1, sprite2){
             bxo: false
         }
     };
+    var mudancaViewport = {"x": 0, "y": 0};
 
     var pos1 = sprite1.getPosAtual();
     var pos2 = sprite2.getPosAtual();
@@ -114,14 +115,14 @@ function Colisao(sprite1, sprite2){
                 var variacao = (pos2.x - pos1.w) - sprite1.pos.x;
                 sprite1.pos.x += variacao;
                 if(sprite1.moveCamera){
-                    viewport.x += variacao;
+                    mudancaViewport.x += variacao;
                 }
             }
             else{
                 var variacao = (pos1.x + pos1.w) - sprite2.pos.x;
                 sprite2.pos.x += variacao;
                 if(sprite2.moveCamera){
-                    viewport.x += variacao;
+                    mudancaViewport.x += variacao;
                 }
             }
         }
@@ -133,14 +134,14 @@ function Colisao(sprite1, sprite2){
                 var variacao = (pos2.x + pos2.w) - sprite1.pos.x;
                 sprite1.pos.x += variacao;
                 if(sprite1.moveCamera){
-                    viewport.x += variacao;
+                    mudancaViewport.x += variacao;
                 }
             }
             else{
                 var variacao = (pos1.x - pos2.w) - sprite2.pos.x;
                 sprite2.pos.x += variacao;
                 if(sprite2.moveCamera){
-                    viewport.x += variacao;
+                    mudancaViewport.x += variacao;
                 }
             }
         }
@@ -158,14 +159,14 @@ function Colisao(sprite1, sprite2){
                 var variacao = (pos2.y - pos1.h) - sprite1.pos.y;
                 sprite1.pos.y += variacao;
                 if(sprite1.moveCamera){
-                    viewport.y += variacao;
+                    mudancaViewport.y += variacao;
                 }
             }
             else{
                 var variacao = (pos1.y + pos1.h) - sprite2.pos.y;
                 sprite2.pos.y += variacao;
                 if(sprite2.moveCamera){
-                    viewport.y += variacao;
+                    mudancaViewport.y += variacao;
                 }
             }
         }
@@ -177,14 +178,14 @@ function Colisao(sprite1, sprite2){
                 var variacao = (pos2.y + pos2.h) - sprite1.pos.y;
                 sprite1.pos.y += variacao;
                 if(sprite1.moveCamera){
-                    viewport.y += variacao;
+                    mudancaViewport.y += variacao;
                 }
             }
             else{
                 var variacao = (pos1.y - pos2.h) - sprite2.pos.y;
                 sprite2.pos.y += variacao;
                 if(sprite2.moveCamera){
-                    viewport.y += variacao;
+                    mudancaViewport.y += variacao;
                 }
             }
         }
@@ -201,7 +202,7 @@ function Colisao(sprite1, sprite2){
     sprite2.hp -= sprite1.dano(colisao["um"]);
     sprite1.hp -= sprite2.dano(colisao["dois"]);
 
-    return colisao;
+    return mudancaViewport;
 };
 
 window.funcaoAtualiza = function(){

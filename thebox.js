@@ -142,17 +142,24 @@ Fase.prototype.hover = function(x, y){
 Fase.prototype.atualiza = function(){
 	//Testando colisoes
 	inimigosPersonagem = false;
+	var aux, mudancaViewport = {"x": 0, "y": 0};
 	for (var i = 0; i < this.elementosCenario.length; i++) {
 		if(!this.elementosCenario[i].isVisivel())
 			continue;
-		Colisao(this.elementosCenario[i], this.principal);
+		aux = Colisao(this.elementosCenario[i], this.principal);
+		mudancaViewport.x += aux.x;
+		mudancaViewport.y += aux.y;
 		for (var j = 0; j < this.inimigos.length; j++) {
 			if(!this.inimigos[i].isVisivel())
 				continue;
-			Colisao(this.elementosCenario[i], this.inimigos[j]);
+			aux = Colisao(this.elementosCenario[i], this.inimigos[j]);
+			mudancaViewport.x += aux.x;
+			mudancaViewport.y += aux.y;
 			if(!inimigosPersonagem){
 				inimigosPersonagem = true;
-				Colisao(this.inimigos[j], this.principal);
+				aux = Colisao(this.inimigos[j], this.principal);
+				mudancaViewport.x += aux.x;
+				mudancaViewport.y += aux.y;
 			}
 		}
 	}
@@ -173,8 +180,8 @@ Fase.prototype.atualiza = function(){
 
 	var velx = vely = 0;
 	//Desloca a fase
-	velx = this.principal.vel.x;
-	vely = this.principal.vel.y;
+	velx = this.principal.vel.x + mudancaViewport.x;
+	vely = this.principal.vel.y + mudancaViewport.y;
 	viewport.x += velx;
 	viewport.y += vely;
 
@@ -182,7 +189,7 @@ Fase.prototype.atualiza = function(){
 	//Atualiza quem nao se move junto com a tela
 	this.planodefundo.atualiza(velx, vely);
 	for (var i = 0; i < this.cenario.length; i++) {
-		this.cenario[i].atualiza(velx);
+		this.cenario[i].atualiza(velx, vely);
 	}
 
 };
