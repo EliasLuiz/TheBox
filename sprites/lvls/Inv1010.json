@@ -1,11 +1,11 @@
 {
-    "imagem": "sprites/lvls/ground.png",
+    "imagem": "sprites/lvls/inv.png",
     "animacoes": {
         "idle": {
-            "x": [3],
-            "y": [3],
-            "w": [10],
-            "h": [10]
+            "x": [1],
+            "y": [1],
+            "w": [100],
+            "h": [100]
         }
     }
 }

@@ -317,6 +317,8 @@ Fase1.prototype.atualiza = function(){
 		this.principalOriginalX = this.principal.pos.x;
 		this.principalOriginalY = this.principal.pos.y;
 		this.principalOriginalEscala = this.principal.altura;
+		viewport.x = 1700;
+		this.planodefundo.pos.x = 1700;
 	}
 	Fase.prototype.atualiza.call(this);
 	if(this.tocando === ""){
