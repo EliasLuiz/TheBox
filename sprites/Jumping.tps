@@ -115,7 +115,7 @@
             <key>basic</key>
             <struct type="AlgorithmBasicSettings">
                 <key>sortBy</key>
-                <enum type="AlgorithmBasicSettings::SortBy">Best</enum>
+                <enum type="AlgorithmBasicSettings::SortBy">Name</enum>
                 <key>order</key>
                 <enum type="AlgorithmBasicSettings::Order">Ascending</enum>
             </struct>
@@ -182,21 +182,21 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">JumpingFrames/Jumping0001.png</key>
-            <key type="filename">JumpingFrames/Jumping0002.png</key>
-            <key type="filename">JumpingFrames/Jumping0003.png</key>
-            <key type="filename">JumpingFrames/Jumping0004.png</key>
-            <key type="filename">JumpingFrames/Jumping0005.png</key>
-            <key type="filename">JumpingFrames/Jumping0006.png</key>
-            <key type="filename">JumpingFrames/Jumping0007.png</key>
-            <key type="filename">JumpingFrames/Jumping0008.png</key>
-            <key type="filename">JumpingFrames/Jumping0009.png</key>
-            <key type="filename">JumpingFrames/Jumping0010.png</key>
-            <key type="filename">JumpingFrames/Jumping0011.png</key>
-            <key type="filename">JumpingFrames/Jumping0012.png</key>
-            <key type="filename">JumpingFrames/Jumping0013.png</key>
-            <key type="filename">JumpingFrames/Jumping0014.png</key>
-            <key type="filename">JumpingFrames/Jumping0015.png</key>
+            <key type="filename">bloquinvisivi/bloquin0002.png</key>
+            <key type="filename">bloquinvisivi/bloquin0003.png</key>
+            <key type="filename">bloquinvisivi/bloquin0004.png</key>
+            <key type="filename">bloquinvisivi/bloquin0005.png</key>
+            <key type="filename">bloquinvisivi/bloquin0006.png</key>
+            <key type="filename">bloquinvisivi/bloquin0007.png</key>
+            <key type="filename">bloquinvisivi/bloquin0008.png</key>
+            <key type="filename">bloquinvisivi/bloquin0009.png</key>
+            <key type="filename">bloquinvisivi/bloquin0010.png</key>
+            <key type="filename">bloquinvisivi/bloquin0011.png</key>
+            <key type="filename">bloquinvisivi/bloquin0012.png</key>
+            <key type="filename">bloquinvisivi/bloquin0013.png</key>
+            <key type="filename">bloquinvisivi/bloquin0014.png</key>
+            <key type="filename">bloquinvisivi/bloquin0015.png</key>
+            <key type="filename">bloquinvisivi/bloquin0016.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -204,7 +204,7 @@
         </map>
         <key>fileList</key>
         <array>
-            <filename>JumpingFrames</filename>
+            <filename>bloquinvisivi</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
