@@ -46,6 +46,8 @@ Jogo.prototype.botaoVoltar = function(estado){
 	this.fase.botaoVoltar(estado);
 };
 Jogo.prototype.restart = function(x, y){
+	Som().stopAllMusic();
+	Som().stopAllSfx();
 	this.fase = FaseFactory().newFase(this.faseAtual);
 	viewport.x = viewport.y = 0;
 };
@@ -165,7 +167,7 @@ Fase.prototype.atualiza = function(){
 		mudancaViewport.x += aux.x;
 		mudancaViewport.y += aux.y;
 		for (var j = 0; j < this.inimigos.length; j++) {
-			if(!this.inimigos[i].isVisivel())
+			if(!this.inimigos[j].isVisivel())
 				continue;
 			aux = Colisao(this.elementosCenario[i], this.inimigos[j]);
 			mudancaViewport.x += aux.x;
@@ -249,6 +251,10 @@ Animacao.prototype.botaoAcao = function(estado){
 Animacao.prototype.desenha = function(){
 	this.planodefundo.desenha();
 };
+Animacao.prototype.proxFase = function(){
+	Jogo().faseAtual = "Menu";
+	Jogo().fase = FaseFactory().newFase("Menu");
+};
 
 ////////////////////////////////////////////////////////////////
 
@@ -271,6 +277,8 @@ Menu.prototype.atualiza = function(){
 		Som().music["Menu"].loop = true;
 		Som().playMusic("Menu");
 		this.tocando = "Menu";
+		viewport.x = 0;
+		viewport.y = 0;
 	}
 	this.planodefundo.atualiza()
 };
@@ -296,6 +304,10 @@ Menu.prototype.hover = function(x, y){
 //Desenhar os elementos do Menu
 Menu.prototype.desenha = function(){
 	this.planodefundo.desenha();
+};
+Menu.prototype.proxFase = function(){
+	Jogo().faseAtual = "Fase1";
+	Jogo().fase = FaseFactory().newFase("Fase1");
 };
 
 ////////////////////////////////////////////////////////////////
@@ -331,6 +343,10 @@ Fase1.prototype.atualiza = function(){
 		Som().playMusic("Fase01Loop");
 	}
 };
+Fase1.prototype.proxFase = function(){
+	Jogo().faseAtual = "Menu";
+	Jogo().fase = FaseFactory().newFase("Menu");
+};
 
 ////////////////////////////////////////////////////////////////
 
@@ -345,6 +361,10 @@ function Fase2 (canvas){
 Fase2.prototype.atualiza = function(){
 
 	Fase.prototype.atualiza.call(this);
+};
+Fase2.prototype.proxFase = function(){
+	Jogo().faseAtual = "Fase3";
+	Jogo().fase = FaseFactory().newFase("Fase3");
 };
 
 ////////////////////////////////////////////////////////////////
@@ -361,6 +381,10 @@ Fase3.prototype.atualiza = function(){
 
 	Fase.prototype.atualiza.call(this);
 };
+Fase3.prototype.proxFase = function(){
+	Jogo().faseAtual = "Fase4";
+	Jogo().fase = FaseFactory().newFase("Fase4");
+};
 
 ////////////////////////////////////////////////////////////////
 
@@ -376,6 +400,10 @@ Fase4.prototype.atualiza = function(){
 
 	Fase.prototype.atualiza.call(this);
 };
+Fase4.prototype.proxFase = function(){
+	Jogo().faseAtual = "Fase5";
+	Jogo().fase = FaseFactory().newFase("Fase5");
+};
 
 ////////////////////////////////////////////////////////////////
 
@@ -390,6 +418,10 @@ function Fase5 (canvas){
 Fase5.prototype.atualiza = function(){
 
 	Fase.prototype.atualiza.call(this);
+};
+Fase5.prototype.proxFase = function(){
+	Jogo().faseAtual = "Menu";
+	Jogo().fase = FaseFactory().newFase("Menu");
 };
 
 

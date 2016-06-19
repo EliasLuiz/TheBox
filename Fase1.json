@@ -21,7 +21,14 @@
     ],
     "elementosCenario": [
     {
-        "tipo": "Chao1010",  
+        "tipo": "InvInv1010",
+        "x": 1080,
+        "y": 40,
+        "escala": 1
+    },
+
+    {
+        "tipo": "Chao1010",
         "x": 0,
         "y": 0,
         "escala": 20
@@ -35,24 +42,6 @@
     {
         "tipo": "Chao1010",
         "x": 400,
-        "y": 0,
-        "escala": 20
-    },
-    {
-        "tipo": "Chao1010",
-        "x": 600,
-        "y": 0,
-        "escala": 20
-    },
-    {
-        "tipo": "Chao1010",
-        "x": 800,
-        "y": 0,
-        "escala": 20
-    },
-    {
-        "tipo": "Chao1010",
-        "x": 1000,
         "y": 0,
         "escala": 20
     },
@@ -217,19 +206,19 @@
     },	
 	
 			{
-        "tipo": "Inv1010",
+        "tipo": "InvInv1010",
         "x": 4600,
         "y": 40,
         "escala": 0.4
     },	
 			{
-        "tipo": "Inv1010",
+        "tipo": "InvInv1010",
         "x": 4600,
         "y": 80,
         "escala": 0.4
     },	
 			{
-        "tipo": "Inv1010",
+        "tipo": "InvInv1010",
         "x": 4600,
         "y": 120,
         "escala": 0.4
@@ -645,24 +634,6 @@
         "y": 1120,
         "escala": 0.4
     },	
-		{
-        "tipo": "Inv1010",
-        "x": 3840,
-        "y": 1120,
-        "escala": 0.4
-    },	
-        {
-        "tipo": "Inv1010",
-        "x": 3880,
-        "y": 1120,
-        "escala": 0.4
-    },  
-        {
-        "tipo": "Inv1010",
-        "x": 3920,
-        "y": 1120,
-        "escala": 0.4
-    },  
 	
 	
 			{
@@ -1217,25 +1188,22 @@
         "y": 1240,
         "escala": 0.4 
     },
-
-
-
-        {
+    {
         "tipo": "Inv10010",
         "x": 2680,
         "y": 960,
         "escala": 0.4 
     }
-
-
-	
-	
-	
-	
-	
     ],
     "inimigos": [
 
+
+    {
+        "tipo": "Portal",
+        "x": 0,
+        "y": 198,
+        "escala": 0.3
+    }
     ],
     "principal": {
         "tipo": "SpritePrincipal01",

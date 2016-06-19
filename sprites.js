@@ -24,6 +24,8 @@ function Sprite(){
 	this.movel = false;
 	//Determina se a camera deve seguir o sprite ou nao
 	this.moveCamera = false;
+	//Diz se sprite deve ser desenhado ou nao
+	this.visivel = true;
 };
 //Carrega sprites a partir de arquivo
 Sprite.prototype.load = function(canvas, filename, onload){
@@ -97,7 +99,7 @@ Sprite.prototype.isVisivel = function(){
 //Desenha o objeto
 Sprite.prototype.desenha = function(){
 	//Se estiver visivel imprime
-	if(this.isVisivel()){
+	if(this.visivel && this.isVisivel()){
 		var p = this.getPosAtual();
 	    this.context.drawImage(
 	        this.imagem,		//img 	Specifies the image, canvas, or video element to use 	 	
@@ -279,8 +281,7 @@ BackgroundAnimacao.prototype.atualiza = function(){
 	}
 };
 BackgroundAnimacao.prototype.botaoAcao = function(){
-	Jogo().faseAtual = "Menu";
-	Jogo().fase = FaseFactory().newFase("Menu");
+	Jogo().fase.proxFase();
 };
 
 ////////////////////////////////////////////////////////////////
@@ -419,8 +420,7 @@ BackgroundMenu.prototype.toCreditos = function(){
 };
 BackgroundMenu.prototype.play = function(){
 	Som().stopMusic("Menu");
-	Jogo().faseAtual = "Fase1";
-	Jogo().fase = FaseFactory().newFase("Fase1");
+	Jogo().fase.proxFase();
 };
 BackgroundMenu.prototype.volume = function(volume){
 	if(volume == Som().volume)
@@ -560,6 +560,75 @@ Inv1010.prototype.desenha = function(){
 			"bxo": false
 		};
 	}
+}
+
+////////////////////////////////////////////////////////////////
+
+InvInv1010.prototype = new Sprite();
+InvInv1010.prototype.constructor = InvInv1010;
+function InvInv1010(canvas, onload) {
+	Sprite.prototype.load.call(this, canvas, "sprites/lvls/Inv1010.json", onload);
+	this.h = this.animacoes["idle"].h;
+	this.w = this.animacoes["idle"].w;
+};
+InvInv1010.prototype.getPosAtual = function(){
+	return {
+		x: this.pos.x,
+		y: this.pos.y,
+		h: this.h * this.altura,
+		w: this.w * this.altura
+	};
+}
+InvInv1010.prototype.desenha = function(){}
+
+////////////////////////////////////////////////////////////////
+
+Portal.prototype = new Sprite();
+Portal.prototype.constructor = Portal;
+function Portal(canvas, onload) {
+	Sprite.prototype.load.call(this, canvas, "sprites/lvls/Portal.json", onload);
+	this.spriteAtual = { "animacao": "idle", "frame": 0 };
+	this.incremento = 0;
+};
+Portal.prototype.getPosAtual = function(){
+	this.h = this.animacoes["idle"].h[0] * this.altura;
+	this.w = this.animacoes["idle"].w[0] * this.altura;
+	return {
+		x: this.pos.x,
+		y: this.pos.y,
+		h: this.h,
+		w: this.w
+	};
+}
+Portal.prototype.atualiza = function(){
+	this.colisao = {
+		"dir": false,
+		"esq": false,
+		"cim": false,
+		"bxo": false
+	};
+	if(this.spriteAtual.frame === 23){
+		this.incremento = -1;
+		Jogo().fase.principal.visivel = false;
+	}
+	if(this.spriteAtual.frame === 0 && this.incremento === -1){
+		Jogo().fase.proxFase();
+		return;
+	}
+	Colisao(this, Jogo().fase.principal);
+	if(this.colisao["esq"] || this.colisao["dir"] || this.colisao["cim"] || this.colisao["bxo"]){
+		if(this.spriteAtual.frame === 0){
+			this.incremento = 1;
+		}
+		//Desfaz movimento do personagem
+		Jogo().fase.principal.vel.x = 0;
+		Jogo().fase.principal.vel.y = 0;
+		//Puxa o principal para o centro
+		var p = Jogo().fase.principal.getPosAtual();
+		Jogo().fase.principal.pos.x = this.pos.x + (this.w - p.w) / 2;
+		Jogo().fase.principal.pos.y = this.pos.y
+	}
+	this.spriteAtual.frame += this.incremento;
 }
 
 
@@ -820,10 +889,14 @@ function SpriteFactory(canvas){
 				copia = this.copiaProfunda(this.sprites.Chao10100);break;
 			case "Inv1010":
 				copia = this.copiaProfunda(this.sprites.Inv1010);break;
+			case "InvInv1010":
+				copia = this.copiaProfunda(this.sprites.InvInv1010);break;
 			case "Inv10010":
 				copia = this.copiaProfunda(this.sprites.Inv10010);break;
 			case "Inv10100":
 				copia = this.copiaProfunda(this.sprites.Inv10100);break;
+			case "Portal":
+				copia = this.copiaProfunda(this.sprites.Portal);break;
 			case "SpritePrincipal01":
 				copia = this.copiaProfunda(this.sprites.SpritePrincipal01);break;
 		}
@@ -846,6 +919,8 @@ function SpriteFactory(canvas){
 	this.sprites.Chao10010 = new Chao10010(canvas, this.loading);
 	this.sprites.Chao10100 = new Chao10100(canvas, this.loading);
 	this.sprites.Inv1010 = new Inv1010(canvas, this.loading);
+	this.sprites.InvInv1010 = new InvInv1010(canvas, this.loading);
+	this.sprites.Portal = new Portal(canvas, this.loading);
 	/*this.sprites.Inv10010 = new Inv10010(canvas, this.loading);
 	this.sprites.Inv10100 = new Inv10100(canvas, this.loading);*/
 	this.sprites.SpritePrincipal01 = new SpritePrincipal01(canvas, this.loading);

@@ -35,8 +35,18 @@ function Som(){
 	this.stopMusic = function(audio){
 		this.stop(this.music[audio]);
 	}
+	this.stopAllMusic = function(){
+		for(var i = 0; i < this.musicNames.length; i++){
+			this.stopMusic(this.musicNames[i].nome);
+		}
+	}
 	this.stopSfx = function(audio){
 		this.stop(this.sfx[audio]);
+	}
+	this.stopAllSfx = function(){
+		for(var i = 0; i < this.sfxNames.length; i++){
+			this.stopSfx(this.sfxNames[i].nome);
+		}
 	}
 
 	//Lista com nome dos arquivos music
