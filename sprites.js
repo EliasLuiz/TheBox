@@ -354,23 +354,31 @@ BackgroundMenu.prototype.click = function(x, y){
 BackgroundMenu.prototype.hover = function(x, y){
 	if(this.spriteAtual.animacao === "idle"){
 		if (x >= 398 && x <= 629 &&
-			y >= 374 && y <= 475)
+			y >= 374 && y <= 475){
 			this.spriteAtual.frame = 1;
+			Som().playSfx("MenuHover");
+		}
 		else if (x >= 145 && x <= 375 &&
-			y >= 374 && y <= 475)
+			y >= 374 && y <= 475){
 			this.spriteAtual.frame = 0;
+			Som().playSfx("MenuHover");
+		}
 		else if (x >= 656 && x <= 886 &&
-			y >= 374 && y <= 475)
+			y >= 374 && y <= 475){
 			this.spriteAtual.frame = 2;
+			Som().playSfx("MenuHover");
+		}
 	}
 };
 BackgroundMenu.prototype.atualiza = function(){
 	if(this.spriteAtual.animacao === "idle"){
 		if(this.botao["dir"]){
 			this.spriteAtual.frame = this.spriteAtual.frame !== 2 ? this.spriteAtual.frame + 1 : 2;
+			Som().playSfx("MenuHover");
 		}
 		else if(this.botao["esq"]){
 			this.spriteAtual.frame = this.spriteAtual.frame !== 0 ? this.spriteAtual.frame - 1 : 0;
+			Som().playSfx("MenuHover");
 		}
 		if(this.botao["acao"]){
 			switch(this.spriteAtual.frame){
@@ -378,6 +386,7 @@ BackgroundMenu.prototype.atualiza = function(){
 				case 1: this.play();break;
 				case 2: this.toCreditos();break;
 			}
+			Som().playSfx("MenuClick");
 		}
 	}
 	else {
@@ -583,14 +592,15 @@ InvInv1010.prototype.desenha = function(){}
 
 ////////////////////////////////////////////////////////////////
 
-Portal.prototype = new Sprite();
-Portal.prototype.constructor = Portal;
-function Portal(canvas, onload) {
+Portal1.prototype = new Sprite();
+Portal1.prototype.constructor = Portal1;
+function Portal1(canvas, onload) {
 	Sprite.prototype.load.call(this, canvas, "sprites/lvls/Portal.json", onload);
 	this.spriteAtual = { "animacao": "idle", "frame": 0 };
 	this.incremento = 0;
+	this.auxCont = 0;
 };
-Portal.prototype.getPosAtual = function(){
+Portal1.prototype.getPosAtual = function(){
 	this.h = this.animacoes["idle"].h[0] * this.altura;
 	this.w = this.animacoes["idle"].w[0] * this.altura;
 	return {
@@ -600,7 +610,7 @@ Portal.prototype.getPosAtual = function(){
 		w: this.w
 	};
 }
-Portal.prototype.atualiza = function(){
+Portal1.prototype.atualiza = function(){
 	this.colisao = {
 		"dir": false,
 		"esq": false,
@@ -619,6 +629,8 @@ Portal.prototype.atualiza = function(){
 	if(this.colisao["esq"] || this.colisao["dir"] || this.colisao["cim"] || this.colisao["bxo"]){
 		if(this.spriteAtual.frame === 0){
 			this.incremento = 1;
+			Som().stopAllMusic();
+			Som().playMusic("Fase1End");
 		}
 		//Desfaz movimento do personagem
 		Jogo().fase.principal.vel.x = 0;
@@ -628,7 +640,9 @@ Portal.prototype.atualiza = function(){
 		Jogo().fase.principal.pos.x = this.pos.x + (this.w - p.w) / 2;
 		Jogo().fase.principal.pos.y = this.pos.y
 	}
-	this.spriteAtual.frame += this.incremento;
+	this.auxCont = (this.auxCont + 1) % 6;
+	if(this.auxCont === 0)
+		this.spriteAtual.frame += this.incremento;
 }
 
 
@@ -895,8 +909,8 @@ function SpriteFactory(canvas){
 				copia = this.copiaProfunda(this.sprites.Inv10010);break;
 			case "Inv10100":
 				copia = this.copiaProfunda(this.sprites.Inv10100);break;
-			case "Portal":
-				copia = this.copiaProfunda(this.sprites.Portal);break;
+			case "Portal1":
+				copia = this.copiaProfunda(this.sprites.Portal1);break;
 			case "SpritePrincipal01":
 				copia = this.copiaProfunda(this.sprites.SpritePrincipal01);break;
 		}
@@ -920,7 +934,7 @@ function SpriteFactory(canvas){
 	this.sprites.Chao10100 = new Chao10100(canvas, this.loading);
 	this.sprites.Inv1010 = new Inv1010(canvas, this.loading);
 	this.sprites.InvInv1010 = new InvInv1010(canvas, this.loading);
-	this.sprites.Portal = new Portal(canvas, this.loading);
+	this.sprites.Portal1 = new Portal1(canvas, this.loading);
 	/*this.sprites.Inv10010 = new Inv10010(canvas, this.loading);
 	this.sprites.Inv10100 = new Inv10100(canvas, this.loading);*/
 	this.sprites.SpritePrincipal01 = new SpritePrincipal01(canvas, this.loading);

@@ -29,7 +29,6 @@ function Som(){
 	}
 	this.playSfx = function(audio){
 		this.sfx[audio].volume = this.volume;
-		this.stop(this.sfx[audio]);
 		this.sfx[audio].play();
 	}
 	this.stopMusic = function(audio){
@@ -52,13 +51,15 @@ function Som(){
 	//Lista com nome dos arquivos music
 	this.musicNames = [
 		{ nome: "Menu", filename: "music/Menu.mp3" },
-		{ nome: "Fase01Intro", filename: "music/Fase01Intro.mp3" },
-		{ nome: "Fase01Loop", filename: "music/Fase01Loop.mp3" },
-		{ nome: "Fase01End", filename: "music/Fase01End.mp3" }
+		{ nome: "Fase1Intro", filename: "music/Fase1Intro.mp3" },
+		{ nome: "Fase1Loop", filename: "music/Fase1Loop.mp3" },
+		{ nome: "Fase1End", filename: "music/Fase1End.mp3" }
 	];
 	//Lista com nome dos arquivos sfx
 	this.sfxNames = [
-		{ nome: "MarioJump", filename: "sfx/MarioJump.wav" }
+		{ nome: "MarioJump", filename: "sfx/MarioJump.wav" },
+		{ nome: "MenuClick", filename: "sfx/MenuClick.mp3" },
+		{ nome: "MenuHover", filename: "sfx/MenuHover.mp3" },
 	];
 
 	this.music = {};
