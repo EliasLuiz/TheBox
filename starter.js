@@ -73,19 +73,11 @@ function hover(e){
     //console.log(e.layerX - 160, e.layerY - 30);
     Jogo().hover(e.layerX - 160, e.layerY - 30);
 }
-// function Continue(faseContinue,tipo){ //se for usar a mesma funçao pra tudo é só passar o tipo diferente
-	// if(tipo=='Set'){
-		// localStorage.setItem("faseSalva", faseContinue);
-	// }else if(tipo=='Remove'){
-		// localStorage.removeItem("faseSalva");
-	// }else if(tipo=='Get'){
-		// localStorage.getItem("faseSalva");
-	// }	
-// }
-function Continue(faseContinue){
-	localStorage.setItem("faseSalva", faseContinue);
-	//localStorage.getItem("faseSalva"); para pegar o que foi salvo
-	//localStorage.removeItem("faseSalva"); para remover o que foi salvo(quando zerar?)
+function loadFase(){
+    return localStorage.getItem("faseSalva");
+}
+function salvaFase(fase){
+	localStorage.setItem("faseSalva", fase);
 }
 
 function Colisao(sprite1, sprite2){

@@ -309,6 +309,7 @@ BackgroundMenu.prototype.getPosAtual = function(){
 	};
 }
 BackgroundMenu.prototype.click = function(x, y){
+	console.log(x + " " + y);
 	if(this.spriteAtual.animacao === "idle"){
 		if (x >= 398 && x <= 629 &&
 			y >= 374 && y <= 475)
@@ -319,6 +320,14 @@ BackgroundMenu.prototype.click = function(x, y){
 		else if (x >= 656 && x <= 886 &&
 			y >= 374 && y <= 475)
 			this.mouse = "creditos";
+	}
+	if(this.spriteAtual.animacao === "play"){
+		if (x >= 168 && x <= 452 &&
+			y >= 403 && y <= 486)
+			this.mouse = "newGame";
+		else if (x >= 145 && x <= 375 &&
+			y >= 374 && y <= 475)
+			this.mouse = "continue";
 	}
 	else if(this.spriteAtual.animacao === "opcoes"){
 		if (x >= 68 && x <= 174 &&
@@ -345,6 +354,8 @@ BackgroundMenu.prototype.click = function(x, y){
 			case "opcoes": this.toOpcoes();break;
 			case "creditos": this.toCreditos();break;
 			case "play": this.play();break;
+			case "newGame": this.newGame();break;
+			case "continue": this.continue();break;
 			case "volume0": this.volume(0);break;
 			case "volume1": this.volume(0.5);break;
 			case "volume2": this.volume(1);break;
@@ -369,6 +380,14 @@ BackgroundMenu.prototype.hover = function(x, y){
 			Som().playSfx("MenuHover");
 		}
 	}
+	else if(this.spriteAtual.animacao === "play"){
+		if (x >= 168 && x <= 452 &&
+			y >= 403 && y <= 486)
+			this.spriteAtual.frame = 0;
+		else if (x >= 145 && x <= 375 &&
+			y >= 374 && y <= 475)
+			this.spriteAtual.frame = 1;
+	}
 };
 BackgroundMenu.prototype.atualiza = function(){
 	if(this.spriteAtual.animacao === "idle"){
@@ -389,20 +408,36 @@ BackgroundMenu.prototype.atualiza = function(){
 			Som().playSfx("MenuClick");
 		}
 	}
-	else {
-		if(this.botao["voltar"]){
-			this.toIdle();
+	else if(this.spriteAtual.animacao === "play"){
+		if(this.botao["dir"]){
+			this.spriteAtual.frame = 1;
+			Som().playSfx("MenuHover");
 		}
-		if(this.spriteAtual.animacao === "opcoes"){
-			if(this.botao["dir"]){
-				if(this.spriteAtual.frame < 2){
-					this.volume((this.spriteAtual.frame+1) / 2);
-				}
+		if(this.botao["esq"]){
+			this.spriteAtual.frame = 0;
+			Som().playSfx("MenuHover");
+		}
+		if(this.botao["acao"]){
+			switch(this.spriteAtual.frame){
+				case 0: this.newGame();break;
+				case 1: this.continue();break;
 			}
-			else if(this.botao["esq"]){
-				if(this.spriteAtual.frame > 0){
-					this.volume((this.spriteAtual.frame-1) / 2);
-				}
+			Som().stopMusic("Menu");
+			Som().playSfx("MenuClick");
+		}
+	}
+	if(this.botao["voltar"]){
+		this.toIdle();
+	}
+	if(this.spriteAtual.animacao === "opcoes"){
+		if(this.botao["dir"]){
+			if(this.spriteAtual.frame < 2){
+				this.volume((this.spriteAtual.frame+1) / 2);
+			}
+		}
+		else if(this.botao["esq"]){
+			if(this.spriteAtual.frame > 0){
+				this.volume((this.spriteAtual.frame-1) / 2);
 			}
 		}
 	}
@@ -428,8 +463,14 @@ BackgroundMenu.prototype.toCreditos = function(){
 	this.spriteAtual.frame = 0;
 };
 BackgroundMenu.prototype.play = function(){
-	Som().stopMusic("Menu");
+	this.spriteAtual.animacao = "play";
+	this.spriteAtual.frame = 0;
+};
+BackgroundMenu.prototype.newGame = function(){
 	Jogo().fase.proxFase();
+};
+BackgroundMenu.prototype.continue = function(){
+	Jogo().load();
 };
 BackgroundMenu.prototype.volume = function(volume){
 	if(volume == Som().volume)
@@ -639,6 +680,17 @@ Portal1.prototype.atualiza = function(){
 		var p = Jogo().fase.principal.getPosAtual();
 		Jogo().fase.principal.pos.x = this.pos.x + (this.w - p.w) / 2;
 		Jogo().fase.principal.pos.y = this.pos.y
+		//Desativa movimentos personagem
+		Jogo().fase.principal.botaoDireita = function(x){};
+		Jogo().fase.principal.botaoEsquerda = function(x){};
+		Jogo().fase.principal.botaoCima = function(x){};
+		Jogo().fase.principal.acao = {
+			"dir": false,
+			"esq": false,
+			"cim": false,
+			"bxo": false,
+			"spa": false
+		};
 	}
 	this.auxCont = (this.auxCont + 1) % 6;
 	if(this.auxCont === 0)
@@ -779,8 +831,6 @@ SpritePrincipal.prototype.atualiza = function(){
 	else
 	 	this.spriteAtual.animacao = this.spriteAtual.animacao.slice(0, this.spriteAtual.animacao.length-3) + this.lado;
 	this.spriteAtual.frame = (this.spriteAtual.frame + 1) % (this.animacoes[this.spriteAtual.animacao].x.length - 1);
-
-
 
 	//Se morreu
 	if(this.pos.y + this.animacoes[this.spriteAtual.animacao].h[this.spriteAtual.frame] < 0){
