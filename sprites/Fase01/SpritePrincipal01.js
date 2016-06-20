@@ -1,4 +1,4 @@
-{
+JSONS["SpritePrincipal01"] = {
 	"imagem": "sprites/Fase01/SpritePrincipal01.png",
 	"animacoes": {
 		"idleDir": {
@@ -59,4 +59,4 @@
 			"h": [215]
 		}
 	}
-}
+};

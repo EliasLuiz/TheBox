@@ -27,7 +27,7 @@ canvas.addEventListener('keyup', doKeyUp, true);
 canvas.addEventListener('click', click, false);
 //Outras funcoes
 function LoadJSON(filename, callback){
-	var xmlhttp = new XMLHttpRequest();
+	/*var xmlhttp = new XMLHttpRequest();
     xmlhttp.overrideMimeType("application/json");
 	xmlhttp.onreadystatechange = function() {
 		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -35,7 +35,8 @@ function LoadJSON(filename, callback){
 		}
 	};
 	xmlhttp.open("GET", filename, false);
-	xmlhttp.send();
+	xmlhttp.send();*/
+    callback(JSONS[filename]);
 };
 
 function doKeyDown(e) {

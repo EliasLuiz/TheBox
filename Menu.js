@@ -1,8 +1,8 @@
-{
+JSONS["Menu"] = {
     "planodefundo": {
-        "tipo": "BackgroundAnimacao",
-        "x": 256,
-        "y": 144,
+        "tipo": "BackgroundMenu",
+        "x": 0,
+        "y": 0,
         "escala": 1
     },
     "cenario": [
@@ -15,4 +15,4 @@
 
     ],
     "principal": ""
-}
+};

@@ -1,11 +1,11 @@
-{
-	"imagem": "sprites/Fase01/Background01.png",
+JSONS["Cenario01"] = {
+	"imagem": "sprites/Fase01/Cenario01.png",
 	"animacoes": {
 		"idle": {
 			"x": [0],
 			"y": [0],
 			"h": [1431],
-			"w": [4905]
+			"w": [14715]
         }
     }
-}
+};

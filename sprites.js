@@ -139,7 +139,7 @@ Background.prototype.atualiza = function(velx, vely){
 BackgroundAnimacao.prototype = new Background();
 BackgroundAnimacao.prototype.constructor = BackgroundAnimacao;
 function BackgroundAnimacao(canvas, onload) {
-	Sprite.prototype.load.call(this, canvas, "sprites/Animacao/BackgroundAnimacao.json", onload);
+	Sprite.prototype.load.call(this, canvas, "BackgroundAnimacao", onload);
 	this.spriteAtual = { "animacao": "idle", "frame": 0 };
 	this.h = this.animacoes["idle"].h[1];
 	this.w = this.animacoes["idle"].w[1];
@@ -289,7 +289,7 @@ BackgroundAnimacao.prototype.botaoAcao = function(){
 BackgroundMenu.prototype = new Background();
 BackgroundMenu.prototype.constructor = BackgroundMenu;
 function BackgroundMenu(canvas, onload) {
-	Sprite.prototype.load.call(this, canvas, "sprites/Menu/BackgroundMenu.json", onload);
+	Sprite.prototype.load.call(this, canvas, "BackgroundMenu", onload);
 	this.botao = {
 		"dir": false,
 		"esq": false,
@@ -486,7 +486,7 @@ BackgroundMenu.prototype.volume = function(volume){
 Background01.prototype = new Background();
 Background01.prototype.constructor = Background01;
 function Background01(canvas, onload) {
-	Sprite.prototype.load.call(this, canvas, "sprites/Fase01/Background01.json", onload);
+	Sprite.prototype.load.call(this, canvas, "Background01", onload);
 	this.w = (this.animacoes["idle"].w[0] / this.animacoes["idle"].h[0]) * viewport.h;
 };
 Background01.prototype.getPosAtual = function(){
@@ -511,7 +511,7 @@ Background01.prototype.getPosAtual = function(){
 Cenario01.prototype = new Background();
 Cenario01.prototype.constructor = Cenario01;
 function Cenario01(canvas, onload) {
-	Sprite.prototype.load.call(this, canvas, "sprites/Fase01/Cenario01.json", onload);
+	Sprite.prototype.load.call(this, canvas, "Cenario01", onload);
 	this.vel = { "x": 0.15, "y": 0.5 };
 };
 
@@ -521,7 +521,7 @@ function Cenario01(canvas, onload) {
 Cenario02.prototype = new Background();
 Cenario02.prototype.constructor = Cenario02;
 function Cenario02(canvas, onload) {
-	Sprite.prototype.load.call(this, canvas, "sprites/Fase01/Cenario02.json", onload);
+	Sprite.prototype.load.call(this, canvas, "Cenario02", onload);
 	this.vel = { "x": 0.15, "y": 0.5 };
 };
 
@@ -538,7 +538,7 @@ function Cenario02(canvas, onload) {
 Chao1010.prototype = new Sprite();
 Chao1010.prototype.constructor = Chao1010;
 function Chao1010(canvas, onload) {
-	Sprite.prototype.load.call(this, canvas, "sprites/lvls/Chao1010.json", onload);
+	Sprite.prototype.load.call(this, canvas, "Chao1010", onload);
 	this.h = this.animacoes["idle"].h;
 	this.w = this.animacoes["idle"].w;
 };
@@ -554,7 +554,7 @@ Chao1010.prototype.getPosAtual = function(){
 Chao10010.prototype = new Sprite();
 Chao10010.prototype.constructor = Chao10010;
 function Chao10010(canvas, onload) {
-	Sprite.prototype.load.call(this, canvas, "sprites/lvls/Chao10010.json", onload);
+	Sprite.prototype.load.call(this, canvas, "Chao10010", onload);
 	this.h = this.animacoes["idle"].h;
 	this.w = this.animacoes["idle"].w;
 };
@@ -570,7 +570,7 @@ Chao10010.prototype.getPosAtual = function(){
 Chao10100.prototype = new Sprite();
 Chao10100.prototype.constructor = Chao10100;
 function Chao10100(canvas, onload) {
-	Sprite.prototype.load.call(this, canvas, "sprites/lvls/Chao10100.json", onload);
+	Sprite.prototype.load.call(this, canvas, "Chao10100", onload);
 	this.h = this.animacoes["idle"].h;
 	this.w = this.animacoes["idle"].w;
 };
@@ -588,7 +588,7 @@ Chao10100.prototype.getPosAtual = function(){
 Inv1010.prototype = new Sprite();
 Inv1010.prototype.constructor = Inv1010;
 function Inv1010(canvas, onload) {
-	Sprite.prototype.load.call(this, canvas, "sprites/lvls/Inv1010.json", onload);
+	Sprite.prototype.load.call(this, canvas, "Inv1010", onload);
 	this.h = this.animacoes["idle"].h;
 	this.w = this.animacoes["idle"].w;
 };
@@ -617,7 +617,7 @@ Inv1010.prototype.desenha = function(){
 InvInv1010.prototype = new Sprite();
 InvInv1010.prototype.constructor = InvInv1010;
 function InvInv1010(canvas, onload) {
-	Sprite.prototype.load.call(this, canvas, "sprites/lvls/Inv1010.json", onload);
+	Sprite.prototype.load.call(this, canvas, "Inv1010", onload);
 	this.h = this.animacoes["idle"].h;
 	this.w = this.animacoes["idle"].w;
 };
@@ -636,7 +636,7 @@ InvInv1010.prototype.desenha = function(){}
 Portal1.prototype = new Sprite();
 Portal1.prototype.constructor = Portal1;
 function Portal1(canvas, onload) {
-	Sprite.prototype.load.call(this, canvas, "sprites/lvls/Portal.json", onload);
+	Sprite.prototype.load.call(this, canvas, "Portal", onload);
 	this.spriteAtual = { "animacao": "idle", "frame": 0 };
 	this.incremento = 0;
 	this.auxCont = 0;
@@ -845,7 +845,7 @@ SpritePrincipal01.prototype = new SpritePrincipal();
 SpritePrincipal01.prototype.constructor = SpritePrincipal01;
 function SpritePrincipal01(canvas, onload) {
 	SpritePrincipal.prototype.constructor.call(this, canvas);
-	Sprite.prototype.load.call(this, canvas, "sprites/Fase01/SpritePrincipal01.json", onload);
+	Sprite.prototype.load.call(this, canvas, "SpritePrincipal01", onload);
 };
 SpritePrincipal01.prototype.atualiza = function(){
 	SpritePrincipal.prototype.atualiza.call(this);

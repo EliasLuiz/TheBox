@@ -243,7 +243,7 @@ Animacao.prototype.construtor = Animacao;
 function Animacao (canvas){
 	//Construtor de Animacao
 	Fase.prototype.construtor.call(this, canvas);
-	Fase.prototype.load.call(this, "Animacao.json");
+	Fase.prototype.load.call(this, "Animacao");
 }
 //Atualiza os elementos especificos da Fase
 Animacao.prototype.atualiza = function(){
@@ -268,7 +268,7 @@ Menu.prototype.construtor = Menu;
 function Menu (canvas){
 	//Construtor de Menu
 	Fase.prototype.construtor.call(this, canvas);
-	Fase.prototype.load.call(this, "Menu.json");
+	Fase.prototype.load.call(this, "Menu");
 	this.tocando = "";
 	this.addHover = false;
 }
@@ -325,7 +325,7 @@ Fase1.prototype.construtor = Fase1;
 function Fase1 (canvas){
 	//Construtor de Fase1
 	Fase.prototype.construtor.call(this, canvas);
-	Fase.prototype.load.call(this, "Fase1.json");
+	Fase.prototype.load.call(this, "Fase1");
 	this.tocando = "";
 	this.removeHover = false;
 };
@@ -363,7 +363,7 @@ Fase2.prototype.construtor = Fase2;
 function Fase2 (canvas){
 	//Construtor de Fase2
 	Fase.prototype.construtor.call(this, canvas);
-	Fase.prototype.load.call(this, "Fase2.json");
+	Fase.prototype.load.call(this, "Fase2");
 };
 //Atualiza os elementos especificos da Fase
 Fase2.prototype.atualiza = function(){
@@ -384,7 +384,7 @@ Fase3.prototype.construtor = Fase3;
 function Fase3 (canvas){
 	//Construtor de Fase3
 	Fase.prototype.construtor.call(this, canvas);
-	Fase.prototype.load.call(this, "Fase3.json");
+	Fase.prototype.load.call(this, "Fase3");
 };
 //Atualiza os elementos especificos da Fase
 Fase3.prototype.atualiza = function(){
@@ -405,7 +405,7 @@ Fase4.prototype.construtor = Fase4;
 function Fase4 (canvas){
 	//Construtor de Fase4
 	Fase.prototype.construtor.call(this, canvas);
-	Fase.prototype.load.call(this, "Fase4.json");
+	Fase.prototype.load.call(this, "Fase4");
 };
 //Atualiza os elementos especificos da Fase
 Fase4.prototype.atualiza = function(){
@@ -426,7 +426,7 @@ Fase5.prototype.construtor = Fase5;
 function Fase5 (canvas){
 	//Construtor de Fase5
 	Fase.prototype.construtor.call(this, canvas);
-	Fase.prototype.load.call(this, "Fase5.json");
+	Fase.prototype.load.call(this, "Fase5");
 };
 //Atualiza os elementos especificos da Fase
 Fase5.prototype.atualiza = function(){

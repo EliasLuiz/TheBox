@@ -1,4 +1,4 @@
-{
+JSONS["Fase1"] = {
     "planodefundo": {
         "tipo": "Background01",
         "x": 0,
@@ -1211,4 +1211,4 @@
         "y": 200,
         "escala": 0.4
     }
-}
+};

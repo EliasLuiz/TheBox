@@ -1,4 +1,4 @@
-{
+JSONS["BackgroundAnimacao"] = {
     "imagem": "sprites/Animacao/BackgroundAnimacao.png",
     "animacoes": {
         "idle": {
@@ -8,4 +8,4 @@
             "h": [9, 288, 288, 288, 288, 288, 288, 288, 288, 288, 288, 288]
         }
     }
-}
+};

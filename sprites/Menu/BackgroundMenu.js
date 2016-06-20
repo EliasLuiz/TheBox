@@ -1,4 +1,4 @@
-{
+JSONS["BackgroundMenu"] = {
     "imagem": "sprites/Menu/BackgroundMenu.png",
     "animacoes": {
         "idle": {
@@ -26,4 +26,4 @@
             "w": [1024, 1024]
         }
     }
-}
+};

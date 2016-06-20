@@ -1,4 +1,4 @@
-{
+JSONS["Chao10100"] = {
     "imagem": "sprites/lvls/ground.png",
     "animacoes": {
         "idle": {
@@ -8,4 +8,4 @@
             "h": [100]
         }
     }
-}
+};
