@@ -64,10 +64,12 @@ Jogo.prototype.hover = function(x, y){
 };
 Jogo.prototype.atualiza = function(){
 	var now = +new Date();
-	$('#fps').html((1000/(now-this.now)).toFixed(0) + " fps");
+	//$('#fps').html((1000/(now-this.now)).toFixed(0) + " fps");
 	canvas.clearRect(0, 0, viewport.w, viewport.h);
 	this.fase.desenha();
 	this.fase.atualiza();
+	canvas.font = "20px sans-serif";
+	canvas.fillText((1000/(now-this.now)).toFixed(0) + " fps",10,20);
 	requestNextAnimationFrame(window.funcaoAtualiza);
 	this.now = now;
 };
