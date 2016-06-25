@@ -15,5 +15,11 @@ JSONS["Animacao"] = {
     "inimigos": [
 
     ],
-    "principal": ""
+    "principal": "",
+    "frente": [
+
+    ],
+    "projeteis": [
+
+    ]
 };

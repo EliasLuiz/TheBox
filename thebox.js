@@ -142,9 +142,21 @@ Fase.prototype.load = function(filename){
 			for(var i = 0; i < aux.length; i++)
 				gambi.inimigos.push(SpriteFactory().newSprite(aux[i].tipo, aux[i].x, aux[i].y, aux[i].escala));
 
+		aux = json["projeteis"];
+		gambi.projeteis = [];
+		if(aux !== [])
+			for(var i = 0; i < aux.length; i++)
+				gambi.projeteis.push(SpriteFactory().newSprite(aux[i].tipo, aux[i].x, aux[i].y, aux[i].escala));
+
 		var aux = json["principal"];
 		if(aux !== "")
 			gambi.principal = SpriteFactory().newSprite(aux.tipo, aux.x, aux.y, aux.escala);
+
+		aux = json["frente"];
+		gambi.frente = [];
+		if(aux !== [])
+			for(var i = 0; i < aux.length; i++)
+				gambi.frente.push(SpriteFactory().newSprite(aux[i].tipo, aux[i].x, aux[i].y, aux[i].escala));
 	}
 	LoadJSON(filename, __loadfase__);
 };
@@ -225,11 +237,15 @@ Fase.prototype.atualiza = function(){
 	for (var i = 0; i < this.cenario.length; i++) {
 		this.cenario[i].atualiza(velx, vely);
 	}
-
+	for (var i = 0; i < this.projeteis.length; i++) {
+		this.projeteis[i].atualiza(velx, vely);
+	}
+	for (var i = 0; i < this.frente.length; i++) {
+		this.frente[i].atualiza(velx, vely);
+	}
 };
 //Desenhar os elementos do Fase
 Fase.prototype.desenha = function(){
-
 	this.planodefundo.desenha();
 	for (var i = 0; i < this.cenario.length; i++) {
 		this.cenario[i].desenha();
@@ -240,8 +256,13 @@ Fase.prototype.desenha = function(){
 	for (var i = 0; i < this.inimigos.length; i++) {
 		this.inimigos[i].desenha();
 	}
+	for (var i = 0; i < this.projeteis.length; i++) {
+		this.projeteis[i].desenha();
+	}
 	this.principal.desenha();
-
+	for (var i = 0; i < this.frente.length; i++) {
+		this.frente[i].desenha();
+	}
 };
 
 

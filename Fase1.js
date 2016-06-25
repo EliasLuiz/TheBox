@@ -1210,5 +1210,10 @@ JSONS["Fase1"] = {
         "x": 1950,
         "y": 200,
         "escala": 0.4
-    }
+    },
+    "frente": [
+    ],
+    "projeteis": [
+
+    ]
 };

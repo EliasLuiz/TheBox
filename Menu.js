@@ -14,5 +14,11 @@ JSONS["Menu"] = {
     "inimigos": [
 
     ],
-    "principal": ""
+    "principal": "",
+    "frente": [
+
+    ],
+    "projeteis": [
+
+    ]
 };
