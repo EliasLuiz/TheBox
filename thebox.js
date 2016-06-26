@@ -120,16 +120,18 @@ Fase.prototype.load = function(filename){
 		if(aux !== [])
 			for(var i = 0; i < aux.length; i++){
 				//Blocos invisiveis multiplos
-				if(aux[i].tipo === "Inv10010"){
-					var w = SpriteFactory().newSprite("Inv1010", aux[i].x, aux[i].y, aux[i].escala).w
+				if(aux[i].tipo.indexOf("Inv") !== -1 &&
+				   aux[i].tipo.indexOf("10010") !== -1){
+					var w = SpriteFactory().newSprite("Inv11010", aux[i].x, aux[i].y, aux[i].escala).w
 					for (var j = 0; j < 10; j++){
-						gambi.elementosCenario.push(SpriteFactory().newSprite("Inv1010", aux[i].x + j*w*aux[i].escala, aux[i].y, aux[i].escala));
+						gambi.elementosCenario.push(SpriteFactory().newSprite("Inv11010", aux[i].x + j*w*aux[i].escala, aux[i].y, aux[i].escala));
 					}
 				}
-				else if(aux[i].tipo === "Inv10100"){
-					var h = SpriteFactory().newSprite("Inv1010", aux[i].x, aux[i].y, aux[i].escala).h
+				else if(aux[i].tipo.indexOf("Inv") !== -1 &&
+				   		aux[i].tipo.indexOf("10100") !== -1){
+					var h = SpriteFactory().newSprite("Inv11010", aux[i].x, aux[i].y, aux[i].escala).h
 					for (var j = 0; j < 10; j++){
-						gambi.elementosCenario.push(SpriteFactory().newSprite("Inv1010", aux[i].x, aux[i].y + j*h*aux[i].escala, aux[i].escala));
+						gambi.elementosCenario.push(SpriteFactory().newSprite("Inv11010", aux[i].x, aux[i].y + j*h*aux[i].escala, aux[i].escala));
 					}
 				}
 				else

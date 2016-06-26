@@ -498,6 +498,23 @@ Background01.prototype.getPosAtual = function(){
 	};
 }
 
+////////////////////////////////////////////////////////////////
+
+Background02.prototype = new Background();
+Background02.prototype.constructor = Background02;
+function Background02(canvas, onload) {
+	Sprite.prototype.load.call(this, canvas, "Background02", onload);
+	this.w = (this.animacoes["idle"].w[0] / this.animacoes["idle"].h[0]) * viewport.h;
+};
+Background02.prototype.getPosAtual = function(){
+	return {
+		x: this.pos.x,
+		y: this.pos.y,
+		h: viewport.h,
+		w: this.w
+	};
+}
+
 
 
 
@@ -508,20 +525,29 @@ Background01.prototype.getPosAtual = function(){
 //Classe para gerenciar o cenario nao interagivel
 ////////////////////////////////////////////////////////////////
 
-Cenario01.prototype = new Background();
-Cenario01.prototype.constructor = Cenario01;
-function Cenario01(canvas, onload) {
-	Sprite.prototype.load.call(this, canvas, "Cenario01", onload);
+Cenario101.prototype = new Background();
+Cenario101.prototype.constructor = Cenario101;
+function Cenario101(canvas, onload) {
+	Sprite.prototype.load.call(this, canvas, "Cenario101", onload);
 	this.vel = { "x": 0.15, "y": 0.5 };
 };
 
 
 ////////////////////////////////////////////////////////////////
 
-Cenario02.prototype = new Background();
-Cenario02.prototype.constructor = Cenario02;
-function Cenario02(canvas, onload) {
-	Sprite.prototype.load.call(this, canvas, "Cenario02", onload);
+Cenario102.prototype = new Background();
+Cenario102.prototype.constructor = Cenario102;
+function Cenario102(canvas, onload) {
+	Sprite.prototype.load.call(this, canvas, "Cenario102", onload);
+	this.vel = { "x": 0.15, "y": 0.5 };
+};
+
+////////////////////////////////////////////////////////////////
+
+Cenario201.prototype = new Background();
+Cenario201.prototype.constructor = Cenario201;
+function Cenario201(canvas, onload) {
+	Sprite.prototype.load.call(this, canvas, "Cenario201", onload);
 	this.vel = { "x": 0.15, "y": 0.5 };
 };
 
@@ -535,46 +561,14 @@ function Cenario02(canvas, onload) {
 //Classe para gerenciar o cenario interagivel
 ////////////////////////////////////////////////////////////////
 
-Chao1010.prototype = new Sprite();
-Chao1010.prototype.constructor = Chao1010;
-function Chao1010(canvas, onload) {
-	Sprite.prototype.load.call(this, canvas, "Chao1010", onload);
+Chao11010.prototype = new Sprite();
+Chao11010.prototype.constructor = Chao11010;
+function Chao11010(canvas, onload) {
+	Sprite.prototype.load.call(this, canvas, "Chao11010", onload);
 	this.h = this.animacoes["idle"].h;
 	this.w = this.animacoes["idle"].w;
 };
-Chao1010.prototype.getPosAtual = function(){
-	return {
-		x: this.pos.x,
-		y: this.pos.y,
-		h: this.h * this.altura,
-		w: this.w * this.altura
-	};
-}
-
-Chao10010.prototype = new Sprite();
-Chao10010.prototype.constructor = Chao10010;
-function Chao10010(canvas, onload) {
-	Sprite.prototype.load.call(this, canvas, "Chao10010", onload);
-	this.h = this.animacoes["idle"].h;
-	this.w = this.animacoes["idle"].w;
-};
-Chao10010.prototype.getPosAtual = function(){
-	return {
-		x: this.pos.x,
-		y: this.pos.y,
-		h: this.h * this.altura,
-		w: this.w * this.altura
-	};
-}
-
-Chao10100.prototype = new Sprite();
-Chao10100.prototype.constructor = Chao10100;
-function Chao10100(canvas, onload) {
-	Sprite.prototype.load.call(this, canvas, "Chao10100", onload);
-	this.h = this.animacoes["idle"].h;
-	this.w = this.animacoes["idle"].w;
-};
-Chao10100.prototype.getPosAtual = function(){
+Chao11010.prototype.getPosAtual = function(){
 	return {
 		x: this.pos.x,
 		y: this.pos.y,
@@ -585,14 +579,15 @@ Chao10100.prototype.getPosAtual = function(){
 
 ////////////////////////////////////////////////////////////////
 
-Inv1010.prototype = new Sprite();
-Inv1010.prototype.constructor = Inv1010;
-function Inv1010(canvas, onload) {
-	Sprite.prototype.load.call(this, canvas, "Inv1010", onload);
+Chao110010.prototype = new Sprite();
+Chao110010.prototype.constructor = Chao110010;
+function Chao110010(canvas, onload) {
+	Sprite.prototype.load.call(this, canvas, "Chao110010", onload);
 	this.h = this.animacoes["idle"].h;
 	this.w = this.animacoes["idle"].w;
 };
-Inv1010.prototype.getPosAtual = function(){
+
+Chao110010.prototype.getPosAtual = function(){
 	return {
 		x: this.pos.x,
 		y: this.pos.y,
@@ -600,7 +595,126 @@ Inv1010.prototype.getPosAtual = function(){
 		w: this.w * this.altura
 	};
 }
-Inv1010.prototype.desenha = function(){
+
+////////////////////////////////////////////////////////////////
+
+Chao110100.prototype = new Sprite();
+Chao110100.prototype.constructor = Chao110100;
+function Chao110100(canvas, onload) {
+	Sprite.prototype.load.call(this, canvas, "Chao110100", onload);
+	this.h = this.animacoes["idle"].h;
+	this.w = this.animacoes["idle"].w;
+};
+Chao110100.prototype.getPosAtual = function(){
+	return {
+		x: this.pos.x,
+		y: this.pos.y,
+		h: this.h * this.altura,
+		w: this.w * this.altura
+	};
+}
+
+////////////////////////////////////////////////////////////////
+
+Inv11010.prototype = new Sprite();
+Inv11010.prototype.constructor = Inv11010;
+function Inv11010(canvas, onload) {
+	Sprite.prototype.load.call(this, canvas, "Inv11010", onload);
+	this.h = this.animacoes["idle"].h;
+	this.w = this.animacoes["idle"].w;
+};
+Inv11010.prototype.getPosAtual = function(){
+	return {
+		x: this.pos.x,
+		y: this.pos.y,
+		h: this.h * this.altura,
+		w: this.w * this.altura
+	};
+}
+Inv11010.prototype.desenha = function(){
+	if(this.colisao["esq"] || this.colisao["dir"] || this.colisao["cim"] || this.colisao["bxo"]){
+		Sprite.prototype.desenha.call(this);
+		this.colisao = {
+			"dir": false,
+			"esq": false,
+			"cim": false,
+			"bxo": false
+		};
+	}
+}
+
+////////////////////////////////////////////////////////////////
+
+Chao21010.prototype = new Sprite();
+Chao21010.prototype.constructor = Chao21010;
+function Chao21010(canvas, onload) {
+	Sprite.prototype.load.call(this, canvas, "Chao21010", onload);
+	this.h = this.animacoes["idle"].h;
+	this.w = this.animacoes["idle"].w;
+};
+Chao21010.prototype.getPosAtual = function(){
+	return {
+		x: this.pos.x,
+		y: this.pos.y,
+		h: this.h * this.altura,
+		w: this.w * this.altura
+	};
+}
+
+////////////////////////////////////////////////////////////////
+
+Chao210010.prototype = new Sprite();
+Chao210010.prototype.constructor = Chao210010;
+function Chao210010(canvas, onload) {
+	Sprite.prototype.load.call(this, canvas, "Chao210010", onload);
+	this.h = this.animacoes["idle"].h;
+	this.w = this.animacoes["idle"].w;
+};
+Chao210010.prototype.getPosAtual = function(){
+	return {
+		x: this.pos.x,
+		y: this.pos.y,
+		h: this.h * this.altura,
+		w: this.w * this.altura
+	};
+}
+
+////////////////////////////////////////////////////////////////
+
+Chao210100.prototype = new Sprite();
+Chao210100.prototype.constructor = Chao210100;
+function Chao210100(canvas, onload) {
+	Sprite.prototype.load.call(this, canvas, "Chao210100", onload);
+	this.h = this.animacoes["idle"].h;
+	this.w = this.animacoes["idle"].w;
+};
+Chao210100.prototype.getPosAtual = function(){
+	return {
+		x: this.pos.x,
+		y: this.pos.y,
+		h: this.h * this.altura,
+		w: this.w * this.altura
+	};
+}
+
+////////////////////////////////////////////////////////////////
+
+Inv21010.prototype = new Sprite();
+Inv21010.prototype.constructor = Inv21010;
+function Inv21010(canvas, onload) {
+	Sprite.prototype.load.call(this, canvas, "Inv21010", onload);
+	this.h = this.animacoes["idle"].h;
+	this.w = this.animacoes["idle"].w;
+};
+Inv21010.prototype.getPosAtual = function(){
+	return {
+		x: this.pos.x,
+		y: this.pos.y,
+		h: this.h * this.altura,
+		w: this.w * this.altura
+	};
+}
+Inv21010.prototype.desenha = function(){
 	if(this.colisao["esq"] || this.colisao["dir"] || this.colisao["cim"] || this.colisao["bxo"]){
 		Sprite.prototype.desenha.call(this);
 		this.colisao = {
@@ -617,7 +731,7 @@ Inv1010.prototype.desenha = function(){
 InvInv1010.prototype = new Sprite();
 InvInv1010.prototype.constructor = InvInv1010;
 function InvInv1010(canvas, onload) {
-	Sprite.prototype.load.call(this, canvas, "Inv1010", onload);
+	Sprite.prototype.load.call(this, canvas, "Inv11010", onload);
 	this.h = this.animacoes["idle"].h;
 	this.w = this.animacoes["idle"].w;
 };
@@ -722,6 +836,7 @@ function SpritePrincipal() {
 	};
 	this.movel = true;
 	this.moveCamera = true;
+	this.classe = "";
 };
 //Funcoes para acoes do personagem
 SpritePrincipal.prototype.botaoDireita = function(estado){ 	this.acao["dir"] = estado; };
@@ -834,7 +949,7 @@ SpritePrincipal.prototype.atualiza = function(){
 
 	//Se morreu
 	if(this.pos.y + this.animacoes[this.spriteAtual.animacao].h[this.spriteAtual.frame] < 0){
-		Jogo().fase.principal = SpriteFactory().newSprite("SpritePrincipal01");
+		Jogo().fase.principal = SpriteFactory().newSprite(this.classe);
 		Jogo().restart();
 	}
 };
@@ -845,9 +960,23 @@ SpritePrincipal01.prototype = new SpritePrincipal();
 SpritePrincipal01.prototype.constructor = SpritePrincipal01;
 function SpritePrincipal01(canvas, onload) {
 	SpritePrincipal.prototype.constructor.call(this, canvas);
+	this.classe = "SpritePrincipal01";
 	Sprite.prototype.load.call(this, canvas, "SpritePrincipal01", onload);
 };
 SpritePrincipal01.prototype.atualiza = function(){
+	SpritePrincipal.prototype.atualiza.call(this);
+};
+
+////////////////////////////////////////////////////////////////
+
+SpritePrincipal02.prototype = new SpritePrincipal();
+SpritePrincipal02.prototype.constructor = SpritePrincipal02;
+function SpritePrincipal02(canvas, onload) {
+	SpritePrincipal.prototype.constructor.call(this, canvas);
+	this.classe = "SpritePrincipal02";
+	Sprite.prototype.load.call(this, canvas, "SpritePrincipal02", onload);
+};
+SpritePrincipal02.prototype.atualiza = function(){
 	SpritePrincipal.prototype.atualiza.call(this);
 };
 
@@ -941,28 +1070,38 @@ function SpriteFactory(canvas){
 				copia = this.copiaProfunda(this.sprites.BackgroundMenu);break;
 			case "Background01":
 				copia = this.copiaProfunda(this.sprites.Background01);break;
-			case "Cenario01":
-				copia = this.copiaProfunda(this.sprites.Cenario01);break;
-			case "Cenario02":
-				copia = this.copiaProfunda(this.sprites.Cenario02);break;
-			case "Chao1010":
-				copia = this.copiaProfunda(this.sprites.Chao1010);break;
-			case "Chao10010":
-				copia = this.copiaProfunda(this.sprites.Chao10010);break;
-			case "Chao10100":
-				copia = this.copiaProfunda(this.sprites.Chao10100);break;
-			case "Inv1010":
-				copia = this.copiaProfunda(this.sprites.Inv1010);break;
+			case "Background02":
+				copia = this.copiaProfunda(this.sprites.Background02);break;
+			case "Cenario101":
+				copia = this.copiaProfunda(this.sprites.Cenario101);break;
+			case "Cenario102":
+				copia = this.copiaProfunda(this.sprites.Cenario102);break;
+			case "Cenario201":
+				copia = this.copiaProfunda(this.sprites.Cenario201);break;
+			case "Chao11010":
+				copia = this.copiaProfunda(this.sprites.Chao11010);break;
+			case "Chao110010":
+				copia = this.copiaProfunda(this.sprites.Chao110010);break;
+			case "Chao110100":
+				copia = this.copiaProfunda(this.sprites.Chao110100);break;
+			case "Chao21010":
+				copia = this.copiaProfunda(this.sprites.Chao21010);break;
+			case "Chao210010":
+				copia = this.copiaProfunda(this.sprites.Chao210010);break;
+			case "Chao210100":
+				copia = this.copiaProfunda(this.sprites.Chao210100);break;
+			case "Inv11010":
+				copia = this.copiaProfunda(this.sprites.Inv11010);break;
+			case "Inv21010":
+				copia = this.copiaProfunda(this.sprites.Inv21010);break;
 			case "InvInv1010":
 				copia = this.copiaProfunda(this.sprites.InvInv1010);break;
-			case "Inv10010":
-				copia = this.copiaProfunda(this.sprites.Inv10010);break;
-			case "Inv10100":
-				copia = this.copiaProfunda(this.sprites.Inv10100);break;
 			case "Portal1":
 				copia = this.copiaProfunda(this.sprites.Portal1);break;
 			case "SpritePrincipal01":
 				copia = this.copiaProfunda(this.sprites.SpritePrincipal01);break;
+			case "SpritePrincipal02":
+				copia = this.copiaProfunda(this.sprites.SpritePrincipal02);break;
 		}
 		copia.pos.x = x;
 		copia.pos.y = y;
@@ -977,17 +1116,24 @@ function SpriteFactory(canvas){
 	this.sprites.BackgroundAnimacao = new BackgroundAnimacao(canvas, this.loading);
 	this.sprites.BackgroundMenu = new BackgroundMenu(canvas, this.loading);
 	this.sprites.Background01 = new Background01(canvas, this.loading);
-	this.sprites.Cenario01 = new Cenario01(canvas, this.loading);
-	this.sprites.Cenario02 = new Cenario02(canvas, this.loading);
-	this.sprites.Chao1010 = new Chao1010(canvas, this.loading);
-	this.sprites.Chao10010 = new Chao10010(canvas, this.loading);
-	this.sprites.Chao10100 = new Chao10100(canvas, this.loading);
-	this.sprites.Inv1010 = new Inv1010(canvas, this.loading);
+	this.sprites.Background02 = new Background02(canvas, this.loading);
+	this.sprites.Cenario101 = new Cenario101(canvas, this.loading);
+	this.sprites.Cenario102 = new Cenario102(canvas, this.loading);
+	this.sprites.Chao11010 = new Chao11010(canvas, this.loading);
+	this.sprites.Chao110010 = new Chao110010(canvas, this.loading);
+	this.sprites.Chao110100 = new Chao110100(canvas, this.loading);
+	this.sprites.Inv11010 = new Inv11010(canvas, this.loading);
+	this.sprites.Cenario201 = new Cenario201(canvas, this.loading);
+	this.sprites.Chao21010 = new Chao21010(canvas, this.loading);
+	this.sprites.Chao210010 = new Chao210010(canvas, this.loading);
+	this.sprites.Chao210100 = new Chao210100(canvas, this.loading);
+	this.sprites.Inv21010 = new Inv21010(canvas, this.loading);
 	this.sprites.InvInv1010 = new InvInv1010(canvas, this.loading);
 	this.sprites.Portal1 = new Portal1(canvas, this.loading);
 	/*this.sprites.Inv10010 = new Inv10010(canvas, this.loading);
-	this.sprites.Inv10100 = new Inv10100(canvas, this.loading);*/
+	this.sprites.Inv110100 = new Inv110100(canvas, this.loading);*/
 	this.sprites.SpritePrincipal01 = new SpritePrincipal01(canvas, this.loading);
+	this.sprites.SpritePrincipal02 = new SpritePrincipal02(canvas, this.loading);
 };
 
 
