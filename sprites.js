@@ -323,10 +323,10 @@ BackgroundMenu.prototype.click = function(x, y){
 	}
 	if(this.spriteAtual.animacao === "play"){
 		if (x >= 168 && x <= 452 &&
-			y >= 403 && y <= 486)
+			y >= 381 && y <= 464)
 			this.mouse = "newGame";
-		else if (x >= 145 && x <= 375 &&
-			y >= 374 && y <= 475)
+		else if (x >= 583 && x <= 864 &&
+				 y >= 379 && y <= 462)
 			this.mouse = "continue";
 	}
 	else if(this.spriteAtual.animacao === "opcoes"){
@@ -382,10 +382,10 @@ BackgroundMenu.prototype.hover = function(x, y){
 	}
 	else if(this.spriteAtual.animacao === "play"){
 		if (x >= 168 && x <= 452 &&
-			y >= 403 && y <= 486)
+			y >= 381 && y <= 464)
 			this.spriteAtual.frame = 0;
-		else if (x >= 145 && x <= 375 &&
-			y >= 374 && y <= 475)
+		else if (x >= 583 && x <= 864 &&
+				 y >= 379 && y <= 462)
 			this.spriteAtual.frame = 1;
 	}
 };
