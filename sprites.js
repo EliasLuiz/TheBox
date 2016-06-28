@@ -551,6 +551,24 @@ function Cenario201(canvas, onload) {
 	this.vel = { "x": 0.15, "y": 0.5 };
 };
 
+////////////////////////////////////////////////////////////////
+
+Estalactite.prototype = new Background();
+Estalactite.prototype.constructor = Estalactite;
+function Estalactite(canvas, onload) {
+	Sprite.prototype.load.call(this, canvas, "Estalactite", onload);
+	this.vel = { "x": 1, "y": 1 };
+};
+
+////////////////////////////////////////////////////////////////
+
+Estalagmite.prototype = new Background();
+Estalagmite.prototype.constructor = Estalagmite;
+function Estalagmite(canvas, onload) {
+	Sprite.prototype.load.call(this, canvas, "Estalagmite", onload);
+	this.vel = { "x": 1, "y": 1 };
+};
+
 
 
 
@@ -818,6 +836,70 @@ Portal1.prototype.atualiza = function(){
 
 
 ////////////////////////////////////////////////////////////////
+//Classes para gerenciar os inimigos
+////////////////////////////////////////////////////////////////
+
+Inimigo201.prototype = new Sprite();
+Inimigo201.prototype.constructor = Inimigo201;
+function Inimigo201() {
+	this.acc = {x: 5, y: 20};
+	this.lado = "Dir";
+	this.spriteAtual = { "animacao": "idleDir", "frame": 0 };
+	this.acao = {
+		"dir": false,
+		"esq": false,
+		"cim": false,
+		"bxo": false,
+		"spa": false
+	};
+	this.movel = true;
+	this.moveCamera = false;
+	this.classe = "Inimigo201";
+	this.destruido = false;
+};
+Inimigo201.prototype.atualiza = function(){
+	//Se estiver livre
+	if(!this.colisao["bxo"]){
+		this.vel.y += gravidade * this.altura;
+		if(this.vel.y > 0)
+			this.vel.y = this.vel.y > velocidadeTerminal ? velocidadeTerminal : this.vel.y;
+		else
+			this.vel.y = this.vel.y < - velocidadeTerminal ? - velocidadeTerminal : this.vel.y;
+		if(this.vel.y <= 0 && this.spriteAtual.animacao !== ("falling" + this.lado)){
+			this.spriteAtual.animacao = "falling";
+			this.spriteAtual.frame = -1;		
+		}
+	}
+	else if(this.colisao["dir"] || this.colisao["esq"]){
+		this.destruido = true;
+	}
+	//Se estiver escorado no chao
+	else{
+		this.lado = this.lado === "Dir" ? "Esq" : "Dir";
+		if(this.spriteAtual.animacao === ("falling" + this.lado)){
+			this.spriteAtual.animacao = "jumping" + this.lado;
+			this.spriteAtual.frame = -1;
+		}
+		else if(this.spriteAtual.animacao === ("jumping" + this.lado) &&
+				this.spriteAtual.frame === this.animacoes["jumping" + this.lado].x.length-1){
+			this.spriteAtual.animacao = "idle" + this.lado;
+			this.spriteAtual.frame = -1;
+			this.vel.y = this.acc.y;
+			this.vel.x = -this.vel.x
+		}
+	}
+	this.pos.x += this.vel.x;
+	this.pos.y += this.vel.y;
+	this.spriteAtual.frame = (this.spriteAtual.frame + 1) % (this.animacoes[this.spriteAtual.animacao].x.length - 1);
+}
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////
 //Classe para gerenciar o personagem principal
 ////////////////////////////////////////////////////////////////
 
@@ -930,7 +1012,22 @@ SpritePrincipal.prototype.atualiza = function(){
 			this.vel.x = 0;
 	}
 
-
+	//Testa colisao com inimigos
+	var morreu = false
+	for (var i = 0; i < Jogo().fase.inimigos.length; i++) {
+		var inimigo = Jogo().fase.inimigos[i];
+		this.colisao = {
+			"dir": false,
+			"esq": false,
+			"cim": false,
+			"bxo": false
+		};
+		Colisao(this, inimigo);
+		if(inimigo.classe === "Inimigo201" && this.colisao["bxo"]){
+			morreu = true;
+			break;
+		}
+	}
 	this.colisao = {
 		"dir": false,
 		"esq": false,
@@ -948,7 +1045,7 @@ SpritePrincipal.prototype.atualiza = function(){
 	this.spriteAtual.frame = (this.spriteAtual.frame + 1) % (this.animacoes[this.spriteAtual.animacao].x.length - 1);
 
 	//Se morreu
-	if(this.pos.y + this.animacoes[this.spriteAtual.animacao].h[this.spriteAtual.frame] < 0){
+	if(morreu || this.pos.y + this.animacoes[this.spriteAtual.animacao].h[this.spriteAtual.frame] < 0){
 		Jogo().fase.principal = SpriteFactory().newSprite(this.classe);
 		Jogo().restart();
 	}
@@ -1076,6 +1173,10 @@ function SpriteFactory(canvas){
 				copia = this.copiaProfunda(this.sprites.Cenario101);break;
 			case "Cenario102":
 				copia = this.copiaProfunda(this.sprites.Cenario102);break;
+			case "Estalactite":
+				copia = this.copiaProfunda(this.sprites.Estalactite);break;
+			case "Estalagmite":
+				copia = this.copiaProfunda(this.sprites.Estalagmite);break;
 			case "Cenario201":
 				copia = this.copiaProfunda(this.sprites.Cenario201);break;
 			case "Chao11010":
@@ -1098,11 +1199,15 @@ function SpriteFactory(canvas){
 				copia = this.copiaProfunda(this.sprites.InvInv1010);break;
 			case "Portal1":
 				copia = this.copiaProfunda(this.sprites.Portal1);break;
+			case "Inimigo201":
+				copia = this.copiaProfunda(this.sprites.Inimigo201);break;
 			case "SpritePrincipal01":
 				copia = this.copiaProfunda(this.sprites.SpritePrincipal01);break;
 			case "SpritePrincipal02":
 				copia = this.copiaProfunda(this.sprites.SpritePrincipal02);break;
 		}
+		if(copia.pos == undefined) 
+			var x = 1+1;
 		copia.pos.x = x;
 		copia.pos.y = y;
 		if(altura === undefined) 
@@ -1117,21 +1222,27 @@ function SpriteFactory(canvas){
 	this.sprites.BackgroundMenu = new BackgroundMenu(canvas, this.loading);
 	this.sprites.Background01 = new Background01(canvas, this.loading);
 	this.sprites.Background02 = new Background02(canvas, this.loading);
+	///////////////////////////////////////////////////////////////////////
 	this.sprites.Cenario101 = new Cenario101(canvas, this.loading);
 	this.sprites.Cenario102 = new Cenario102(canvas, this.loading);
 	this.sprites.Chao11010 = new Chao11010(canvas, this.loading);
 	this.sprites.Chao110010 = new Chao110010(canvas, this.loading);
 	this.sprites.Chao110100 = new Chao110100(canvas, this.loading);
 	this.sprites.Inv11010 = new Inv11010(canvas, this.loading);
+
 	this.sprites.Cenario201 = new Cenario201(canvas, this.loading);
+	this.sprites.Estalactite = new Estalactite(canvas, this.loading);
+	this.sprites.Estalagmite = new Estalagmite(canvas, this.loading);
 	this.sprites.Chao21010 = new Chao21010(canvas, this.loading);
 	this.sprites.Chao210010 = new Chao210010(canvas, this.loading);
 	this.sprites.Chao210100 = new Chao210100(canvas, this.loading);
 	this.sprites.Inv21010 = new Inv21010(canvas, this.loading);
+
 	this.sprites.InvInv1010 = new InvInv1010(canvas, this.loading);
 	this.sprites.Portal1 = new Portal1(canvas, this.loading);
-	/*this.sprites.Inv10010 = new Inv10010(canvas, this.loading);
-	this.sprites.Inv110100 = new Inv110100(canvas, this.loading);*/
+	///////////////////////////////////////////////////////////////////////
+	this.sprites.Inimigo201 = new Inimigo201(canvas, this.loading);
+	///////////////////////////////////////////////////////////////////////
 	this.sprites.SpritePrincipal01 = new SpritePrincipal01(canvas, this.loading);
 	this.sprites.SpritePrincipal02 = new SpritePrincipal02(canvas, this.loading);
 };

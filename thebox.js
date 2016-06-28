@@ -201,14 +201,6 @@ Fase.prototype.atualiza = function(){
 			if(!this.inimigos[j].isVisivel())
 				continue;
 			aux = Colisao(this.elementosCenario[i], this.inimigos[j]);
-			mudancaViewport.x += aux.x;
-			mudancaViewport.y += aux.y;
-			if(!inimigosPersonagem){
-				inimigosPersonagem = true;
-				aux = Colisao(this.inimigos[j], this.principal);
-				mudancaViewport.x += aux.x;
-				mudancaViewport.y += aux.y;
-			}
 		}
 	}
 
@@ -220,10 +212,16 @@ Fase.prototype.atualiza = function(){
 			this.elementosCenario[i].atualiza();
 		}
 	}
+	var destruidos = [];
 	for (var i = 0; i < this.inimigos.length; i++) {
 		if(this.inimigos[i].isVisivel()){
 			this.inimigos[i].atualiza();
+			if(this.inimigos[i].destruido)
+				destruidos.push(i);
 		}
+	}
+	for (var i = 0; i < destruidos.length; i++) {
+		this.inimigos.splice(destruidos[i]-i, 1);
 	}
 
 	var velx = vely = 0;
@@ -515,6 +513,8 @@ function FaseFactory(canvas){
 			case "Fase1":
 				return this.copiaProfunda(this.fases.Fase1);break;
 				//return new Fase1(canvas);break;
+			case "Fase2":
+				return this.copiaProfunda(this.fases.Fase2);break;
 		}
 	};
 
@@ -522,6 +522,7 @@ function FaseFactory(canvas){
 	this.fases.Animacao = new Animacao(canvas);
 	this.fases.Menu = new Menu(canvas);
 	this.fases.Fase1 = new Fase1(canvas);
+	this.fases.Fase2 = new Fase2(canvas);
 };
 
 
