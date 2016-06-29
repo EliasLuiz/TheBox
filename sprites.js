@@ -777,15 +777,15 @@ function Portal(canvas, onload) {
 	this.incremento = 0;
 	this.auxCont = 0;
 	this.musica = "";
+	this.h = this.animacoes["idle"].h[0];
+	this.w = this.animacoes["idle"].w[0];
 };
 Portal.prototype.getPosAtual = function(){
-	this.h = this.animacoes["idle"].h[0] * this.altura;
-	this.w = this.animacoes["idle"].w[0] * this.altura;
 	return {
 		x: this.pos.x,
 		y: this.pos.y,
-		h: this.h,
-		w: this.w
+		h: this.h * this.altura,
+		w: this.w * this.altura
 	};
 }
 Portal.prototype.atualiza = function(){
@@ -815,7 +815,7 @@ Portal.prototype.atualiza = function(){
 		Jogo().fase.principal.vel.y = 0;
 		//Puxa o principal para o centro
 		var p = Jogo().fase.principal.getPosAtual();
-		Jogo().fase.principal.pos.x = this.pos.x + (this.w - p.w) / 2;
+		Jogo().fase.principal.pos.x = this.pos.x + (this.w * this.altura - p.w) / 2;
 		Jogo().fase.principal.pos.y = this.pos.y
 		//Desativa movimentos personagem
 		Jogo().fase.principal.botaoDireita = function(x){};
@@ -836,21 +836,23 @@ Portal.prototype.atualiza = function(){
 
 ////////////////////////////////////////////////////////////////
 
-Portal1.prototype = new Portal();
+Portal1.prototype = new Sprite();
 Portal1.prototype.constructor = Portal1;
 function Portal1(canvas, onload) {
 	Portal.prototype.constructor.call(this, canvas, onload);
 	this.musica = "Fase1End";
 };
+Portal1.prototype.atualiza = Portal.prototype.atualiza;
 
 ////////////////////////////////////////////////////////////////
 
-Portal2.prototype = new Portal();
+Portal2.prototype = new Sprite();
 Portal2.prototype.constructor = Portal2;
 function Portal2(canvas, onload) {
 	Portal.prototype.constructor.call(this, canvas, onload);
 	this.musica = "Fase2End";
 };
+Portal2.prototype.atualiza = Portal.prototype.atualiza;
 
 
 

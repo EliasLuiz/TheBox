@@ -385,6 +385,7 @@ Fase1.prototype.atualiza = function(){
 		Som().stopAllMusic();
 		Som().playMusic("Fase1Intro");
 		this.tocando = "Intro";
+		this.principal.vel.x = 0; //Correcao de bug
 	}
 	else if(this.tocando === "Intro" && Som().music["Fase1Intro"].ended){
 		this.tocando = "Loop";

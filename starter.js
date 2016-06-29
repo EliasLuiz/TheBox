@@ -1,3 +1,17 @@
+//Outras funcoes
+function LoadJSON(filename, callback){
+    /*var xmlhttp = new XMLHttpRequest();
+    xmlhttp.overrideMimeType("application/json");
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            callback(JSON.parse(xmlhttp.responseText));
+        }
+    };
+    xmlhttp.open("GET", filename, false);
+    xmlhttp.send();*/
+    callback(JSONS[filename]);
+};
+
 (function () {
     var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
     window.requestAnimationFrame = requestAnimationFrame;
@@ -25,19 +39,6 @@ var canvas = document.getElementById("canvas");
 canvas.addEventListener('keydown', doKeyDown, true);
 canvas.addEventListener('keyup', doKeyUp, true);
 canvas.addEventListener('click', click, false);
-//Outras funcoes
-function LoadJSON(filename, callback){
-	/*var xmlhttp = new XMLHttpRequest();
-    xmlhttp.overrideMimeType("application/json");
-	xmlhttp.onreadystatechange = function() {
-		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-		    callback(JSON.parse(xmlhttp.responseText));
-		}
-	};
-	xmlhttp.open("GET", filename, false);
-	xmlhttp.send();*/
-    callback(JSONS[filename]);
-};
 
 function doKeyDown(e) {
     switch (e.keyCode) {
