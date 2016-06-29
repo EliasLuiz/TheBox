@@ -53,7 +53,10 @@ function Som(){
 		{ nome: "Menu", filename: "music/Menu.mp3" },
 		{ nome: "Fase1Intro", filename: "music/Fase1Intro.mp3" },
 		{ nome: "Fase1Loop", filename: "music/Fase1Loop.mp3" },
-		{ nome: "Fase1End", filename: "music/Fase1End.mp3" }
+		{ nome: "Fase1End", filename: "music/Fase1End.mp3" },
+		{ nome: "Fase2Intro", filename: "music/Fase2Intro.mp3" },
+		{ nome: "Fase2Loop", filename: "music/Fase2Loop.mp3" },
+		{ nome: "Fase2End", filename: "music/Fase2End.mp3" }
 	];
 	//Lista com nome dos arquivos sfx
 	this.sfxNames = [

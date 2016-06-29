@@ -120,18 +120,28 @@ Fase.prototype.load = function(filename){
 		if(aux !== [])
 			for(var i = 0; i < aux.length; i++){
 				//Blocos invisiveis multiplos
-				if(aux[i].tipo.indexOf("Inv") !== -1 &&
-				   aux[i].tipo.indexOf("10010") !== -1){
+				if(aux[i].tipo.indexOf("Inv110010") !== -1){
 					var w = SpriteFactory().newSprite("Inv11010", aux[i].x, aux[i].y, aux[i].escala).w
 					for (var j = 0; j < 10; j++){
 						gambi.elementosCenario.push(SpriteFactory().newSprite("Inv11010", aux[i].x + j*w*aux[i].escala, aux[i].y, aux[i].escala));
 					}
 				}
-				else if(aux[i].tipo.indexOf("Inv") !== -1 &&
-				   		aux[i].tipo.indexOf("10100") !== -1){
+				else if(aux[i].tipo.indexOf("Inv110100") !== -1){
 					var h = SpriteFactory().newSprite("Inv11010", aux[i].x, aux[i].y, aux[i].escala).h
 					for (var j = 0; j < 10; j++){
 						gambi.elementosCenario.push(SpriteFactory().newSprite("Inv11010", aux[i].x, aux[i].y + j*h*aux[i].escala, aux[i].escala));
+					}
+				}
+				else if(aux[i].tipo.indexOf("Inv210010") !== -1){
+					var w = SpriteFactory().newSprite("Inv21010", aux[i].x, aux[i].y, aux[i].escala).w
+					for (var j = 0; j < 10; j++){
+						gambi.elementosCenario.push(SpriteFactory().newSprite("Inv21010", aux[i].x + j*w*aux[i].escala, aux[i].y, aux[i].escala));
+					}
+				}
+				else if(aux[i].tipo.indexOf("Inv210100") !== -1){
+					var h = SpriteFactory().newSprite("Inv21010", aux[i].x, aux[i].y, aux[i].escala).h
+					for (var j = 0; j < 10; j++){
+						gambi.elementosCenario.push(SpriteFactory().newSprite("Inv21010", aux[i].x, aux[i].y + j*h*aux[i].escala, aux[i].escala));
 					}
 				}
 				else
@@ -383,9 +393,9 @@ Fase1.prototype.atualiza = function(){
 	}
 };
 Fase1.prototype.proxFase = function(){
-	Jogo().faseAtual = "Menu";
-	//salvaFase("Fase2");
-	Jogo().fase = FaseFactory().newFase("Menu");
+	Jogo().faseAtual = "Fase2";
+	salvaFase("Fase2");
+	Jogo().fase = FaseFactory().newFase("Fase2");
 	Jogo().fase.atualiza();
 };
 
@@ -397,16 +407,28 @@ function Fase2 (canvas){
 	//Construtor de Fase2
 	Fase.prototype.construtor.call(this, canvas);
 	Fase.prototype.load.call(this, "Fase2");
+	this.tocando = "";
 };
 //Atualiza os elementos especificos da Fase
 Fase2.prototype.atualiza = function(){
-
+	if(this.tocando === ""){
+		Som().stopAllMusic();
+		Som().playMusic("Fase2Intro");
+		this.tocando = "Intro";
+		viewport.x = 0;
+		viewport.y = 0;
+	}
+	else if(this.tocando === "Intro" && Som().music["Fase2Intro"].ended){
+		this.tocando = "Loop";
+		Som().music["Fase2Loop"].loop = true;
+		Som().playMusic("Fase2Loop");
+	}
 	Fase.prototype.atualiza.call(this);
 };
 Fase2.prototype.proxFase = function(){
-	Jogo().faseAtual = "Fase3";
-	//salvaFase("Fase3");
-	Jogo().fase = FaseFactory().newFase("Fase3");
+	Jogo().faseAtual = "Menu";
+	salvaFase("Menu");
+	Jogo().fase = FaseFactory().newFase("Menu");
 	Jogo().fase.atualiza();
 };
 
@@ -426,7 +448,7 @@ Fase3.prototype.atualiza = function(){
 };
 Fase3.prototype.proxFase = function(){
 	Jogo().faseAtual = "Fase4";
-	//salvaFase("Fase4");
+	salvaFase("Fase4");
 	Jogo().fase = FaseFactory().newFase("Fase4");
 	Jogo().fase.atualiza();
 };
@@ -447,7 +469,7 @@ Fase4.prototype.atualiza = function(){
 };
 Fase4.prototype.proxFase = function(){
 	Jogo().faseAtual = "Fase5";
-	//salvaFase("Fase5");
+	salvaFase("Fase5");
 	Jogo().fase = FaseFactory().newFase("Fase5");
 	Jogo().fase.atualiza();
 };
@@ -468,7 +490,7 @@ Fase5.prototype.atualiza = function(){
 };
 Fase5.prototype.proxFase = function(){
 	Jogo().faseAtual = "Menu";
-	//salvaFase("Fase1");
+	salvaFase("Fase1");
 	Jogo().fase = FaseFactory().newFase("Menu");
 	Jogo().fase.atualiza();
 };

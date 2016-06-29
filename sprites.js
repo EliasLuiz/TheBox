@@ -26,6 +26,8 @@ function Sprite(){
 	this.moveCamera = false;
 	//Diz se sprite deve ser desenhado ou nao
 	this.visivel = true;
+	
+	this.spriteAtual = { "animacao": "idle", "frame": 0 };
 };
 //Carrega sprites a partir de arquivo
 Sprite.prototype.load = function(canvas, filename, onload){
@@ -43,6 +45,7 @@ Sprite.prototype.load = function(canvas, filename, onload){
 		gambi.imagem.onload = SpriteFactory().loading;
 	}
 	LoadJSON(filename, __loadsprite__);
+	//__loadsprite__(JSONS[filename]);
 	//</Javascript eh um trem muito louco>
 
 	this.spriteAtual = { "animacao": "idle", "frame": 0 };
@@ -77,6 +80,7 @@ Sprite.prototype.dano = function(direcao){
 };
 //Retorna as dimensoes atuais do objeto
 Sprite.prototype.getPosAtual = function(){
+	var x = 1;
 	return {
 		x: this.pos.x,
 		y: this.pos.y,
@@ -557,7 +561,7 @@ Estalactite.prototype = new Background();
 Estalactite.prototype.constructor = Estalactite;
 function Estalactite(canvas, onload) {
 	Sprite.prototype.load.call(this, canvas, "Estalactite", onload);
-	this.vel = { "x": 1, "y": 1 };
+	this.vel = { "x": 0, "y": 0 };
 };
 
 ////////////////////////////////////////////////////////////////
@@ -566,7 +570,7 @@ Estalagmite.prototype = new Background();
 Estalagmite.prototype.constructor = Estalagmite;
 function Estalagmite(canvas, onload) {
 	Sprite.prototype.load.call(this, canvas, "Estalagmite", onload);
-	this.vel = { "x": 1, "y": 1 };
+	this.vel = { "x": 0, "y": 0 };
 };
 
 
@@ -761,19 +765,20 @@ InvInv1010.prototype.getPosAtual = function(){
 		w: this.w * this.altura
 	};
 }
-InvInv1010.prototype.desenha = function(){}
+//InvInv1010.prototype.desenha = function(){}
 
 ////////////////////////////////////////////////////////////////
 
-Portal1.prototype = new Sprite();
-Portal1.prototype.constructor = Portal1;
-function Portal1(canvas, onload) {
+Portal.prototype = new Sprite();
+Portal.prototype.constructor = Portal;
+function Portal(canvas, onload) {
 	Sprite.prototype.load.call(this, canvas, "Portal", onload);
 	this.spriteAtual = { "animacao": "idle", "frame": 0 };
 	this.incremento = 0;
 	this.auxCont = 0;
+	this.musica = "";
 };
-Portal1.prototype.getPosAtual = function(){
+Portal.prototype.getPosAtual = function(){
 	this.h = this.animacoes["idle"].h[0] * this.altura;
 	this.w = this.animacoes["idle"].w[0] * this.altura;
 	return {
@@ -783,7 +788,7 @@ Portal1.prototype.getPosAtual = function(){
 		w: this.w
 	};
 }
-Portal1.prototype.atualiza = function(){
+Portal.prototype.atualiza = function(){
 	this.colisao = {
 		"dir": false,
 		"esq": false,
@@ -803,7 +808,7 @@ Portal1.prototype.atualiza = function(){
 		if(this.spriteAtual.frame === 0){
 			this.incremento = 1;
 			Som().stopAllMusic();
-			Som().playMusic("Fase1End");
+			Som().playMusic(this.musica);
 		}
 		//Desfaz movimento do personagem
 		Jogo().fase.principal.vel.x = 0;
@@ -828,6 +833,24 @@ Portal1.prototype.atualiza = function(){
 	if(this.auxCont === 0)
 		this.spriteAtual.frame += this.incremento;
 }
+
+////////////////////////////////////////////////////////////////
+
+Portal1.prototype = new Portal();
+Portal1.prototype.constructor = Portal1;
+function Portal1(canvas, onload) {
+	Portal.prototype.constructor.call(this, canvas, onload);
+	this.musica = "Fase1End";
+};
+
+////////////////////////////////////////////////////////////////
+
+Portal2.prototype = new Portal();
+Portal2.prototype.constructor = Portal2;
+function Portal2(canvas, onload) {
+	Portal.prototype.constructor.call(this, canvas, onload);
+	this.musica = "Fase2End";
+};
 
 
 
@@ -932,6 +955,9 @@ SpritePrincipal.prototype.colisaoCima = function(){			this.colisao["cim"] = true
 SpritePrincipal.prototype.colisaoBaixo = function(){ 		this.colisao["bxo"] = true; };
 //Atualiza o estado do personagem
 SpritePrincipal.prototype.atualiza = function(){
+	if(!(this.spriteAtual.animacao.endsWith("Dir") || this.spriteAtual.animacao.endsWith("Esq")))
+		this.spriteAtual.animacao += this.lado;
+
 	//Se estiver livre
 	if(!this.colisao["bxo"]){
 		this.vel.y += gravidade * this.altura;
@@ -940,7 +966,7 @@ SpritePrincipal.prototype.atualiza = function(){
 		else
 			this.vel.y = this.vel.y < - velocidadeTerminal ? - velocidadeTerminal : this.vel.y;
 		if(this.vel.y <= 0 && this.spriteAtual.animacao !== ("falling" + this.lado)){
-			this.spriteAtual.animacao = "falling";
+			this.spriteAtual.animacao = "falling" + this.lado;
 			this.spriteAtual.frame = -1;		
 		}
 	}
@@ -951,7 +977,7 @@ SpritePrincipal.prototype.atualiza = function(){
 		if(this.acao["cim"]){			
 			this.acao["cim"] = false;
 			this.vel.y = this.acc.y * this.altura;
-			this.spriteAtual.animacao = "jumping";
+			this.spriteAtual.animacao = "jumping" + this.lado;
 			Som().playSfx("MarioJump");
 			this.spriteAtual.frame = -1;
 		}
@@ -962,7 +988,7 @@ SpritePrincipal.prototype.atualiza = function(){
 				if(!this.colisao["dir"]){
 					this.vel.x = this.acc.x * this.altura;
 					if(this.spriteAtual.animacao !== ("walking" + this.lado)){
-						this.spriteAtual.animacao = "walking";
+						this.spriteAtual.animacao = "walking" + this.lado;
 						this.spriteAtual.frame = 0;
 					}
 				}
@@ -973,7 +999,7 @@ SpritePrincipal.prototype.atualiza = function(){
 				if(!this.colisao["esq"]){
 					this.vel.x = -this.acc.x * this.altura;
 					if(this.spriteAtual.animacao !== ("walking" + this.lado)){
-						this.spriteAtual.animacao = "walking";
+						this.spriteAtual.animacao = "walking" + this.lado;
 						this.spriteAtual.frame = 0;
 					}
 				}
@@ -982,7 +1008,7 @@ SpritePrincipal.prototype.atualiza = function(){
 			else if(this.spriteAtual.animacao !== ("idle" + this.lado)){
 				this.vel.x = 0;
 				this.vel.x = 0;
-				this.spriteAtual.animacao = "idle";
+				this.spriteAtual.animacao = "idle" + this.lado;
 				this.spriteAtual.frame = 0;
 			}
 		}
@@ -1199,6 +1225,8 @@ function SpriteFactory(canvas){
 				copia = this.copiaProfunda(this.sprites.InvInv1010);break;
 			case "Portal1":
 				copia = this.copiaProfunda(this.sprites.Portal1);break;
+			case "Portal2":
+				copia = this.copiaProfunda(this.sprites.Portal2);break;
 			case "Inimigo201":
 				copia = this.copiaProfunda(this.sprites.Inimigo201);break;
 			case "SpritePrincipal01":
@@ -1239,6 +1267,7 @@ function SpriteFactory(canvas){
 	this.sprites.Inv21010 = new Inv21010(canvas, this.loading);
 
 	this.sprites.InvInv1010 = new InvInv1010(canvas, this.loading);
+	this.sprites.Portal2 = new Portal2(canvas, this.loading);
 	this.sprites.Portal1 = new Portal1(canvas, this.loading);
 	///////////////////////////////////////////////////////////////////////
 	this.sprites.Inimigo201 = new Inimigo201(canvas, this.loading);

@@ -8,8 +8,8 @@ JSONS["Fase2"] = {
     "cenario": [
         {
             "tipo": "Cenario201",
-            "x": 0,
-            "y": 0,
+            "x": -300,
+            "y": -300,
             "escala": 1
         },
     ],
@@ -322,14 +322,14 @@ JSONS["Fase2"] = {
     	
     	
     	{
-            "tipo": "Inv10010",
+            "tipo": "Inv210010",
             "x": 2480,
             "y": 320,
             "escala": 0.4
         },	
     	
     		{
-            "tipo": "Inv10010",
+            "tipo": "Inv210010",
             "x": 2880,
             "y": 320,
             "escala": 0.4
@@ -410,31 +410,31 @@ JSONS["Fase2"] = {
     	
     		
     		{
-            "tipo": "Inv10010",
+            "tipo": "Inv210010",
             "x": 2480,
             "y": 1280,
             "escala": 0.4
         },	
     		{
-            "tipo": "Inv10010",
+            "tipo": "Inv210010",
             "x": 2880,
             "y": 1280,
             "escala": 0.4
         },		
     		{
-            "tipo": "Inv10010",
+            "tipo": "Inv210010",
             "x": 3280,
             "y": 1280,
             "escala": 0.4
         },		
     			{
-            "tipo": "Inv10010",
+            "tipo": "Inv210010",
             "x": 3680,
             "y": 1280,
             "escala": 0.4
         },		
     		{
-            "tipo": "Inv10010",
+            "tipo": "Inv210010",
             "x": 4080,
             "y": 1280,
             "escala": 0.4
@@ -624,7 +624,7 @@ JSONS["Fase2"] = {
     	
     	
     			{
-            "tipo": "Inv10010",
+            "tipo": "Inv210010",
             "x": 2480,
             "y": 480,
             "escala": 0.4
@@ -667,7 +667,7 @@ JSONS["Fase2"] = {
         },	
     	
     	{
-            "tipo": "Inv10010",
+            "tipo": "Inv210010",
             "x": 3360,
             "y": 480,
             "escala": 0.4 
@@ -1125,13 +1125,13 @@ JSONS["Fase2"] = {
     	
     	
     	{
-    	        "tipo": "Inv10010",
+    	        "tipo": "Inv210010",
             "x": 2800,
             "y": 800,
             "escala": 0.4 
         },
     		{
-    	        "tipo": "Inv10010",
+    	        "tipo": "Inv210010",
             "x": 3040,
             "y": 800,
             "escala": 0.4 
@@ -1176,15 +1176,21 @@ JSONS["Fase2"] = {
             "escala": 0.4 
         },
         {
-            "tipo": "Inv10010",
+            "tipo": "Inv210010",
             "x": 2680,
             "y": 960,
             "escala": 0.4 
-        }
+        },
+    {
+        "tipo": "InvInv1010",
+        "x": 1080,
+        "y": 100,
+        "escala": 1
+    }
     ],
     "inimigos": [
         {
-            "tipo": "Portal1",
+            "tipo": "Portal2",
             "x": 0,
             "y": 200,
             "escala": 0.3
@@ -1192,8 +1198,8 @@ JSONS["Fase2"] = {
     ],
     "principal": {
         "tipo": "SpritePrincipal02",
-        "x": 1950,
-        "y": 200,
+        "x": 300,
+        "y": 300,
         "escala": 0.4
     },
     "frente": [
@@ -1201,12 +1207,12 @@ JSONS["Fase2"] = {
             "tipo": "Estalactite",
             "x": 0,
             "y": 4000,
-            "escala": 1
+            "escala": 0.5
         },
         {
             "tipo": "Estalagmite",
             "x": 0,
-            "y": 0,
+            "y": -400,
             "escala": 1
         }
     ],
