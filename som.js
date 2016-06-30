@@ -14,6 +14,7 @@ function Som(){
         urls: ['music/musicas.mp3', 'music/musicas.wav', 'music/musicas.ogg'],
         //loop: true,
         volume: 0.5,
+		buffer: true,
         sprite: {
 			Menu: [0, 1000,true],//início em milisegundos, duração em milisegundos, loop(true or false)
             Fase1Intro: [1000, 1000],//ínicio,duração
@@ -33,6 +34,7 @@ function Som(){
 	this.efeitos = new Howl({//http://howlerjs.com/
         urls: ['music/efeitos.mp3', 'music/efeitos.wav', 'music/efeitos.ogg'],
 		volume: 0.5,
+		buffer: true,
         sprite: {
             jump: [0, 500],
             MenuHover: [500, 600],

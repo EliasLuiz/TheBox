@@ -323,7 +323,7 @@ Menu.prototype.atualiza = function(){
 	}
 	if(this.tocando === ""){	
 		Som().stopAllMusic();		
-		Som().musicas.play('menu');
+		Som().musicas.play('Menu');
 		//Som().stopAllMusic();
 		//Som().musicas.loop = true;		
 		//Som().playMusic("Menu");
