@@ -50,8 +50,8 @@ Jogo.prototype.load = function(){
 	this.restart();
 };
 Jogo.prototype.restart = function(x, y){
-	Som().stopAllMusic();
-	Som().stopAllSfx();
+	Som().stopAllMusic();	
+	//Som().stopAllSfx();	
 	this.fase = FaseFactory().newFase(this.faseAtual);
 	viewport.x = viewport.y = 0;
 	this.fase.atualiza();
@@ -321,10 +321,12 @@ Menu.prototype.atualiza = function(){
 		document.getElementById("canvas").addEventListener('mousemove', hover, false);
 		this.addHover = true;
 	}
-	if(this.tocando === ""){
-		Som().stopAllMusic();
-		Som().music["Menu"].loop = true;
-		Som().playMusic("Menu");
+	if(this.tocando === ""){	
+		Som().stopAllMusic();		
+		Som().musicas.play('Menu');
+		//Som().stopAllMusic();
+		//Som().musicas.loop = true;		
+		//Som().playMusic("Menu");
 		this.tocando = "Menu";
 		viewport.x = 0;
 		viewport.y = 0;
@@ -383,15 +385,25 @@ Fase1.prototype.atualiza = function(){
 	Fase.prototype.atualiza.call(this);
 	if(this.tocando === ""){
 		Som().stopAllMusic();
-		Som().playMusic("Fase1Intro");
+		Som().musicas.play('Fase1Intro');
+		//Som().stopAllMusic();
+		//Som().playMusic("Fase1Intro");
 		this.tocando = "Intro";
 		this.principal.vel.x = 0; //Correcao de bug
 	}
-	else if(this.tocando === "Intro" && Som().music["Fase1Intro"].ended){
-		this.tocando = "Loop";
-		Som().music["Fase1Loop"].loop = true;
-		Som().playMusic("Fase1Loop");
+	
+	else if(this.tocando === "Intro"){
+		Som().musicas.on('end', function(){
+			this.tocando = "Loop";
+			Som().musicas.play('Fase1Loop');
+		});
+		//nao sei se isso vai funcionar kkk
 	}
+	// else if(this.tocando === "Intro" && Som().music["Fase1Intro"].ended){
+		// this.tocando = "Loop";
+		// Som().music["Fase1Loop"].loop = true;
+		// Som().playMusic("Fase1Loop");
+	// }
 };
 Fase1.prototype.proxFase = function(){
 	Jogo().faseAtual = "Fase2";
@@ -414,16 +426,22 @@ function Fase2 (canvas){
 Fase2.prototype.atualiza = function(){
 	if(this.tocando === ""){
 		Som().stopAllMusic();
-		Som().playMusic("Fase2Intro");
+		Som().musicas.play('Fase2Intro');
 		this.tocando = "Intro";
 		viewport.x = 0;
 		viewport.y = 0;
 	}
-	else if(this.tocando === "Intro" && Som().music["Fase2Intro"].ended){
-		this.tocando = "Loop";
-		Som().music["Fase2Loop"].loop = true;
-		Som().playMusic("Fase2Loop");
+	else if(this.tocando === "Intro"){
+		Som().musicas.on('end', function(){
+			this.tocando = "Loop";
+			Som().musicas.play('Fase2Loop');
+		});		
 	}
+	// else if(this.tocando === "Intro" && Som().music["Fase2Intro"].ended){
+		// this.tocando = "Loop";
+		// Som().music["Fase2Loop"].loop = true;
+		// Som().playMusic("Fase2Loop");
+	// }
 	Fase.prototype.atualiza.call(this);
 };
 Fase2.prototype.proxFase = function(){
@@ -441,10 +459,23 @@ function Fase3 (canvas){
 	//Construtor de Fase3
 	Fase.prototype.construtor.call(this, canvas);
 	Fase.prototype.load.call(this, "Fase3");
+	this.tocando = "";
 };
 //Atualiza os elementos especificos da Fase
 Fase3.prototype.atualiza = function(){
-
+	if(this.tocando === ""){
+		Som().stopAllMusic();
+		Som().musicas.play('Fase3Intro');
+		this.tocando = "Intro";
+		viewport.x = 0; //?
+		viewport.y = 0;
+	}
+	else if(this.tocando === "Intro"){
+		Som().musicas.on('end', function(){
+			this.tocando = "Loop";
+			Som().musicas.play('Fase3Loop');
+		});		
+	}
 	Fase.prototype.atualiza.call(this);
 };
 Fase3.prototype.proxFase = function(){
@@ -462,10 +493,23 @@ function Fase4 (canvas){
 	//Construtor de Fase4
 	Fase.prototype.construtor.call(this, canvas);
 	Fase.prototype.load.call(this, "Fase4");
+	this.tocando = "";
 };
 //Atualiza os elementos especificos da Fase
 Fase4.prototype.atualiza = function(){
-
+	if(this.tocando === ""){
+		Som().stopAllMusic();
+		Som().musicas.play('Fase4Intro');
+		this.tocando = "Intro";
+		viewport.x = 0; //?
+		viewport.y = 0;
+	}
+	else if(this.tocando === "Intro"){
+		Som().musicas.on('end', function(){
+			this.tocando = "Loop";
+			Som().musicas.play('Fase4Loop');
+		});		
+	}
 	Fase.prototype.atualiza.call(this);
 };
 Fase4.prototype.proxFase = function(){

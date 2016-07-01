@@ -371,17 +371,17 @@ BackgroundMenu.prototype.hover = function(x, y){
 		if (x >= 398 && x <= 629 &&
 			y >= 374 && y <= 475){
 			this.spriteAtual.frame = 1;
-			Som().playSfx("MenuHover");
+			Som().efeitos.play('MenuHover');
 		}
 		else if (x >= 145 && x <= 375 &&
 			y >= 374 && y <= 475){
 			this.spriteAtual.frame = 0;
-			Som().playSfx("MenuHover");
+			Som().efeitos.play('MenuHover');
 		}
 		else if (x >= 656 && x <= 886 &&
 			y >= 374 && y <= 475){
 			this.spriteAtual.frame = 2;
-			Som().playSfx("MenuHover");
+			Som().efeitos.play('MenuHover');
 		}
 	}
 	else if(this.spriteAtual.animacao === "play"){
@@ -397,11 +397,11 @@ BackgroundMenu.prototype.atualiza = function(){
 	if(this.spriteAtual.animacao === "idle"){
 		if(this.botao["dir"]){
 			this.spriteAtual.frame = this.spriteAtual.frame !== 2 ? this.spriteAtual.frame + 1 : 2;
-			Som().playSfx("MenuHover");
+			Som().efeitos.play('MenuHover');
 		}
 		else if(this.botao["esq"]){
 			this.spriteAtual.frame = this.spriteAtual.frame !== 0 ? this.spriteAtual.frame - 1 : 0;
-			Som().playSfx("MenuHover");
+			Som().efeitos.play('MenuHover');
 		}
 		if(this.botao["acao"]){
 			switch(this.spriteAtual.frame){
@@ -409,25 +409,27 @@ BackgroundMenu.prototype.atualiza = function(){
 				case 1: this.play();break;
 				case 2: this.toCreditos();break;
 			}
-			Som().playSfx("MenuClick");
+			Som().efeitos.play('MenuClick');
 		}
 	}
 	else if(this.spriteAtual.animacao === "play"){
 		if(this.botao["dir"]){
 			this.spriteAtual.frame = 1;
-			Som().playSfx("MenuHover");
+			Som().efeitos.play('MenuHover');
 		}
 		if(this.botao["esq"]){
 			this.spriteAtual.frame = 0;
-			Som().playSfx("MenuHover");
+			Som().efeitos.play('MenuHover');
 		}
 		if(this.botao["acao"]){
 			switch(this.spriteAtual.frame){
 				case 0: this.newGame();break;
 				case 1: this.continue();break;
 			}
-			Som().stopMusic("Menu");
-			Som().playSfx("MenuClick");
+			Som().musicas.stop('Menu');
+			Som().efeitos.play('MenuClick');
+			// Som().stopMusic("Menu");
+			// Som().playSfx("MenuClick");
 		}
 	}
 	if(this.botao["voltar"]){
@@ -460,7 +462,7 @@ BackgroundMenu.prototype.toIdle = function(){
 };
 BackgroundMenu.prototype.toOpcoes = function(){
 	this.spriteAtual.animacao = "opcoes";
-	this.spriteAtual.frame = Som().volume * 2;
+	this.spriteAtual.frame = Som().musicas.volume * 2;
 };
 BackgroundMenu.prototype.toCreditos = function(){
 	this.spriteAtual.animacao = "creditos";
@@ -477,11 +479,12 @@ BackgroundMenu.prototype.continue = function(){
 	Jogo().load();
 };
 BackgroundMenu.prototype.volume = function(volume){
-	if(volume == Som().volume)
+	if(volume == Som().musicas.volume)
 		return;
 	this.spriteAtual.frame = volume * 2;
-	Som().volume = volume;
-	Som().music["Menu"].volume = volume;
+	Som().musicas.volume = volume;
+	Som().efeitos.volume = volume;
+	Som().musicas.volume('Menu') = volume;//nao entendi se é isso mesmo
 };
 
 
@@ -808,7 +811,8 @@ Portal.prototype.atualiza = function(){
 		if(this.spriteAtual.frame === 0){
 			this.incremento = 1;
 			Som().stopAllMusic();
-			Som().playMusic(this.musica);
+			//Som().playMusic(this.musica);
+			Som().musicas.play(this.musica);
 		}
 		//Desfaz movimento do personagem
 		Jogo().fase.principal.vel.x = 0;
@@ -980,7 +984,8 @@ SpritePrincipal.prototype.atualiza = function(){
 			this.acao["cim"] = false;
 			this.vel.y = this.acc.y * this.altura;
 			this.spriteAtual.animacao = "jumping" + this.lado;
-			Som().playSfx("MarioJump");
+			//Som().playSfx("MarioJump");
+			Som().efeitos.play('MarioJump');
 			this.spriteAtual.frame = -1;
 		}
 		else{
