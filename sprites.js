@@ -781,6 +781,7 @@ function Portal(canvas, onload) {
 	this.incremento = 0;
 	this.auxCont = 0;
 	this.musica = "";
+	this.mod = 6;
 	this.h = this.animacoes["idle"].h[0];
 	this.w = this.animacoes["idle"].w[0];
 };
@@ -834,7 +835,7 @@ Portal.prototype.atualiza = function(){
 			"spa": false
 		};
 	}
-	this.auxCont = (this.auxCont + 1) % 6;
+	this.auxCont = (this.auxCont + 1) % this.mod;
 	if(this.auxCont === 0)
 		this.spriteAtual.frame += this.incremento;
 }
@@ -856,6 +857,7 @@ Portal2.prototype.constructor = Portal2;
 function Portal2(canvas, onload) {
 	Portal.prototype.constructor.call(this, canvas, onload);
 	this.musica = "Fase2End";
+	this.mod = 9;
 };
 Portal2.prototype.atualiza = Portal.prototype.atualiza;
 

@@ -30,10 +30,10 @@ function Som(){
 		volume: 0.5,
 		buffer: true,
         sprite: {
-            jump: [0, 500],
-            MenuHover: [500, 600],
-            MenuClick: [1100, 2200],
-            acao: [3300, 1000]
+            jump: [0, 801],
+            MenuHover: [0, 343],
+            MenuClick: [500, 1231],
+            acao: [2000, 801]
         
         }
     });
