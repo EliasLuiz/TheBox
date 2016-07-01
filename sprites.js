@@ -1002,7 +1002,7 @@ SpritePrincipal.prototype.atualiza = function(){
 			this.vel.y = this.acc.y * this.altura;
 			this.spriteAtual.animacao = "jumping" + this.lado;
 			//Som().playSfx("MarioJump");
-			Som().efeitos.play('MarioJump');
+			Som().efeitos.play('jump');
 			this.spriteAtual.frame = -1;
 		}
 		else{

@@ -26,15 +26,13 @@ function Som(){
         },		
     });
 	this.efeitos = new Howl({//http://howlerjs.com/
-        urls: ['music/efeitos.mp3', 'music/efeitos.ogg'],
+        urls: ['sfx/efeitos.mp3', 'sfx/efeitos.ogg'],
 		volume: 0.5,
 		buffer: true,
         sprite: {
-            jump: [0, 801],
+            jump: [2000, 801],
             MenuHover: [0, 343],
-            MenuClick: [500, 1231],
-            acao: [2000, 801]
-        
+            MenuClick: [500, 1231]
         }
     });
 	//definicao dos metodos de som
