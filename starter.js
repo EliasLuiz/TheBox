@@ -48,7 +48,6 @@ function doKeyDown(e) {
         case 40: Jogo().botaoBaixo(true);break; 
         case 13:                                //enter
 		case 32: Jogo().botaoAcao(true);break;  //space
-		case 80: Jogo().botaoPause(true);break; //p
         case 8:                                 //backspace
 		case 27: Jogo().botaoVoltar(true);break;//esc
     }
@@ -62,7 +61,7 @@ function doKeyUp(e) {
         case 40: Jogo().botaoBaixo(false);break; 
         case 13:                                 //enter
 		case 32: Jogo().botaoAcao(false);break;  //space	
-        case 80: Jogo().botaoPause(false);break; //p
+        case 80: Jogo().botaoPause();break; //p
         case 8:                                  //backspace
         case 27: Jogo().botaoVoltar(false);break;//esc
     }

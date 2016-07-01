@@ -2,7 +2,7 @@ JSONS["Fase2"] = {
     "planodefundo": {
         "tipo": "Background02",
         "x": 0,
-        "y": 0,
+        "y": 200,
         "escala": 1
     },
     "cenario": [
@@ -1190,6 +1190,12 @@ JSONS["Fase2"] = {
     ],
     "inimigos": [
         {
+            "tipo": "Inimigo201",
+            "x": 100,
+            "y": 200,
+            "escala": 0.7
+        },
+        {
             "tipo": "Portal2",
             "x": 0,
             "y": 200,
@@ -1198,7 +1204,7 @@ JSONS["Fase2"] = {
     ],
     "principal": {
         "tipo": "SpritePrincipal02",
-        "x": 300,
+        "x": 450,
         "y": 300,
         "escala": 0.4
     },

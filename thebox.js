@@ -39,7 +39,7 @@ Jogo.prototype.botaoBaixo = function(estado){
 Jogo.prototype.botaoAcao = function(estado){
 	this.fase.botaoAcao(estado);
 };
-Jogo.prototype.botaoPause = function(estado){
+Jogo.prototype.botaoPause = function(){
 	this.pausado = !this.pausado;
 };
 Jogo.prototype.botaoVoltar = function(estado){
@@ -68,8 +68,10 @@ Jogo.prototype.atualiza = function(){
 	var now = +new Date();
 	//$('#fps').html((1000/(now-this.now)).toFixed(0) + " fps");
 	canvas.clearRect(0, 0, viewport.w, viewport.h);
+	if(!this.pausado){
+		this.fase.atualiza();
+	}
 	this.fase.desenha();
-	this.fase.atualiza();
 	
 	if(intervalo==60 || intervalo==0){		
 		fps=(1000/(now-this.now)).toFixed(0);
@@ -208,8 +210,8 @@ Fase.prototype.atualiza = function(){
 		mudancaViewport.x += aux.x;
 		mudancaViewport.y += aux.y;
 		for (var j = 0; j < this.inimigos.length; j++) {
-			if(!this.inimigos[j].isVisivel())
-				continue;
+			//if(!this.inimigos[j].isVisivel())
+			//	continue;
 			aux = Colisao(this.elementosCenario[i], this.inimigos[j]);
 		}
 	}
@@ -221,11 +223,11 @@ Fase.prototype.atualiza = function(){
 		if(this.elementosCenario[i].isVisivel()){
 			this.elementosCenario[i].atualiza();
 		}
-	}
+	}	
 	var destruidos = [];
 	for (var i = 0; i < this.inimigos.length; i++) {
+		this.inimigos[i].atualiza();
 		if(this.inimigos[i].isVisivel()){
-			this.inimigos[i].atualiza();
 			if(this.inimigos[i].destruido)
 				destruidos.push(i);
 		}
@@ -429,7 +431,7 @@ Fase2.prototype.atualiza = function(){
 		Som().musicas.play('Fase2Intro');
 		this.tocando = "Intro";
 		viewport.x = 0;
-		viewport.y = 0;
+		viewport.y = 200;
 	}
 	else if(this.tocando === "Intro"){
 		Som().musicas.on('end', function(){

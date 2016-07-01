@@ -80,7 +80,6 @@ Sprite.prototype.dano = function(direcao){
 };
 //Retorna as dimensoes atuais do objeto
 Sprite.prototype.getPosAtual = function(){
-	var x = 1;
 	return {
 		x: this.pos.x,
 		y: this.pos.y,
@@ -462,7 +461,8 @@ BackgroundMenu.prototype.toIdle = function(){
 };
 BackgroundMenu.prototype.toOpcoes = function(){
 	this.spriteAtual.animacao = "opcoes";
-	this.spriteAtual.frame = Som().musicas.volume * 2;
+	//this.spriteAtual.frame = Som().musicas.volume * 2;
+	this.spriteAtual.frame = Som().getVolume() * 2;
 };
 BackgroundMenu.prototype.toCreditos = function(){
 	this.spriteAtual.animacao = "creditos";
@@ -482,9 +482,10 @@ BackgroundMenu.prototype.volume = function(volume){
 	if(volume == Som().musicas.volume)
 		return;
 	this.spriteAtual.frame = volume * 2;
-	Som().musicas.volume = volume;
-	Som().efeitos.volume = volume;
-	Som().musicas.volume('Menu') = volume;//nao entendi se é isso mesmo
+	Som().setVolume(volume);
+	//Som().musicas.volume = volume;
+	//Som().efeitos.volume = volume;
+	//Som().musicas.volume('Menu') = volume;//nao entendi se é isso mesmo
 };
 
 
@@ -870,8 +871,9 @@ Portal2.prototype.atualiza = Portal.prototype.atualiza;
 
 Inimigo201.prototype = new Sprite();
 Inimigo201.prototype.constructor = Inimigo201;
-function Inimigo201() {
-	this.acc = {x: 5, y: 20};
+function Inimigo201(canvas, onload) {
+	Sprite.prototype.load.call(this, canvas, "Inimigo201", onload);
+	this.acc = {x: 15, y: 20};
 	this.lado = "Dir";
 	this.spriteAtual = { "animacao": "idleDir", "frame": 0 };
 	this.acao = {
@@ -895,12 +897,9 @@ Inimigo201.prototype.atualiza = function(){
 		else
 			this.vel.y = this.vel.y < - velocidadeTerminal ? - velocidadeTerminal : this.vel.y;
 		if(this.vel.y <= 0 && this.spriteAtual.animacao !== ("falling" + this.lado)){
-			this.spriteAtual.animacao = "falling";
+			this.spriteAtual.animacao = "falling" + this.lado;
 			this.spriteAtual.frame = -1;		
 		}
-	}
-	else if(this.colisao["dir"] || this.colisao["esq"]){
-		this.destruido = true;
 	}
 	//Se estiver escorado no chao
 	else{
@@ -917,9 +916,25 @@ Inimigo201.prototype.atualiza = function(){
 			this.vel.x = -this.vel.x
 		}
 	}
+	this.colisao = {
+		"dir": false,
+		"esq": false,
+		"cim": false,
+		"bxo": false
+	};
 	this.pos.x += this.vel.x;
 	this.pos.y += this.vel.y;
-	this.spriteAtual.frame = (this.spriteAtual.frame + 1) % (this.animacoes[this.spriteAtual.animacao].x.length - 1);
+	this.spriteAtual.frame = (this.spriteAtual.frame + 1) % (this.animacoes[this.spriteAtual.animacao].x.length);
+	Colisao(this, Jogo().fase.principal);
+	if(this.colisao["dir"] || this.colisao["esq"]){
+		this.destruido = true;
+	}
+	this.colisao = {
+		"dir": false,
+		"esq": false,
+		"cim": false,
+		"bxo": false
+	};
 }
 
 

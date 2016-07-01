@@ -11,28 +11,22 @@ function Som(){
 	}
 	arguments.callee._singletonInstance = this;
 	this.musicas = new Howl({//http://howlerjs.com/
-        urls: ['music/musicas.mp3', 'music/musicas.wav', 'music/musicas.ogg'],
+        urls: ['music/musicas.mp3', 'music/musicas.ogg'],
         //loop: true,
         volume: 0.5,
 		buffer: true,
         sprite: {
-			Menu: [0, 1000,true],//início em milisegundos, duração em milisegundos, loop(true or false)
-            Fase1Intro: [1000, 1000],//ínicio,duração
-            Fase1Loop: [2000, 1000, true],//pode tirar o loop daqui e colocar só na hora do play tb
-			Fase1End: [1000, 1000],
-			Fase2Intro: [1000, 1000],
-			Fase2Loop: [2000, 1000, true],
-			Fase2End: [1000, 1000],
-			Fase3Intro: [1000, 1000],
-			Fase3Loop: [2000, 1000, true],
-			Fase3End: [1000, 1000],
-			Fase4Intro: [1000, 1000],
-			Fase4Loop: [2000, 1000, true],
-			Fase4End: [1000, 1000],
+			Menu: [0, 97242, true],//início em milisegundos, duração em milisegundos, loop(true or false)
+            Fase1Intro: [100000, 44537],//ínicio,duração
+            Fase1Loop: [145000, 116340, true],//pode tirar o loop daqui e colocar só na hora do play tb
+			Fase1End: [262000, 4934],
+			Fase2Intro: [267000, 118154],
+			Fase2Loop: [385500, 132120, true],
+			Fase2End: [518000, 7280]
         },		
     });
 	this.efeitos = new Howl({//http://howlerjs.com/
-        urls: ['music/efeitos.mp3', 'music/efeitos.wav', 'music/efeitos.ogg'],
+        urls: ['music/efeitos.mp3', 'music/efeitos.ogg'],
 		volume: 0.5,
 		buffer: true,
         sprite: {
@@ -99,7 +93,15 @@ function Som(){
 	// this.music = {};
 	// this.sfx = {};
 
-	// this.volume = 0.5;
+	this.volume = 0.5;
+	this.setVolume = function(vol){
+		this.musicas.volume = vol;
+		this.efeitos.volume = vol;
+		this.volume = vol;
+	}
+	this.getVolume = function(){
+		return this.volume;
+	}
 
 	// for(var i = 0; i < this.musicNames.length; i++){
 		// this.music[this.musicNames[i].nome] = this.carrega(this.musicNames[i].filename);
