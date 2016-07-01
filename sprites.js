@@ -725,6 +725,72 @@ Chao210100.prototype.getPosAtual = function(){
 
 ////////////////////////////////////////////////////////////////
 
+Plataforma.prototype = new Sprite();
+Plataforma.prototype.constructor = Plataforma;
+function Plataforma(canvas, onload) {
+	//Sprite.prototype.load.call(this, canvas, "Plataforma", onload);
+	this.vel = {"x": 0, "y": 0};
+	this.posOriginal = {"x": this.pos.x, "y": this.pos.y};
+};
+Plataforma.prototype.atualiza = function(){
+	if(this.colisao["cma"]){
+		this.pos.x += this.vel.x;
+		this.pos.y += this.vel.y;
+	}
+	else{
+		if(this.posOriginal.x !== this.pos.x)
+			this.pos.x -= this.vel.x;
+		if(this.posOriginal.y !== this.pos.y)
+			this.pos.y -= this.vel.y;
+	}
+	this.colisao = {
+		"dir": false,
+		"esq": false,
+		"cim": false,
+		"bxo": false
+	};
+}
+
+////////////////////////////////////////////////////////////////
+
+PlatTop21010.prototype = new Plataforma();
+PlatTop21010.prototype.constructor = PlatTop21010;
+function PlatTop21010(canvas, onload) {
+	Sprite.prototype.load.call(this, canvas, "Chao21010", onload);
+	this.vel = {"x": 0, "y": 2};
+	this.h = this.animacoes["idle"].h * this.altura;
+	this.w = this.animacoes["idle"].w * this.altura;
+};
+PlatTop21010.prototype.getPosAtual = function(){
+	return {
+		x: this.pos.x,
+		y: this.pos.y,
+		h: this.h,
+		w: this.w
+	};
+};
+
+////////////////////////////////////////////////////////////////
+
+PlatDir21010.prototype = new Plataforma();
+PlatDir21010.prototype.constructor = PlatDir21010;
+function PlatDir21010(canvas, onload) {
+	Sprite.prototype.load.call(this, canvas, "Chao21010", onload);
+	this.vel = {"x": 2, "y": 0};
+	this.h = this.animacoes["idle"].h * this.altura;
+	this.w = this.animacoes["idle"].w * this.altura;
+};
+PlatDir21010.prototype.getPosAtual = function(){
+	return {
+		x: this.pos.x,
+		y: this.pos.y,
+		h: this.h,
+		w: this.w
+	};
+};
+
+////////////////////////////////////////////////////////////////
+
 Inv21010.prototype = new Sprite();
 Inv21010.prototype.constructor = Inv21010;
 function Inv21010(canvas, onload) {
@@ -769,7 +835,7 @@ InvInv1010.prototype.getPosAtual = function(){
 		w: this.w * this.altura
 	};
 }
-//InvInv1010.prototype.desenha = function(){}
+InvInv1010.prototype.desenha = function(){}
 
 ////////////////////////////////////////////////////////////////
 
@@ -875,7 +941,7 @@ Inimigo201.prototype = new Sprite();
 Inimigo201.prototype.constructor = Inimigo201;
 function Inimigo201(canvas, onload) {
 	Sprite.prototype.load.call(this, canvas, "Inimigo201", onload);
-	this.acc = {x: 15, y: 20};
+	this.acc = {x: 5, y: 21};
 	this.lado = "Dir";
 	this.spriteAtual = { "animacao": "idleDir", "frame": 0 };
 	this.acao = {
@@ -889,9 +955,12 @@ function Inimigo201(canvas, onload) {
 	this.moveCamera = false;
 	this.classe = "Inimigo201";
 	this.destruido = false;
+	this.yOriginal = this.pos.y;
 };
 Inimigo201.prototype.atualiza = function(){
 	//Se estiver livre
+	if(!this.isVisivel())
+		return;
 	if(!this.colisao["bxo"]){
 		this.vel.y += gravidade * this.altura;
 		if(this.vel.y > 0)
@@ -927,9 +996,11 @@ Inimigo201.prototype.atualiza = function(){
 	this.pos.x += this.vel.x;
 	this.pos.y += this.vel.y;
 	this.spriteAtual.frame = (this.spriteAtual.frame + 1) % (this.animacoes[this.spriteAtual.animacao].x.length);
-	Colisao(this, Jogo().fase.principal);
-	if(this.colisao["dir"] || this.colisao["esq"]){
-		this.destruido = true;
+	if(Jogo().fase.principal != undefined){
+		Colisao(this, Jogo().fase.principal);
+		if(this.colisao["dir"] || this.colisao["esq"]){
+			this.destruido = true;
+		}
 	}
 	this.colisao = {
 		"dir": false,
@@ -937,6 +1008,30 @@ Inimigo201.prototype.atualiza = function(){
 		"cim": false,
 		"bxo": false
 	};
+}
+////////////////////////////////////////////////////////////////
+
+Inimigo202.prototype = new Sprite();
+Inimigo202.prototype.constructor = Inimigo202;
+function Inimigo202(canvas, onload) {
+	Sprite.prototype.load.call(this, canvas, "Inimigo201", onload);
+	this.acc = {x: 0, y: 0};
+	this.lado = "Dir";
+	this.spriteAtual = { "animacao": "idleDir", "frame": 0 };
+	this.acao = {
+		"dir": false,
+		"esq": false,
+		"cim": false,
+		"bxo": false,
+		"spa": false
+	};
+	this.movel = true;
+	this.moveCamera = false;
+	this.classe = "Inimigo202";
+	this.destruido = false;
+};
+
+Inimigo202.prototype.atualiza = function(){
 }
 
 
@@ -965,6 +1060,7 @@ function SpritePrincipal() {
 	this.movel = true;
 	this.moveCamera = true;
 	this.classe = "";
+	this.yMinimo = 0;
 };
 //Funcoes para acoes do personagem
 SpritePrincipal.prototype.botaoDireita = function(estado){ 	this.acao["dir"] = estado; };
@@ -1073,7 +1169,7 @@ SpritePrincipal.prototype.atualiza = function(){
 			"bxo": false
 		};
 		Colisao(this, inimigo);
-		if(inimigo.classe === "Inimigo201" && this.colisao["bxo"]){
+		if((inimigo.classe === "Inimigo201" || inimigo.classe === "Inimigo202") && this.colisao["bxo"]){
 			morreu = true;
 			break;
 		}
@@ -1095,7 +1191,7 @@ SpritePrincipal.prototype.atualiza = function(){
 	this.spriteAtual.frame = (this.spriteAtual.frame + 1) % (this.animacoes[this.spriteAtual.animacao].x.length - 1);
 
 	//Se morreu
-	if(morreu || this.pos.y + this.animacoes[this.spriteAtual.animacao].h[this.spriteAtual.frame] < 0){
+	if(morreu || this.pos.y + this.animacoes[this.spriteAtual.animacao].h[this.spriteAtual.frame] < this.yMinimo){
 		Jogo().fase.principal = SpriteFactory().newSprite(this.classe);
 		Jogo().restart();
 	}
@@ -1122,6 +1218,7 @@ function SpritePrincipal02(canvas, onload) {
 	SpritePrincipal.prototype.constructor.call(this, canvas);
 	this.classe = "SpritePrincipal02";
 	Sprite.prototype.load.call(this, canvas, "SpritePrincipal02", onload);
+	this.yMinimo = -1000;
 };
 SpritePrincipal02.prototype.atualiza = function(){
 	SpritePrincipal.prototype.atualiza.call(this);
@@ -1241,6 +1338,10 @@ function SpriteFactory(canvas){
 				copia = this.copiaProfunda(this.sprites.Chao210010);break;
 			case "Chao210100":
 				copia = this.copiaProfunda(this.sprites.Chao210100);break;
+			case "PlatTop21010":
+				copia = this.copiaProfunda(this.sprites.PlatTop21010);break;
+			case "PlatDir21010":
+				copia = this.copiaProfunda(this.sprites.PlatDir21010);break;
 			case "Inv11010":
 				copia = this.copiaProfunda(this.sprites.Inv11010);break;
 			case "Inv21010":
@@ -1253,12 +1354,14 @@ function SpriteFactory(canvas){
 				copia = this.copiaProfunda(this.sprites.Portal2);break;
 			case "Inimigo201":
 				copia = this.copiaProfunda(this.sprites.Inimigo201);break;
+			case "Inimigo202":
+				copia = this.copiaProfunda(this.sprites.Inimigo202);break;
 			case "SpritePrincipal01":
 				copia = this.copiaProfunda(this.sprites.SpritePrincipal01);break;
 			case "SpritePrincipal02":
 				copia = this.copiaProfunda(this.sprites.SpritePrincipal02);break;
 		}
-		if(copia.pos == undefined) 
+		if(copia == undefined) 
 			var x = 1+1;
 		copia.pos.x = x;
 		copia.pos.y = y;
@@ -1286,6 +1389,8 @@ function SpriteFactory(canvas){
 	this.sprites.Estalactite = new Estalactite(canvas, this.loading);
 	this.sprites.Estalagmite = new Estalagmite(canvas, this.loading);
 	this.sprites.Chao21010 = new Chao21010(canvas, this.loading);
+	this.sprites.PlatTop21010 = new PlatTop21010(canvas, this.loading);
+	this.sprites.PlatDir21010 = new PlatDir21010(canvas, this.loading);
 	this.sprites.Chao210010 = new Chao210010(canvas, this.loading);
 	this.sprites.Chao210100 = new Chao210100(canvas, this.loading);
 	this.sprites.Inv21010 = new Inv21010(canvas, this.loading);
@@ -1295,6 +1400,7 @@ function SpriteFactory(canvas){
 	this.sprites.Portal1 = new Portal1(canvas, this.loading);
 	///////////////////////////////////////////////////////////////////////
 	this.sprites.Inimigo201 = new Inimigo201(canvas, this.loading);
+	this.sprites.Inimigo202 = new Inimigo202(canvas, this.loading);
 	///////////////////////////////////////////////////////////////////////
 	this.sprites.SpritePrincipal01 = new SpritePrincipal01(canvas, this.loading);
 	this.sprites.SpritePrincipal02 = new SpritePrincipal02(canvas, this.loading);

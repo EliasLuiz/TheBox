@@ -204,16 +204,16 @@ Fase.prototype.atualiza = function(){
 	inimigosPersonagem = false;
 	var aux, mudancaViewport = {"x": 0, "y": 0};
 	for (var i = 0; i < this.elementosCenario.length; i++) {
+		for (var j = 0; j < this.inimigos.length; j++) {
+			if(!this.inimigos[j].isVisivel())
+				continue;
+			aux = Colisao(this.elementosCenario[i], this.inimigos[j]);
+		}
 		if(!this.elementosCenario[i].isVisivel())
 			continue;
 		aux = Colisao(this.elementosCenario[i], this.principal);
 		mudancaViewport.x += aux.x;
 		mudancaViewport.y += aux.y;
-		for (var j = 0; j < this.inimigos.length; j++) {
-			//if(!this.inimigos[j].isVisivel())
-			//	continue;
-			aux = Colisao(this.elementosCenario[i], this.inimigos[j]);
-		}
 	}
 
 
@@ -378,6 +378,14 @@ function Fase1 (canvas){
 };
 //Atualiza os elementos especificos da Fase
 Fase1.prototype.atualiza = function(){
+	if(this.tocando === ""){
+		Som().stopAllMusic();
+		Som().musicas.play('Fase1Loop');
+		//Som().stopAllMusic();
+		//Som().playMusic("Fase1Intro");
+		this.tocando = "Intro";
+		this.principal.vel.x = 0; //Correcao de bug
+	}
 	if(!this.removeHover){
 		viewport.x = 1700;
 		document.getElementById("canvas").removeEventListener("mousemove", hover);
@@ -385,22 +393,14 @@ Fase1.prototype.atualiza = function(){
 		this.planodefundo.pos.x = 1700;
 	}
 	Fase.prototype.atualiza.call(this);
-	if(this.tocando === ""){
-		Som().stopAllMusic();
-		Som().musicas.play('Fase1Intro');
-		//Som().stopAllMusic();
-		//Som().playMusic("Fase1Intro");
-		this.tocando = "Intro";
-		this.principal.vel.x = 0; //Correcao de bug
-	}
 	
-	else if(this.tocando === "Intro"){
-		Som().musicas.on('end', function(){
-			this.tocando = "Loop";
-			Som().musicas.play('Fase1Loop');
-		});
-		//nao sei se isso vai funcionar kkk
-	}
+	// else if(this.tocando === "Intro"){
+	// 	Som().musicas.on('end', function(){
+	// 		this.tocando = "Loop";
+	// 		Som().musicas.play('Fase1Loop');
+	// 	});
+	// 	//nao sei se isso vai funcionar kkk
+	// }
 	// else if(this.tocando === "Intro" && Som().music["Fase1Intro"].ended){
 		// this.tocando = "Loop";
 		// Som().music["Fase1Loop"].loop = true;
@@ -428,17 +428,17 @@ function Fase2 (canvas){
 Fase2.prototype.atualiza = function(){
 	if(this.tocando === ""){
 		Som().stopAllMusic();
-		Som().musicas.play('Fase2Intro');
+		Som().musicas.play('Fase2Loop');
 		this.tocando = "Intro";
 		viewport.x = 0;
-		viewport.y = 200;
+		viewport.y = 0;
 	}
-	else if(this.tocando === "Intro"){
-		Som().musicas.on('end', function(){
-			this.tocando = "Loop";
-			Som().musicas.play('Fase2Loop');
-		});		
-	}
+	// else if(this.tocando === "Intro"){
+	// 	Som().musicas.on('end', function(){
+	// 		this.tocando = "Loop";
+	// 		Som().musicas.play('Fase2Loop');
+	// 	});		
+	// }
 	// else if(this.tocando === "Intro" && Som().music["Fase2Intro"].ended){
 		// this.tocando = "Loop";
 		// Som().music["Fase2Loop"].loop = true;
